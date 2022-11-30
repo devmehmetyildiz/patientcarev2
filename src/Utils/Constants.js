@@ -1,0 +1,20 @@
+export const ROUTES = {
+    AUTH: 'Auth',
+    CASE: 'Case',
+    COSTUMERTYPE: 'Costumertype',
+    DEPARTMENT: 'Department',
+    FILE: 'File',
+    PATIENT: 'Patient',
+    PATIENTTYPE: 'Patienttype',
+    ROLE: 'Roles',
+    STATION: 'Station',
+    STOCK: 'Stock',
+    UNIT: 'Unit',
+    USER: 'Users',
+    DEACTIVESTOCK: 'Deactivestock',
+    STOCKMOVEMENT: 'Stockmovement',
+    ACTIVESTOCK: 'Activestock',
+    DATATABLE: 'Datatable',
+    ACTIVEPATIENT: 'Activepatient',
+    PATIENTREPORT: 'Patientreport'
+}
