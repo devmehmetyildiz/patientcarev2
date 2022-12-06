@@ -7,24 +7,24 @@ import LoadingPage from '../../Utils/LoadingPage'
 import NoDataScreen from '../../Utils/NoDataScreen'
 import Popup from '../../Utils/Popup'
 
-export class Roles extends Component {
+export class Departments extends Component {
 
   constructor(props) {
     super(props)
     const open = false
     const selectedrecord = {}
-    const authoriesStatus = []
+    const stationsStatus = []
     this.state = {
       open,
       selectedrecord,
-      authoriesStatus
+      stationsStatus
     }
   }
 
 
   componentDidMount() {
-    const { GetRoles } = this.props
-    GetRoles()
+    const { GetDepartments } = this.props
+    GetDepartments()
   }
 
   render() {
@@ -34,18 +34,17 @@ export class Roles extends Component {
       { Header: 'Tekil ID', accessor: 'concurrencyStamp', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'İsim', accessor: 'name', sortable: true, canGroupBy: true, canFilter: true },
       {
-        Header: 'Yetkiler', accessor: 'authoriestxt', sortable: true, canGroupBy: true, canFilter: true, isOpen: false,
+        Header: 'İstasyonlar', accessor: 'stationstxt', sortable: true, canGroupBy: true, canFilter: true, isOpen: false,
         Cell: col => {
           if (col.value) {
             if (!col.cell.isGrouped) {
-              console.log('col.row: ', col.row);
               const itemId = col.row.original.id
-              const itemPrivileges = col.row.original.authories
+              const itemStations = col.row.original.stations
               return col.value.length - 35 > 20 ?
                 (
-                  !this.state.authoriesStatus.includes(itemId) ?
-                    [col.value.slice(0, 35) + ' ...(' + itemPrivileges.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandAuthory(itemId)}> ...Daha Fazla Göster</Link>] :
-                    [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkAuthory(itemId)}> ...Daha Az Göster</Link>]
+                  !this.state.stationsStatus.includes(itemId) ?
+                    [col.value.slice(0, 35) + ' ...(' + itemStations.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandStations(itemId)}> ...Daha Fazla Göster</Link>] :
+                    [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkStations(itemId)}> ...Daha Az Göster</Link>]
                 ) : col.value
             }
             return col.value
@@ -53,7 +52,7 @@ export class Roles extends Component {
           return null
         },
       },
-      { Header: 'Oluşturan Kullanıcı', accessor: 'createdUser', sortable: true, canGroupBy: true, canFilter: true },
+      { Header: 'Oluşturan Kullanıcı', accessor: 'createdUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Güncelleyen Kullanıcı', accessor: 'updatedUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Oluşturma Zamanı', accessor: 'createTime', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Güncelleme Zamanı', accessor: 'updateTime', sortable: true, canGroupBy: true, canFilter: true, },
@@ -62,20 +61,20 @@ export class Roles extends Component {
 
     const initialConfig = { hiddenColumns: ['concurrencyStamp'] };
 
-    const { Roles, removeRolenotification, DeleteRoles } = this.props
-    const { notifications, list, isLoading, isDispatching } = Roles
+    const { Departments, removeDepartmentnotification, DeleteDepartments } = this.props
+    const { notifications, list, isLoading, isDispatching } = Departments
     if (notifications && notifications.length > 0) {
       let msg = notifications[0]
       Popup(msg.type, msg.code, msg.description)
-      removeRolenotification()
+      removeDepartmentnotification()
     }
 
     (list || []).map(item => {
-      var text = item.authories.map((authory) => {
-        return authory.name;
+      var text = item.stations.map((station) => {
+        return station.name;
       }).join(", ")
-      item.authoriestxt = text;
-      item.edit = <Link to={`/roles/${item.concurrencyStamp}/edit`} ><Icon size='large' className='row-edit' name='edit' /></Link>
+      item.stationstxt = text;
+      item.edit = <Link to={`/Departments/${item.concurrencyStamp}/edit`} ><Icon size='large' className='row-edit' name='edit' /></Link>
       item.delete = <Icon link size='large' color='red' name='alternate trash' onClick={() => { this.setState({ selectedrecord: item, open: true }) }} />
     })
 
@@ -88,13 +87,13 @@ export class Roles extends Component {
                 <Grid columns='2' >
                   <GridColumn width={8} className="">
                     <Breadcrumb size='big'>
-                      <Link to={"/Roles"}>
-                        <Breadcrumb.Section>Roller</Breadcrumb.Section>
+                      <Link to={"/Departments"}>
+                        <Breadcrumb.Section>Departmanlar</Breadcrumb.Section>
                       </Link>
                     </Breadcrumb>
                   </GridColumn>
                   <GridColumn width={8} >
-                    <Link to={"Roles/Create"}>
+                    <Link to={"Departments/Create"}>
                       <Button color='blue' floated='right' className='list-right-green-button'>
                         Oluştur
                       </Button>
@@ -115,12 +114,12 @@ export class Roles extends Component {
             onOpen={() => this.setState({ open: true })}
             open={this.state.open}
           >
-            <Modal.Header>Rol Silme</Modal.Header>
+            <Modal.Header>Departman Silme</Modal.Header>
             <Modal.Content image>
               <Modal.Description>
                 <p>
                   <span className='font-bold'>{Object.keys(this.state.selectedrecord).length > 0 ? `${this.state.selectedrecord.name} ` : null} </span>
-                  rolünü silmek istediğinize emin misiniz?
+                  departmanını silmek istediğinize emin misiniz?
                 </p>
               </Modal.Description>
             </Modal.Content>
@@ -133,7 +132,7 @@ export class Roles extends Component {
                 labelPosition='right'
                 icon='checkmark'
                 onClick={() => {
-                  DeleteRoles(this.state.selectedrecord)
+                  DeleteDepartments(this.state.selectedrecord)
                   this.setState({ open: false, selectedrecord: {} })
                 }}
                 positive
@@ -144,20 +143,20 @@ export class Roles extends Component {
     )
   }
 
-  expandAuthory = (rowid) => {
-    const prevData = this.state.authoriesStatus
+  expandStations = (rowid) => {
+    const prevData = this.state.stationsStatus
     prevData.push(rowid)
-    this.setState({ authoriesStatus: [...prevData] })
+    this.setState({ stationsStatus: [...prevData] })
   }
 
-  shrinkAuthory = (rowid) => {
-    const index = this.state.authoriesStatus.indexOf(rowid)
-    const prevData = this.state.authoriesStatus
+  shrinkStations = (rowid) => {
+    const index = this.state.stationsStatus.indexOf(rowid)
+    const prevData = this.state.stationsStatus
     if (index > -1) {
       prevData.splice(index, 1)
-      this.setState({ authoriesStatus: [...prevData] })
+      this.setState({ stationsStatus: [...prevData] })
     }
   }
 
 }
-export default withRouter(Roles)
+export default Departments

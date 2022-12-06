@@ -12,10 +12,6 @@ export const ACTION_TYPES = {
     GET_ALLDEPARTMENTS_SUCCESS: 'GET_ALLDEPARTMENTS_SUCCESS',
     GET_ALLDEPARTMENTS_ERROR: 'GET_ALLDEPARTMENTS_ERROR',
 
-    GET_ALLSTATIONS_INIT: 'GET_ALLSTATIONS_INIT',
-    GET_ALLSTATIONS_SUCCESS: 'GET_ALLSTATIONS_SUCCESS',
-    GET_ALLSTATIONS_ERROR: 'GET_ALLSTATIONS_ERROR',
-
     GET_DEPARTMENT_INIT: 'GET_DEPARTMENT_INIT',
     GET_DEPARTMENT_SUCCESS: 'GET_DEPARTMENT_SUCCESS',
     GET_DEPARTMENT_ERROR: 'GET_DEPARTMENT_ERROR',
@@ -62,18 +58,6 @@ export const GetDepartment = (guid) => async (dispatch, getState) => {
         })
 }
 
-export const GetStations = () => async (dispatch, getState) => {
-    dispatch({ type: ACTION_TYPES.GET_ALLSTATIONS_INIT })
-    await instanse.get(ROUTES.DEPARTMENT + "/GetAllStations")
-        .then(response => {
-            { dispatch({ type: ACTION_TYPES.GET_ALLSTATIONS_SUCCESS, payload: response.data }) }
-        })
-        .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_DEPARTMENTS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_ALLSTATIONS_ERROR, payload: axiosErrorHelper(error) })
-        })
-}
-
 export const AddDepartments = (data, historypusher) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.ADD_DEPARTMENT_INIT })
     await instanse.post(ROUTES.DEPARTMENT + "/Add", data)
@@ -105,6 +89,8 @@ export const EditDepartments = (data, historypusher) => async (dispatch, getStat
 }
 
 export const DeleteDepartments = (data) => async (dispatch, getState) => {
+    delete data['edit']
+    delete data['delete']
     dispatch({ type: ACTION_TYPES.DELETE_DEPARTMENT_INIT })
     await instanse.post(ROUTES.DEPARTMENT + "/Delete", data)
         .then(response => {
@@ -118,19 +104,19 @@ export const DeleteDepartments = (data) => async (dispatch, getState) => {
         })
 }
 
-export const RemoveSelected = payload => {
+export const RemoveSelectedDepartment = payload => {
     return (dispatch, getState) => {
         dispatch({ type: ACTION_TYPES.REMOVE_SELECTED_DEPARTMENT, payload })
     }
 }
 
-export const fillnotification = payload => {
+export const fillDepartmentnotification = payload => {
     return (dispatch, getState) => {
         dispatch({ type: ACTION_TYPES.FILL_DEPARTMENTS_NOTIFICATION, payload })
     }
 }
 
-export const removenotification = () => {
+export const removeDepartmentnotification = () => {
     return (dispatch, getState) => {
         dispatch({ type: ACTION_TYPES.REMOVE_DEPARTMENTS_NOTIFICATION })
     }

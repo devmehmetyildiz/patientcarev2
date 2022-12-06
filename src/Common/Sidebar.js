@@ -96,10 +96,30 @@ export function Sidebar(props) {
                     url: "/Roles"
                 },
                 {
+                    id: 10,
+                    subtitle: "Departmanlar",
+                    url: "/Departments"
+                },
+                {
+                    id: 10,
+                    subtitle: "İstasyonlar",
+                    url: "/Stations"
+                },
+                {
                     id: 11,
                     subtitle: "Kullanıcılar",
                     url: "/Users"
-                }
+                },
+                {
+                    id: 12,
+                    subtitle: "Durumlar",
+                    url: "/Cases"
+                },
+                {
+                    id: 13,
+                    subtitle: "Birimler",
+                    url: "/Units"
+                },
             ]
         },
     ])

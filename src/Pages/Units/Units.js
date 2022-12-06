@@ -7,45 +7,67 @@ import LoadingPage from '../../Utils/LoadingPage'
 import NoDataScreen from '../../Utils/NoDataScreen'
 import Popup from '../../Utils/Popup'
 
-export class Roles extends Component {
+export default class Units extends Component {
 
   constructor(props) {
     super(props)
     const open = false
     const selectedrecord = {}
-    const authoriesStatus = []
+    const departmentStatus = []
     this.state = {
       open,
       selectedrecord,
-      authoriesStatus
+      departmentStatus
     }
   }
 
 
   componentDidMount() {
-    const { GetRoles } = this.props
-    GetRoles()
+    const { GetUnits } = this.props
+    GetCases()
   }
 
+
   render() {
+
+    const unitstatusOption = [
+      {
+        key: '0',
+        text: 'Number',
+        value: 0,
+      },
+      {
+        key: '1',
+        text: 'String',
+        value: 1,
+      }
+    ]
 
     const Columns = [
       { Header: 'Id', accessor: 'id', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Tekil ID', accessor: 'concurrencyStamp', sortable: true, canGroupBy: true, canFilter: true, },
-      { Header: 'İsim', accessor: 'name', sortable: true, canGroupBy: true, canFilter: true },
+      { Header: 'Birim Adı', accessor: 'name', sortable: true, canGroupBy: true, canFilter: true },
       {
-        Header: 'Yetkiler', accessor: 'authoriestxt', sortable: true, canGroupBy: true, canFilter: true, isOpen: false,
+        Header: 'Birim Türü', accessor: 'unittype', sortable: true, canGroupBy: true, canFilter: true,
+        Cell: col => {
+          if (col.value) {
+            return unitstatusOption.find(u => u.value === col.value) ? unitstatusOption.find(u => u.value === col.value).text : ''
+          }
+          return null
+        },
+      },
+      {
+        Header: 'Departmanlar', accessor: 'departmentstxt', sortable: true, canGroupBy: true, canFilter: true, isOpen: false,
         Cell: col => {
           if (col.value) {
             if (!col.cell.isGrouped) {
-              console.log('col.row: ', col.row);
               const itemId = col.row.original.id
-              const itemPrivileges = col.row.original.authories
+              const itemDepartments = col.row.original.departments
               return col.value.length - 35 > 20 ?
                 (
-                  !this.state.authoriesStatus.includes(itemId) ?
-                    [col.value.slice(0, 35) + ' ...(' + itemPrivileges.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandAuthory(itemId)}> ...Daha Fazla Göster</Link>] :
-                    [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkAuthory(itemId)}> ...Daha Az Göster</Link>]
+                  !this.state.departmentStatus.includes(itemId) ?
+                    [col.value.slice(0, 35) + ' ...(' + itemDepartments.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandDepartments(itemId)}> ...Daha Fazla Göster</Link>] :
+                    [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkDepartments(itemId)}> ...Daha Az Göster</Link>]
                 ) : col.value
             }
             return col.value
@@ -53,7 +75,7 @@ export class Roles extends Component {
           return null
         },
       },
-      { Header: 'Oluşturan Kullanıcı', accessor: 'createdUser', sortable: true, canGroupBy: true, canFilter: true },
+      { Header: 'Oluşturan Kullanıcı', accessor: 'createdUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Güncelleyen Kullanıcı', accessor: 'updatedUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Oluşturma Zamanı', accessor: 'createTime', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Güncelleme Zamanı', accessor: 'updateTime', sortable: true, canGroupBy: true, canFilter: true, },
@@ -62,20 +84,20 @@ export class Roles extends Component {
 
     const initialConfig = { hiddenColumns: ['concurrencyStamp'] };
 
-    const { Roles, removeRolenotification, DeleteRoles } = this.props
-    const { notifications, list, isLoading, isDispatching } = Roles
+    const { Units, removeUnitnotification, DeleteUnits } = this.props
+    const { notifications, list, isLoading, isDispatching } = Units
     if (notifications && notifications.length > 0) {
       let msg = notifications[0]
       Popup(msg.type, msg.code, msg.description)
-      removeRolenotification()
+      removeUnitnotification()
     }
 
     (list || []).map(item => {
-      var text = item.authories.map((authory) => {
-        return authory.name;
+      var text = item.departments.map((department) => {
+        return department.name;
       }).join(", ")
-      item.authoriestxt = text;
-      item.edit = <Link to={`/roles/${item.concurrencyStamp}/edit`} ><Icon size='large' className='row-edit' name='edit' /></Link>
+      item.departmentstxt = text;
+      item.edit = <Link to={`/Units/${item.concurrencyStamp}/edit`} ><Icon size='large' className='row-edit' name='edit' /></Link>
       item.delete = <Icon link size='large' color='red' name='alternate trash' onClick={() => { this.setState({ selectedrecord: item, open: true }) }} />
     })
 
@@ -88,13 +110,13 @@ export class Roles extends Component {
                 <Grid columns='2' >
                   <GridColumn width={8} className="">
                     <Breadcrumb size='big'>
-                      <Link to={"/Roles"}>
-                        <Breadcrumb.Section>Roller</Breadcrumb.Section>
+                      <Link to={"/Units"}>
+                        <Breadcrumb.Section>Birimler</Breadcrumb.Section>
                       </Link>
                     </Breadcrumb>
                   </GridColumn>
                   <GridColumn width={8} >
-                    <Link to={"Roles/Create"}>
+                    <Link to={"/Units/Create"}>
                       <Button color='blue' floated='right' className='list-right-green-button'>
                         Oluştur
                       </Button>
@@ -107,7 +129,7 @@ export class Roles extends Component {
             {list.length > 0 ?
               <div className='w-full mx-auto '>
                 <DataTable Columns={Columns} Data={list} Config={initialConfig} />
-              </div> : <NoDataScreen message="Tanımlı Durum Yok" />
+              </div> : <NoDataScreen message="Tanımlı Birim Yok" />
             }
           </div>
           <Modal
@@ -115,12 +137,12 @@ export class Roles extends Component {
             onOpen={() => this.setState({ open: true })}
             open={this.state.open}
           >
-            <Modal.Header>Rol Silme</Modal.Header>
+            <Modal.Header>Birim Silme</Modal.Header>
             <Modal.Content image>
               <Modal.Description>
                 <p>
                   <span className='font-bold'>{Object.keys(this.state.selectedrecord).length > 0 ? `${this.state.selectedrecord.name} ` : null} </span>
-                  rolünü silmek istediğinize emin misiniz?
+                  Birimini silmek istediğinize emin misiniz?
                 </p>
               </Modal.Description>
             </Modal.Content>
@@ -133,31 +155,30 @@ export class Roles extends Component {
                 labelPosition='right'
                 icon='checkmark'
                 onClick={() => {
-                  DeleteRoles(this.state.selectedrecord)
+                  DeleteCases(this.state.selectedrecord)
                   this.setState({ open: false, selectedrecord: {} })
                 }}
                 positive
               />
             </Modal.Actions>
           </Modal>
-        </React.Fragment>
+        </React.Fragment >
     )
   }
 
-  expandAuthory = (rowid) => {
-    const prevData = this.state.authoriesStatus
+  expandDepartments = (rowid) => {
+    const prevData = this.state.departmentStatus
     prevData.push(rowid)
-    this.setState({ authoriesStatus: [...prevData] })
+    this.setState({ departmentStatus: [...prevData] })
   }
 
-  shrinkAuthory = (rowid) => {
-    const index = this.state.authoriesStatus.indexOf(rowid)
-    const prevData = this.state.authoriesStatus
+  shrinkDepartments = (rowid) => {
+    const index = this.state.departmentStatus.indexOf(rowid)
+    const prevData = this.state.departmentStatus
     if (index > -1) {
       prevData.splice(index, 1)
-      this.setState({ authoriesStatus: [...prevData] })
+      this.setState({ departmentStatus: [...prevData] })
     }
   }
 
 }
-export default withRouter(Roles)

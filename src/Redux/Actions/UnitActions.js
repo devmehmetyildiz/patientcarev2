@@ -1,157 +1,122 @@
-import axios from "axios"
 import { ROUTES } from "../../Utils/Constants";
-import Popup from "../../Utils/Popup";
-import { AxiosErrorHandle, GetToken } from "../../Utils/TokenValidChecker";
+import { axiosErrorHelper } from "../../Utils/ErrorHelper";
+import instanse from "./axios"
 
 export const ACTION_TYPES = {
-    GET_ALLUNITS_INIT: `GET_ALLUNITS_INIT`,
-    GET_ALLUNITS_SUCCESS: `GET_ALLUNITS_SUCCESS`,
-    GET_ALLUNITS_ERROR: `GET_ALLUNITS_ERROR`,
+    GET_UNITS_INIT: 'GET_UNITS_INIT',
+    GET_UNITS_SUCCESS: 'GET_UNITS_SUCCESS',
+    GET_UNITS_ERROR: 'GET_UNITS_ERROR',
 
-    GET_ALLUNITSETTINGS_INIT: `GET_ALLUNITSETTINGS_INIT`,
-    GET_ALLUNITSETTINGS_SUCCESS: `GET_ALLUNITSETTINGS_SUCCESS`,
-    GET_ALLUNITSETTINGS_ERROR: `GET_ALLUNITSETTINGS_ERROR`,
+    GET_ALLUNITS_INIT: 'GET_ALLUNITS_INIT',
+    GET_ALLUNITS_SUCCESS: 'GET_ALLUNITS_SUCCESS',
+    GET_ALLUNITS_ERROR: 'GET_ALLUNITS_ERROR',
 
-    GET_SELECTEDUNIT_INIT: `GET_SELECTEDUNIT_INIT`,
-    GET_SELECTEDUNIT_SUCCESS: `GET_SELECTEDUNIT_SUCCESS`,
-    GET_SELECTEDUNIT_ERROR: `GET_SELECTEDUNIT_ERROR`,
+    GET_UNIT_INIT: 'GET_UNIT_INIT',
+    GET_UNIT_SUCCESS: 'GET_UNIT_SUCCESS',
+    GET_UNIT_ERROR: 'GET_UNIT_ERROR',
 
-    REMOVE_SELECTEDUNIT: `REMOVE_SELECTEDUNIT`,
-    DELETE_MODAL_OPEN: `DELETE_MODAL_OPEN`,
-    DELETE_MODAL_CLOSE: `DELETE_MODAL_CLOSE`,
+    ADD_UNIT_INIT: 'ADD_UNIT_INIT',
+    ADD_UNIT_SUCCESS: 'ADD_UNIT_SUCCESS',
+    ADD_UNIT_ERROR: 'ADD_UNIT_ERROR',
 
-    CREATE_UNIT_INIT: `CREATE_UNIT_INIT`,
-    CREATE_UNIT_SUCCESS: `CREATE_UNIT_SUCCESS`,
-    CREATE_UNIT_ERROR: `CREATE_UNIT_ERROR`,
+    EDIT_UNIT_INIT: 'EDIT_UNIT_INIT',
+    EDIT_UNIT_SUCCESS: 'EDIT_UNIT_SUCCESS',
+    EDIT_UNIT_ERROR: 'EDIT_UNIT_ERROR',
 
-    EDIT_UNIT_INIT: `EDIT_UNIT_INIT`,
-    EDIT_UNIT_SUCCESS: `EDIT_UNIT_SUCCESS`,
-    EDIT_UNIT_ERROR: `EDIT_UNIT_ERROR`,
+    DELETE_UNIT_INIT: 'DELETE_UNIT_INIT',
+    DELETE_UNIT_SUCCESS: 'DELETE_UNIT_SUCCESS',
+    DELETE_UNIT_ERROR: 'DELETE_UNIT_ERROR',
 
-    DELETE_UNIT_INIT: `DELETE_UNIT_INIT`,
-    DELETE_UNIT_SUCCESS: `DELETE_UNIT_SUCCESS`,
-    DELETE_UNIT_ERROR: `DELETE_UNIT_ERROR`,
+    REMOVE_SELECTED_UNIT: 'REMOVE_SELECTED_UNIT',
+
+    FILL_UNITS_NOTIFICATION: 'FILL_UNITS_NOTIFICATION',
+    REMOVE_UNITS_NOTIFICATION: 'REMOVE_UNITS_NOTIFICATION',
 }
 
-export const GetAllUnits = () => async (dispatch,getState) => {
-    const state = getState()
-    console.log('state: ', state);
-    dispatch({ type: ACTION_TYPES.GET_ALLUNITS_INIT })
-    await axios({
-        method: `get`,
-        url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.UNIT}/GetAll`,
-        headers: { Authorization: `Bearer ${GetToken()}` }
-    })
+export const GetUnits = () => async (dispatch, getState) => {
+    dispatch({ type: ACTION_TYPES.GET_UNITS_INIT })
+    await instanse.get(ROUTES.UNIT + "/GetAll")
         .then(response => {
-            response.data.forEach((item, index) => {
-                var text = item.departments.map((item) => {
-                    return item.name;
-                }).join(", ")
-                item.departmentstxt = text;
-            })
-            { dispatch({ type: ACTION_TYPES.GET_ALLUNITS_SUCCESS, payload: response.data }) }
+            { dispatch({ type: ACTION_TYPES.GET_UNITS_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.GET_ALLUNITS_ERROR, payload: error })
+            dispatch({ type: ACTION_TYPES.FILL_UNITS_NOTIFICATION, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_UNITS_ERROR, payload: axiosErrorHelper(error) })
         })
 }
 
-export const GetAllUnitsSettings = () => async dispatch => {
-    dispatch({ type: ACTION_TYPES.GET_ALLUNITSETTINGS_INIT })
-    await axios({
-        method: `get`,
-        url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.UNIT}/GetAllSettings`,
-        headers: { Authorization: `Bearer ${GetToken()}` }
-    })
+export const GetUnit = (guid) => async (dispatch, getState) => {
+    dispatch({ type: ACTION_TYPES.GET_UNIT_INIT })
+    await instanse.get(ROUTES.UNIT + `/Getselected?guid=${guid}`)
         .then(response => {
-            response.data.forEach((item, index) => {
-                var text = item.departments.map((item) => {
-                    return item.name;
-                }).join(", ")
-                item.departmentstxt = text;
-            })
-            { dispatch({ type: ACTION_TYPES.GET_ALLUNITSETTINGS_SUCCESS, payload: response.data }) }
+            { dispatch({ type: ACTION_TYPES.GET_UNIT_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.GET_ALLUNITSETTINGS_ERROR, payload: error })
+            dispatch({ type: ACTION_TYPES.FILL_UNITS_NOTIFICATION, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_UNIT_ERROR, payload: axiosErrorHelper(error) })
         })
 }
 
-export const GetSelectedUnit = (ItemId) => async dispatch => {
-    dispatch({ type: ACTION_TYPES.GET_SELECTEDUNIT_INIT })
-    await axios({
-        method: `get`,
-        url: `${process.env.REACT_APP_BACKEND_URL}/${ROUTES.UNIT}/GetSelectedUnit?ID=${ItemId}`,
-        headers: { Authorization: `Bearer ${GetToken()}` }
-    })
-        .then(response => dispatch({ type: ACTION_TYPES.GET_SELECTEDUNIT_SUCCESS, payload: response.data }))
-        .catch(error => {
-            dispatch({ type: ACTION_TYPES.GET_SELECTEDUNIT_ERROR, payload: error })
-        })
-};
-
-export const CreateUnit = (Item, historypusher) => dispatch => {
-    dispatch({ type: ACTION_TYPES.CREATE_UNIT_INIT })
-    axios({
-        method: `post`,
-        url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.UNIT}/Add`,
-        headers: { Authorization: `Bearer ${GetToken()}` },
-        data: Item
-    })
-        .then(() => {
-            dispatch({ type: ACTION_TYPES.CREATE_UNIT_SUCCESS })
-            Popup("Success", "Birimler", "Birim Oluşturuldu")
-            historypusher.push("/Units")
+export const AddUnits = (data, historypusher) => async (dispatch, getState) => {
+    dispatch({ type: ACTION_TYPES.ADD_UNIT_INIT })
+    await instanse.post(ROUTES.UNIT + "/Add", data)
+        .then(response => {
+            {
+                dispatch({ type: ACTION_TYPES.ADD_UNIT_SUCCESS, payload: response.data })
+                historypusher.push('/Units')
+            }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.CREATE_UNIT_ERROR, payload: error })
+            dispatch({ type: ACTION_TYPES.FILL_UNITS_NOTIFICATION, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.ADD_UNIT_ERROR, payload: axiosErrorHelper(error) })
         })
 }
 
-export const UpdateUnit = (Item, historypusher) => dispatch => {
+export const EditUnits = (data, historypusher) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.EDIT_UNIT_INIT })
-    axios({
-        method: `post`,
-        url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.UNIT}/Update`,
-        headers: { Authorization: `Bearer ${GetToken()}` },
-        data: Item
-    })
-        .then(() => {
-            dispatch({ type: ACTION_TYPES.EDIT_UNIT_SUCCESS })
-            dispatch({ type: ACTION_TYPES.REMOVE_SELECTEDUNIT })
-            Popup("Success", "Birimler", "Birim Güncellendi")
-            historypusher.push("/Units")
+    await instanse.post(ROUTES.UNIT + "/Update", data)
+        .then(response => {
+            {
+                dispatch({ type: ACTION_TYPES.EDIT_UNIT_SUCCESS, payload: response.data })
+                historypusher.push('/Units')
+            }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.EDIT_UNIT_ERROR, payload: error })
+            dispatch({ type: ACTION_TYPES.FILL_UNITS_NOTIFICATION, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.EDIT_UNIT_ERROR, payload: axiosErrorHelper(error) })
         })
 }
 
-export const DeleteUnit = (Item) => dispatch => {
+export const DeleteUnits = (data) => async (dispatch, getState) => {
+    delete data['edit']
+    delete data['delete']
     dispatch({ type: ACTION_TYPES.DELETE_UNIT_INIT })
-    axios({
-        method: `delete`,
-        url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.UNIT}/Delete`,
-        headers: { Authorization: `Bearer ${GetToken()}` },
-        data: Item
-    })
-        .then(() => {
-            dispatch({ type: ACTION_TYPES.DELETE_UNIT_SUCCESS })
-            Popup("Success", "Birimler", "Birim Silindi")
+    await instanse.post(ROUTES.UNIT + "/Delete", data)
+        .then(response => {
+            {
+                dispatch({ type: ACTION_TYPES.DELETE_UNIT_SUCCESS, payload: response.data })
+            }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.DELETE_UNIT_ERROR, payload: error })
+            dispatch({ type: ACTION_TYPES.FILL_UNITS_NOTIFICATION, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.DELETE_UNIT_ERROR, payload: axiosErrorHelper(error) })
         })
 }
 
-export const ClearSelectedUnit = () => dispatch => {
-    dispatch({ type: ACTION_TYPES.REMOVE_SELECTEDUNIT })
+export const RemoveSelectedUnit = payload => {
+    return (dispatch, getState) => {
+        dispatch({ type: ACTION_TYPES.REMOVE_SELECTED_UNIT, payload })
+    }
 }
 
-export const OpenDeleteModal = () => dispatch => {
-    dispatch({ type: ACTION_TYPES.DELETE_MODAL_OPEN })
+export const fillUnitnotification = payload => {
+    return (dispatch, getState) => {
+        dispatch({ type: ACTION_TYPES.FILL_UNITS_NOTIFICATION, payload })
+    }
 }
 
-export const CloseDeleteModal = () => dispatch => {
-    dispatch({ type: ACTION_TYPES.DELETE_MODAL_CLOSE })
+export const removeUnitnotification = () => {
+    return (dispatch, getState) => {
+        dispatch({ type: ACTION_TYPES.REMOVE_UNITS_NOTIFICATION })
+    }
 }

@@ -1,5 +1,5 @@
-import axios from 'axios'
-import Cookies from 'universal-cookie';
+import instanse from "./axios"
+import cookies from 'universal-cookie';
 import { axiosErrorHelper } from '../../Utils/ErrorHelper';
 
 export const ACTION_TYPES = {
@@ -17,12 +17,10 @@ export const ACTION_TYPES = {
 export const logIn = (data, historyPusher, redirecturl) => {
   return (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.LOGIN_REQUEST_INIT })
-    return axios.post(process.env.REACT_APP_BACKEND_URL + `/auth/login`, data)
+    return instanse.post(`/auth/login`, data)
       .then(result => {
-        const cookies = new Cookies();
-        cookies.set('patientcareauthtoken', result.data.token, { path: '/' });
         dispatch({ type: ACTION_TYPES.LOGIN_REQUEST_SUCCESS })
-          redirecturl ? historyPusher.push(redirecturl) : historyPusher.push('Home')
+        redirecturl ? historyPusher.push(redirecturl) : historyPusher.push('Home')
       })
       .catch(error => {
         dispatch({ type: ACTION_TYPES.FILL_USER_NOTIFICATION, payload: axiosErrorHelper(error) })
@@ -46,8 +44,8 @@ export const removenotification = () => {
 export const logOut = () => {
   return dispatch => {
     dispatch({ type: ACTION_TYPES.LOGOUT_REQUEST_INIT })
-    const cookies = new Cookies();
-    cookies.remove('patientcareauthtoken')
+    const localcookies = new cookies();
+    localcookies.remove('patientcareauthtoken')
     dispatch({ type: ACTION_TYPES.LOGOUT_REQUEST_SUCCESS })
   }
 }

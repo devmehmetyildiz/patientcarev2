@@ -120,6 +120,8 @@ export const EditRoles = (data, historypusher) => async (dispatch, getState) => 
 }
 
 export const DeleteRoles = (data) => async (dispatch, getState) => {
+    delete data['edit']
+    delete data['delete']
     dispatch({ type: ACTION_TYPES.DELETE_ROLE_INIT })
     await instanse.post(ROUTES.ROLE + "/Delete", data)
         .then(response => {
@@ -133,19 +135,19 @@ export const DeleteRoles = (data) => async (dispatch, getState) => {
         })
 }
 
-export const RemoveSelected = payload => {
+export const RemoveSelectedRole = payload => {
     return (dispatch, getState) => {
         dispatch({ type: ACTION_TYPES.REMOVE_SELECTED_ROLE, payload })
     }
 }
 
-export const fillnotification = payload => {
+export const fillRolenotification = payload => {
     return (dispatch, getState) => {
         dispatch({ type: ACTION_TYPES.FILL_ROLES_NOTIFICATION, payload })
     }
 }
 
-export const removenotification = () => {
+export const removeRolenotification = () => {
     return (dispatch, getState) => {
         dispatch({ type: ACTION_TYPES.REMOVE_ROLES_NOTIFICATION })
     }

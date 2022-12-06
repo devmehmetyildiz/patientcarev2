@@ -1,13 +1,14 @@
 import axios from 'axios';
-import Cookies from 'universal-cookie';
+import cookies from 'universal-cookie';
 
 
 // Next we make an 'instance' of it
 const instanse = axios.create({
-    baseURL: process.env.REACT_APP_BACKEND_URL
+    baseURL: process.env.REACT_APP_BACKEND_URL,
+    withCredentials: true
 });
 // Where you would set stuff like your 'Authorization' header, etc ...
-const cookies = new Cookies();
-instanse.defaults.headers.common['Authorization'] = "Bearer  " + cookies.get('patientcareauthtoken')
+const localcookies = new cookies();
+instanse.defaults.headers.common['Authorization'] = "Bearer  " + localcookies.get('patientcare')
 // Also add/ configure interceptors && all the other cool stuff
 export default instanse;

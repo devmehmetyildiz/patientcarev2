@@ -200,28 +200,32 @@ export const DataTable = ({ Columns, Data, Config }) => {
                     </table>
                 </div>
             </div>
-            <div className='flex flex-row justify-between items-center w-full p-2'>
-                <Select className='ml-2' placeholder='Set Page Size' value={pageSize} onChange={(e, data) => { setPageSize(data.value) }} options={pageSizes} />
-                <Pagination
-                    className='row-pagination'
-                    activePage={pageIndex + 1}
-                    boundaryRange={2}
-                    onPageChange={(e, { activePage }) => { gotoPage(activePage - 1) }}
-                    siblingRange={2}
-                    totalPages={pageCount}
-                    ellipsisItem={{ content: <Icon name='ellipsis horizontal' />, icon: true }}
-                    firstItem={canPreviousPage ? { content: <Icon name='angle double left' />, icon: true } : null}
-                    lastItem={canNextPage ? { content: <Icon name='angle double right' />, icon: true } : null}
-                    prevItem={canPreviousPage ? { content: <Icon name='angle left' />, icon: true } : null}
-                    nextItem={canNextPage ? { content: <Icon name='angle right' />, icon: true } : null}
-                    size='small'
-                    pointing
-                    secondary
-                />
-                <div className='mr-2'>
-                    <p>Page {pageIndex + 1} of {pageOptions.length}</p>
+            {pageOptions.length > 1 ?
+                <div className='flex flex-row justify-between items-center w-full p-2'>
+                    <Select className='ml-2' placeholder='Set Page Size' value={pageSize} onChange={(e, data) => { setPageSize(data.value) }} options={pageSizes} />
+                    <div className="pagination">
+                        <Pagination
+                            className='row-pagination'
+                            activePage={pageIndex + 1}
+                            boundaryRange={2}
+                            onPageChange={(e, { activePage }) => { gotoPage(activePage - 1) }}
+                            siblingRange={2}
+                            totalPages={pageCount}
+                            ellipsisItem={{ content: <Icon name='ellipsis horizontal' />, icon: true }}
+                            firstItem={canPreviousPage ? { content: <Icon name='angle double left' />, icon: true } : null}
+                            lastItem={canNextPage ? { content: <Icon name='angle double right' />, icon: true } : null}
+                            prevItem={canPreviousPage ? { content: <Icon name='angle left' />, icon: true } : null}
+                            nextItem={canNextPage ? { content: <Icon name='angle right' />, icon: true } : null}
+                            size='small'
+                            pointing
+                            secondary
+                        />
+                    </div>
+                    <div className='mr-2'>
+                        <p>Page {pageIndex + 1} of {pageOptions.length}</p>
+                    </div>
                 </div>
-            </div>
+                : null}
         </div>
     )
 }

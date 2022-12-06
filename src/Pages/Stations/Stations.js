@@ -1,30 +1,28 @@
 import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
-import { Divider, Icon, Modal } from 'semantic-ui-react'
+import { Divider, Icon, Loader, Modal } from 'semantic-ui-react'
 import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
 import DataTable from '../../Utils/DataTable'
 import LoadingPage from '../../Utils/LoadingPage'
-import NoDataScreen from '../../Utils/NoDataScreen'
 import Popup from '../../Utils/Popup'
+import DeleteModal from "../../Utils/DeleteModal"
+import NoDataScreen from '../../Utils/NoDataScreen'
 
-export class Roles extends Component {
+export class Stations extends Component {
 
   constructor(props) {
     super(props)
     const open = false
     const selectedrecord = {}
-    const authoriesStatus = []
     this.state = {
       open,
-      selectedrecord,
-      authoriesStatus
+      selectedrecord
     }
   }
 
-
   componentDidMount() {
-    const { GetRoles } = this.props
-    GetRoles()
+    const { GetStations } = this.props
+    GetStations()
   }
 
   render() {
@@ -33,49 +31,24 @@ export class Roles extends Component {
       { Header: 'Id', accessor: 'id', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Tekil ID', accessor: 'concurrencyStamp', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'İsim', accessor: 'name', sortable: true, canGroupBy: true, canFilter: true },
-      {
-        Header: 'Yetkiler', accessor: 'authoriestxt', sortable: true, canGroupBy: true, canFilter: true, isOpen: false,
-        Cell: col => {
-          if (col.value) {
-            if (!col.cell.isGrouped) {
-              console.log('col.row: ', col.row);
-              const itemId = col.row.original.id
-              const itemPrivileges = col.row.original.authories
-              return col.value.length - 35 > 20 ?
-                (
-                  !this.state.authoriesStatus.includes(itemId) ?
-                    [col.value.slice(0, 35) + ' ...(' + itemPrivileges.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandAuthory(itemId)}> ...Daha Fazla Göster</Link>] :
-                    [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkAuthory(itemId)}> ...Daha Az Göster</Link>]
-                ) : col.value
-            }
-            return col.value
-          }
-          return null
-        },
-      },
-      { Header: 'Oluşturan Kullanıcı', accessor: 'createdUser', sortable: true, canGroupBy: true, canFilter: true },
+      { Header: 'Oluşturan Kullanıcı', accessor: 'createdUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Güncelleyen Kullanıcı', accessor: 'updatedUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Oluşturma Zamanı', accessor: 'createTime', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Güncelleme Zamanı', accessor: 'updateTime', sortable: true, canGroupBy: true, canFilter: true, },
       { accessor: 'edit', Header: "Güncelle", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' },
       { accessor: 'delete', Header: "Sil", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
-
     const initialConfig = { hiddenColumns: ['concurrencyStamp'] };
 
-    const { Roles, removeRolenotification, DeleteRoles } = this.props
-    const { notifications, list, isLoading, isDispatching } = Roles
+    const { Stations, DeleteStations, removeStationnotification } = this.props
+    const { notifications, list, isLoading, isDispatching } = Stations
     if (notifications && notifications.length > 0) {
       let msg = notifications[0]
       Popup(msg.type, msg.code, msg.description)
-      removeRolenotification()
+      removeStationnotification()
     }
 
     (list || []).map(item => {
-      var text = item.authories.map((authory) => {
-        return authory.name;
-      }).join(", ")
-      item.authoriestxt = text;
-      item.edit = <Link to={`/roles/${item.concurrencyStamp}/edit`} ><Icon size='large' className='row-edit' name='edit' /></Link>
+      item.edit = <Link to={`/Stations/${item.concurrencyStamp}/edit`} ><Icon size='large' className='row-edit' name='edit' /></Link>
       item.delete = <Icon link size='large' color='red' name='alternate trash' onClick={() => { this.setState({ selectedrecord: item, open: true }) }} />
     })
 
@@ -88,13 +61,13 @@ export class Roles extends Component {
                 <Grid columns='2' >
                   <GridColumn width={8} className="">
                     <Breadcrumb size='big'>
-                      <Link to={"/Roles"}>
-                        <Breadcrumb.Section>Roller</Breadcrumb.Section>
+                      <Link to={"/Stations"}>
+                        <Breadcrumb.Section>İstasyonlar</Breadcrumb.Section>
                       </Link>
                     </Breadcrumb>
                   </GridColumn>
                   <GridColumn width={8} >
-                    <Link to={"Roles/Create"}>
+                    <Link to={"Stations/Create"}>
                       <Button color='blue' floated='right' className='list-right-green-button'>
                         Oluştur
                       </Button>
@@ -115,7 +88,7 @@ export class Roles extends Component {
             onOpen={() => this.setState({ open: true })}
             open={this.state.open}
           >
-            <Modal.Header>Rol Silme</Modal.Header>
+            <Modal.Header>İsyasyon Silme</Modal.Header>
             <Modal.Content image>
               <Modal.Description>
                 <p>
@@ -133,31 +106,20 @@ export class Roles extends Component {
                 labelPosition='right'
                 icon='checkmark'
                 onClick={() => {
-                  DeleteRoles(this.state.selectedrecord)
+                  DeleteStations(this.state.selectedrecord)
                   this.setState({ open: false, selectedrecord: {} })
                 }}
                 positive
               />
             </Modal.Actions>
           </Modal>
-        </React.Fragment>
+        </React.Fragment >
     )
   }
 
-  expandAuthory = (rowid) => {
-    const prevData = this.state.authoriesStatus
-    prevData.push(rowid)
-    this.setState({ authoriesStatus: [...prevData] })
-  }
-
-  shrinkAuthory = (rowid) => {
-    const index = this.state.authoriesStatus.indexOf(rowid)
-    const prevData = this.state.authoriesStatus
-    if (index > -1) {
-      prevData.splice(index, 1)
-      this.setState({ authoriesStatus: [...prevData] })
-    }
+  handleChangeModal = (value) => {
+    this.setState({ modal: value })
   }
 
 }
-export default withRouter(Roles)
+export default Stations
