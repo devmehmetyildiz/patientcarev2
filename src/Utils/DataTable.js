@@ -31,7 +31,7 @@ function DefaultColumnFilter({
     )
 }
 
-export const DataTable = ({ Columns, Data, Config }) => {
+export const DataTable = ({ Columns, Data, Config, renderRowSubComponent }) => {
     const columns = useMemo(() => Columns, [])
     const data = useMemo(() => Data, [Data])
 
@@ -48,6 +48,7 @@ export const DataTable = ({ Columns, Data, Config }) => {
         []
     )
 
+
     const {
         getTableProps,
         getTableBodyProps,
@@ -60,6 +61,7 @@ export const DataTable = ({ Columns, Data, Config }) => {
         pageOptions,
         pageCount,
         gotoPage,
+        visibleColumns,
         nextPage,
         previousPage,
         setPageSize,
@@ -168,7 +170,7 @@ export const DataTable = ({ Columns, Data, Config }) => {
                                 prepareRow(row)
                                 return (
                                     <React.Fragment key={`rw-${row.id}`}>
-                                        <tr {...row.getRowProps()}>
+                                        <tr {...row.getRowProps()} style={{ backgroundColor: row.original.case ? row.original.case.casecolor : null }} >
                                             {row.cells.map(cell => {
                                                 return (
                                                     <td  {...cell.getCellProps({ className: cell.column.className })}>
@@ -193,6 +195,20 @@ export const DataTable = ({ Columns, Data, Config }) => {
                                                 )
                                             })}
                                         </tr>
+                                        {row.isExpanded && renderRowSubComponent ? (
+                                            <tr>
+                                                <td colSpan={visibleColumns.length}>
+                                                    {/*
+                          Inside it, call our renderRowSubComponent function. In reality,
+                          you could pass whatever you want as props to
+                          a component like this, including the entire
+                          table instance. But for this example, we'll just
+                          pass the row
+                        */}
+                                                    {renderRowSubComponent({ row })}
+                                                </td>
+                                            </tr>
+                                        ) : null}
                                     </React.Fragment>
                                 )
                             })}

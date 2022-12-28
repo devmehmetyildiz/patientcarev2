@@ -23,6 +23,30 @@ const Units = lazy(() => import('./Containers/Units/Units'));
 const UnitsCreate = lazy(() => import('./Containers/Units/UnitsCreate'));
 const UnitsEdit = lazy(() => import('./Containers/Units/UnitsEdit'));
 
+const Users = lazy(() => import('./Containers/Users/Users'));
+const UsersCreate = lazy(() => import('./Containers/Users/UsersCreate'));
+const UsersEdit = lazy(() => import('./Containers/Users/UsersEdit'));
+
+const Stockdefines = lazy(() => import('./Containers/Stockdefines/Stockdefines'));
+const StockdefinesCreate = lazy(() => import('./Containers/Stockdefines/StockdefinesCreate'));
+const StockdefinesEdit = lazy(() => import('./Containers/Stockdefines/StockdefinesEdit'));
+
+const Files = lazy(() => import('./Containers/Files/Files'));
+const FilesCreate = lazy(() => import('./Containers/Files/FilesCreate'));
+const FilesEdit = lazy(() => import('./Containers/Files/FilesEdit'));
+
+const Purchaseorders = lazy(() => import('./Containers/Purchaseorders/Purchaseorders'));
+const PurchaseordersCreate = lazy(() => import('./Containers/Purchaseorders/PurchaseordersCreate'));
+const PurchaseordersEdit = lazy(() => import('./Containers/Purchaseorders/PurchaseordersEdit'));
+
+const Stocks = lazy(() => import('./Containers/Stocks/Stocks'));
+const StocksCreate = lazy(() => import('./Containers/Stocks/StocksCreate'));
+const StocksEdit = lazy(() => import('./Containers/Stocks/StocksEdit'));
+const Stocksmovements = lazy(() => import('./Containers/Stocks/Stockmovements'));
+const Stockmovementsdetail = lazy(() => import('./Containers/Stocks/Stockmovementsdetail'));
+
+const PasswordChange = lazy(() => import('./Pages/Home'));
+const ProfileEdit = lazy(() => import('./Containers/Auth/ProfileEdit'));
 const Home = lazy(() => import('./Pages/Home'));
 
 
@@ -48,6 +72,25 @@ class AppRoutes extends Component {
           <Route exact path="/Units" component={Units} />
           <Route exact path="/Units/Create" component={UnitsCreate} />
           <Route exact path="/Units/:UnitID/Edit" component={UnitsEdit} />
+          <Route exact path="/Stockdefines" component={Stockdefines} />
+          <Route exact path="/Stockdefines/Create" component={StockdefinesCreate} />
+          <Route exact path="/Stockdefines/:StockdefineID/Edit" component={StockdefinesEdit} />
+          <Route exact path="/Stocks" component={Stocks} />
+          <Route exact path="/Stocks/Create" component={StocksCreate} />
+          <Route exact path="/Stocks/:StockID/Edit" component={StocksEdit} />
+          <Route exact path="/Stockmovements" component={Stocksmovements} />
+          <Route exact path="/Stockmovement/:StockmovementID" component={Stockmovementsdetail} />
+          <Route exact path="/Stockmovement" component={Stockmovementsdetail} />
+          <Route exact path="/Users" component={Users} />
+          <Route exact path="/Users/Create" component={UsersCreate} />
+          <Route exact path="/Users/:UserID/Edit" component={UsersEdit} />
+          <Route exact path="/Files" component={Files} />
+          <Route exact path="/Files/Create" component={FilesCreate} />
+          <Route exact path="/Files/:FileID/Edit" component={FilesEdit} />
+          <Route exact path="/Purchaseorders" component={Purchaseorders} />
+          <Route exact path="/Purchaseorders/Create" component={PurchaseordersCreate} />
+          <Route exact path="/Purchaseorders/:PurchaseorderID/Edit" component={PurchaseordersEdit} />
+          <Route exact path="/Profile/Edit" component={ProfileEdit} />
           <Redirect to="/" />
         </Switch>
       </Suspense>

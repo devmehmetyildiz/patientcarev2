@@ -11,13 +11,13 @@ export function Sidebar(props) {
     const [Pages, setPages] = useState([
         {
             id: 1,
-            title: "Dashboard",
+            title: "Boş Ekran",
             url: "/Dashboard",
             icon: <TbGauge className=' text-blue-700' />
         },
         {
             id: 2,
-            title: "Apps",
+            title: "Boş Ekran",
             isOpened: false,
             icon: <Tb3DRotate className='text-red-700' />,
             items: [
@@ -40,48 +40,38 @@ export function Sidebar(props) {
         },
         {
             id: 3,
-            title: "Widgets",
+            title: "Siparişler",
             isOpened: false,
             icon: <TbAccessPoint className='text-orange-300' />,
             items: [
                 {
                     id: 4,
-                    subtitle: "111Kanban List",
-                    url: "/Kanbanlist"
+                    subtitle: "Açık Siparişler",
+                    url: "/Purchaseorders"
                 },
-                {
-                    id: 5,
-                    subtitle: "22Todo List",
-                    url: "/Todolist"
-                },
-                {
-                    id: 6,
-                    subtitle: "333Kanban List",
-                    url: "/Tickets"
-                }
             ]
         },
         {
             id: 4,
-            title: "Basic UI",
+            title: "Stok Yönetimi",
             isOpened: false,
             icon: <TbActivity className='text-green-400' />,
             items: [
                 {
                     id: 7,
-                    subtitle: "44Kanban List",
-                    url: "/Kanbanlist"
+                    subtitle: "Ürünler",
+                    url: "/Stocks"
                 },
                 {
-                    id: 8,
-                    subtitle: "55Todo List",
-                    url: "/Todolist"
+                    id: 7,
+                    subtitle: "Ürün Hareketleri",
+                    url: "/Stockmovements"
                 },
                 {
-                    id: 9,
-                    subtitle: "666Kanban List",
-                    url: "/Tickets"
-                }
+                    id: 7,
+                    subtitle: "Ürün Hareketi İncele",
+                    url: "/Stockmovement"
+                },
             ]
         },
         {
@@ -119,6 +109,21 @@ export function Sidebar(props) {
                     id: 13,
                     subtitle: "Birimler",
                     url: "/Units"
+                },
+                {
+                    id: 14,
+                    subtitle: "Stok Tanımları",
+                    url: "/Stockdefines"
+                },
+                {
+                    id: 14,
+                    subtitle: "Kullanııclar",
+                    url: "/Users"
+                },
+                {
+                    id: 14,
+                    subtitle: "Dosyalar",
+                    url: "/Files"
                 },
             ]
         },

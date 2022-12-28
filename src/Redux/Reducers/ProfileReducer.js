@@ -7,7 +7,9 @@ const defaultState = {
   error: null,
   isDispatching: false,
   notifications: [],
-  meta: [],
+  meta: {},
+  username: "",
+  roles: []
 }
 const ProfileReducer = (state = defaultState, { type, payload }) => {
   switch (type) {
@@ -22,6 +24,24 @@ const ProfileReducer = (state = defaultState, { type, payload }) => {
       return { ...state, isLogging: true }
     case ACTION_TYPES.LOGOUT_REQUEST_SUCCESS:
       return { ...defaultState }
+    case ACTION_TYPES.GET_ACTIVEUSER_INIT:
+      return { ...state, isLogging: true }
+    case ACTION_TYPES.GET_ACTIVEUSER_SUCCESS:
+      return { ...state, isLogging: false, username: payload }
+    case ACTION_TYPES.GET_ACTIVEUSER_ERROR:
+      return { ...state, isLogging: false, error: payload }
+    case ACTION_TYPES.GET_USERMETA_INIT:
+      return { ...state, isLogging: true }
+    case ACTION_TYPES.GET_USERMETA_SUCCESS:
+      return { ...state, isLogging: false, meta: payload }
+    case ACTION_TYPES.GET_USERMETA_ERROR:
+      return { ...state, isLogging: false, error: payload }
+    case ACTION_TYPES.GET_USERSROLES_INIT:
+      return { ...state, isLogging: true }
+    case ACTION_TYPES.GET_USERSROLES_SUCCESS:
+      return { ...state, isLogging: false, roles: payload }
+    case ACTION_TYPES.GET_USERSROLES_ERROR:
+      return { ...state, isLogging: false, error: payload }
     case ACTION_TYPES.FILL_USER_NOTIFICATION:
       const messages = [...state.notifications]
       messages.push(payload)

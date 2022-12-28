@@ -1,19 +1,21 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Breadcrumb, Button, Checkbox, Divider, Dropdown, Form, Header } from 'semantic-ui-react'
-import Popup from '../../Utils/Popup'
+import { Breadcrumb, Button, Checkbox, Divider, Dropdown, Form, Header, Icon, Popup } from 'semantic-ui-react'
+import PopupUtils from '../../Utils/Popup'
 import formToObject from 'form-to-object'
 import LoadingPage from '../../Utils/LoadingPage'
-
 export default class CasesEdit extends Component {
+
   constructor(props) {
     super(props)
     const selecteddepartments = []
     const record = {}
+    const selectedstatusOption = {}
     const isDatafetched = false
     this.state = {
       selecteddepartments,
-      isDatafetched
+      isDatafetched,
+      selectedstatusOption
     }
   }
 
@@ -23,7 +25,7 @@ export default class CasesEdit extends Component {
       GetCase(match.params.CaseID)
       GetDepartments()
     } else {
-      history.push("/Departments")
+      history.push("/Cases")
     }
   }
 
@@ -34,7 +36,7 @@ export default class CasesEdit extends Component {
       this.setState({
         selecteddepartments: selected_record.departments.map(department => {
           return department.concurrencyStamp
-        }), isDatafetched: true
+        }), isDatafetched: true, selectedstatusOption: selected_record.caseStatus
       })
     }
   }
@@ -42,20 +44,34 @@ export default class CasesEdit extends Component {
   render() {
 
     const { Cases, Departments, removeDepartmentnotification, removeCasenotification } = this.props
+    const { selected_record } = Cases
     if (Cases.notifications && Cases.notifications.length > 0) {
       let msg = Cases.notifications[0]
-      Popup(msg.type, msg.code, msg.description)
+      PopupUtils(msg.type, msg.code, msg.description)
       removeCasenotification()
     }
     if (Departments.notifications && Departments.notifications.length > 0) {
       let msg = Departments.notifications[0]
-      Popup(msg.type, msg.code, msg.description)
+      PopupUtils(msg.type, msg.code, msg.description)
       removeDepartmentnotification()
     }
 
     const Departmentoptions = Departments.list.map(department => {
       return { key: department.concurrencyStamp, text: department.name, value: department.concurrencyStamp }
     })
+
+    const casestatusOption = [
+      {
+        key: '0',
+        text: 'Pasif',
+        value: 0,
+      },
+      {
+        key: '1',
+        text: 'Tamamlama',
+        value: 1,
+      }
+    ]
 
     return (
       Departments.isLoading || Departments.isDispatching || Cases.isLoading || Cases.isDispatching ? <LoadingPage /> :
@@ -67,34 +83,42 @@ export default class CasesEdit extends Component {
                   <Breadcrumb.Section >Durumlar</Breadcrumb.Section>
                 </Link>
                 <Breadcrumb.Divider icon='right chevron' />
-                <Breadcrumb.Section>Oluştur</Breadcrumb.Section>
+                <Breadcrumb.Section>Güncelle</Breadcrumb.Section>
               </Breadcrumb>
             </Header>
           </div>
           <Divider className='w-full  h-[1px]' />
           <div className='w-full bg-white p-4 rounded-lg shadow-md outline outline-[1px] outline-gray-200 '>
             <Form className='' onSubmit={this.handleSubmit}>
-              <Form.Field>
-                <Form.Input label="Durum Adı" placeholder="Durum Adı" name="name" fluid defaultValue={Departments.selected_record.name} />
-              </Form.Field>
-              <Form.Field>
-                <label className='text-[#000000de]'>Departmanlar</label>
-                <Dropdown
-                  placeholder='Departmanlar'
-                  clearable
-                  search
-                  fluid
-                  multiple
-                  selection
-                  value={this.state.selecteddepartments}
-                  options={Departmentoptions}
-                  onChange={this.handleChange} />
-              </Form.Field>
+              <Form.Group widths='equal'>
+                <Form.Input label="Durum Adı" placeholder="Durum Adı" name="name" fluid defaultValue={selected_record.name} />
+                <Form.Input label="Durum Kısaltma" placeholder="Durum Kısaltma" name="shortname" fluid defaultValue={selected_record.shortname} />
+              </Form.Group>
+              <Form.Group widths='equal'>
+                <Form.Field>
+                  <label className='text-[#000000de]'>Durum Rengi<span> <Popup
+                    trigger={<Icon link name='exclamation' />}
+                    content='blue,red,green...'
+                    position='bottom left'
+                  /></span></label>
+                  <Form.Input placeholder="Durum Rengi" name="casecolor" fluid defaultValue={selected_record.casecolor} />
+                </Form.Field>
+                <Form.Field>
+                  <label className='text-[#000000de]'>Durum Türü</label>
+                  <Dropdown placeholder='Durum Türü' fluid selection options={casestatusOption} onChange={this.handleChangeOption} value={this.state.selectedstatusOption} />
+                </Form.Field>
+              </Form.Group>
+              <Form.Group widths='equal'>
+                <Form.Field>
+                  <label className='text-[#000000de]'>Departmanlar</label>
+                  <Dropdown placeholder='Departmanlar' clearable search fluid multiple selection options={Departmentoptions} onChange={this.handleChange} value={this.state.selecteddepartments} />
+                </Form.Field>
+              </Form.Group>
               <div className='flex flex-row w-full justify-between py-4  items-center'>
                 <Link to="/Cases">
                   <Button floated="left" color='grey'>Geri Dön</Button>
                 </Link>
-                <Button floated="right" type='submit' color='blue'>Oluştur</Button>
+                <Button floated="right" type='submit' color='blue'>Güncelle</Button>
               </div>
             </Form>
           </div>
@@ -110,6 +134,8 @@ export default class CasesEdit extends Component {
     const { list } = Departments
     const pushData = { ...Cases.selected_record }
     const data = formToObject(e.target)
+    data.caseStatus = this.state.selectedstatusOption
+    console.log('data.caseStatus: ', data.caseStatus);
     data.departments = this.state.selecteddepartments.map(department => {
       return list.find(u => u.concurrencyStamp === department)
     })
@@ -117,6 +143,16 @@ export default class CasesEdit extends Component {
     let errors = []
     if (!data.name || data.name == '') {
       errors.push({ type: 'Error', code: 'Durumlar', description: 'İsim Boş Olamaz' })
+    }
+    console.log('!Number.isInteger(data.caseStatus): ', !Number.isInteger(data.caseStatus));
+    if ((!Number.isInteger(data.caseStatus))) {
+      errors.push({ type: 'Error', code: 'Durumlar', description: 'Tür seçili değil' })
+    }
+    if (!data.casecolor || data.casecolor == '') {
+      errors.push({ type: 'Error', code: 'Durumlar', description: 'Renk seçili değil' })
+    }
+    if (!data.shortname || data.shortname == '') {
+      errors.push({ type: 'Error', code: 'Durumlar', description: 'Kısaltma girili değil' })
     }
     if (!data.departments || data.departments.length <= 0) {
       errors.push({ type: 'Error', code: 'Durumlar', description: 'Hiç Bir Departman seçili değil' })
@@ -126,13 +162,16 @@ export default class CasesEdit extends Component {
         fillCasenotification(error)
       })
     } else {
-      pushData.name = data.name
-      pushData.departments = data.departments
-      EditCases(pushData, history)
+      EditCases({ ...Cases.selected_record, ...data }, history)
     }
   }
 
   handleChange = (e, { value }) => {
     this.setState({ selecteddepartments: value })
+  }
+
+  handleChangeOption = (e, { value }) => {
+    console.log('value: ', value);
+    this.setState({ selectedstatusOption: value })
   }
 }

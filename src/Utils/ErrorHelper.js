@@ -14,6 +14,7 @@ export function axiosErrorHelper(error) {
                 case 404:
                     return { type: 'Error', code: error.code, description: 'URL BULUNAMADI' }
                 case 400:
+                    console.log('error: ', error);
                     return { type: 'Error', code: error.code, description: 'EKSİK DATA' }
                 case 500:
                     return { type: 'Error', code: error.code, description: 'SERVER HATASI' }

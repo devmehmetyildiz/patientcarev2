@@ -51,11 +51,7 @@ export default class Cases extends Component {
       {
         Header: 'Durum Türü', accessor: 'caseStatus', sortable: true, canGroupBy: true, canFilter: true,
         Cell: col => {
-          console.log('col.value: ', col.value);
-          if (col.value) {
-            return casestatusOption.find(u => u.value === col.value) ? casestatusOption.find(u => u.value === col.value).text : ''
-          }
-          return null
+          return casestatusOption.find(u => u.value === col.value) ? casestatusOption.find(u => u.value === col.value).text : ''
         },
       },
       {

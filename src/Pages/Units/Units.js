@@ -24,7 +24,7 @@ export default class Units extends Component {
 
   componentDidMount() {
     const { GetUnits } = this.props
-    GetCases()
+    GetUnits()
   }
 
 
@@ -50,10 +50,7 @@ export default class Units extends Component {
       {
         Header: 'Birim Türü', accessor: 'unittype', sortable: true, canGroupBy: true, canFilter: true,
         Cell: col => {
-          if (col.value) {
-            return unitstatusOption.find(u => u.value === col.value) ? unitstatusOption.find(u => u.value === col.value).text : ''
-          }
-          return null
+          return unitstatusOption.find(u => u.value == col.value) ? unitstatusOption.find(u => u.value == col.value).text : 'tanımsız'
         },
       },
       {
@@ -155,7 +152,7 @@ export default class Units extends Component {
                 labelPosition='right'
                 icon='checkmark'
                 onClick={() => {
-                  DeleteCases(this.state.selectedrecord)
+                  DeleteUnits(this.state.selectedrecord)
                   this.setState({ open: false, selectedrecord: {} })
                 }}
                 positive

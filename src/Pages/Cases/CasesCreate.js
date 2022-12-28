@@ -18,7 +18,7 @@ export default class CasesCreate extends Component {
       selectedstatusOption
     }
   }
- 
+
 
   componentDidMount() {
     const { GetDepartments } = this.props
@@ -46,12 +46,12 @@ export default class CasesCreate extends Component {
       {
         key: '0',
         text: 'Pasif',
-        value: '0',
+        value: 0,
       },
       {
         key: '1',
         text: 'Tamamlama',
-        value: '1',
+        value: 1,
       }
     ]
 
@@ -133,6 +133,15 @@ export default class CasesCreate extends Component {
     let errors = []
     if (!data.name || data.name == '') {
       errors.push({ type: 'Error', code: 'Durumlar', description: 'İsim Boş Olamaz' })
+    }
+    if ((!Number.isInteger(data.caseStatus))) {
+      errors.push({ type: 'Error', code: 'Durumlar', description: 'Tür seçili değil' })
+    }
+    if (!data.casecolor || data.casecolor == '') {
+      errors.push({ type: 'Error', code: 'Durumlar', description: 'Renk seçili değil' })
+    }
+    if (!data.shortname || data.shortname == '') {
+      errors.push({ type: 'Error', code: 'Durumlar', description: 'Kısaltma girili değil' })
     }
     if (!data.departments || data.departments.length <= 0) {
       errors.push({ type: 'Error', code: 'Durumlar', description: 'Hiç Bir Departman seçili değil' })

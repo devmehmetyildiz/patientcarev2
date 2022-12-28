@@ -3,6 +3,7 @@ import Sidebar from './Common/Sidebar';
 import Navbar from './Common/Navbar';
 import AppRoutes from './AppRoutes';
 import { withRouter } from 'react-router-dom';
+import Layout from './Containers/Layout/Layout';
 
 class App extends Component {
 
@@ -69,18 +70,7 @@ class App extends Component {
             <AppRoutes />
           </div>
           :
-          <div className='bg-[#f2f2f3] dark:bg-Contentbg' >
-            <Navbar iconOnly={this.state.iconstate} seticonOnly={this.setIconmode} />
-            <div className='flex flex-row justify-start items-start '>
-              <Sidebar iconOnly={this.state.iconstate} seticonOnly={this.setIconmode} />
-              <div className={`mt-[58.61px] p-4 w-full min-w-[0px] contentWrapper`}>
-                <div className='  w-full '>
-                  <AppRoutes />
-                </div>
-              </div>
-            </div>
-          </div>
-
+          <Layout {...this.props} iconOnly={this.state.iconstate} seticonOnly={this.setIconmode} />
         }
       </React.Fragment>
     );

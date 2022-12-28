@@ -94,7 +94,7 @@ export class DepartmentsEdit extends Component {
                 <Link to="/Departments">
                   <Button floated="left" color='grey'>Geri Dön</Button>
                 </Link>
-                <Button floated="right" type='submit' color='blue'>Oluştur</Button>
+                <Button floated="right" type='submit' color='blue'>Güncelle</Button>
               </div>
             </Form>
           </div>

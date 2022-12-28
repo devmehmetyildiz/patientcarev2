@@ -78,7 +78,7 @@ export class StationsCreate extends Component {
       })
     } else {
       AddStations(data, history)
-    }
+    } 
   }
 
 

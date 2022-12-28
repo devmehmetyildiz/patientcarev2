@@ -18,7 +18,7 @@ export default class CasesCreate extends Component {
       selectedstatusOption
     }
   }
- 
+
 
   componentDidMount() {
     const { GetDepartments } = this.props
@@ -26,11 +26,11 @@ export default class CasesCreate extends Component {
   }
 
   render() {
-    const { Units, Departments, removeCasenotification, removeDepartmentnotification } = this.props
+    const { Units, Departments, removeUnitnotification, removeDepartmentnotification } = this.props
     if (Units.notifications && Units.notifications.length > 0) {
       let msg = Units.notifications[0]
       Popuputil(msg.type, msg.code, msg.description)
-      removeCasenotification()
+      removeUnitnotification()
     }
     if (Departments.notifications && Departments.notifications.length > 0) {
       let msg = Departments.notifications[0]
@@ -42,21 +42,21 @@ export default class CasesCreate extends Component {
       return { key: department.concurrencyStamp, text: department.name, value: department.concurrencyStamp }
     })
 
-    const casestatusOption = [
+    const unitstatusOption = [
       {
         key: '0',
-        text: 'Pasif',
-        value: '0',
+        text: 'Number',
+        value: 0,
       },
       {
         key: '1',
-        text: 'Tamamlama',
-        value: '1',
+        text: 'String',
+        value: 1,
       }
     ]
 
     return (
-      Cases.isLoading || Cases.isDispatching || Departments.isLoading || Departments.isDispatching ? <LoadingPage /> :
+      Units.isLoading || Units.isDispatching || Departments.isLoading || Departments.isDispatching ? <LoadingPage /> :
         <div className='w-full h-[calc(100vh-59px-2rem)] mx-auto flex flex-col  justify-start items-center pb-[2rem] px-[2rem]'>
           <div className='w-full mx-auto align-middle'>
             <Header style={{ backgroundColor: 'transparent', border: 'none', color: '#3d3d3d' }} as='h1' attached='top' >
@@ -73,10 +73,10 @@ export default class CasesCreate extends Component {
           <div className='w-full bg-white p-4 rounded-lg shadow-md outline outline-[1px] outline-gray-200 '>
             <Form className='' onSubmit={this.handleSubmit}>
               <Form.Group widths='equal'>
-                <Form.Input label="Birim Adı" placeholder="Durum Adı" name="name" fluid />
+                <Form.Input label="Birim Adı" placeholder="Birim Adı" name="name" fluid />
                 <Form.Field>
                   <label className='text-[#000000de]'>Birim Türü</label>
-                  <Dropdown placeholder='Durum Türü' fluid selection options={casestatusOption} onChange={this.handleChangeOption} />
+                  <Dropdown placeholder='Birim Türü' fluid selection options={unitstatusOption} onChange={this.handleChangeOption} />
                 </Form.Field>
               </Form.Group>
               <Form.Group widths='equal'>
@@ -86,7 +86,7 @@ export default class CasesCreate extends Component {
                 </Form.Field>
               </Form.Group>
               <div className='flex flex-row w-full justify-between py-4  items-center'>
-                <Link to="/Cases">
+                <Link to="/Units">
                   <Button floated="left" color='grey'>Geri Dön</Button>
                 </Link>
                 <Button floated="right" type='submit' color='blue'>Oluştur</Button>
@@ -101,13 +101,13 @@ export default class CasesCreate extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    const { AddCases, history, fillCasenotification, Departments } = this.props
+    const { AddUnits, history, fillUnitnotification, Departments } = this.props
     const { list } = Departments
     const data = formToObject(e.target)
+    data.unittype = this.state.selectedstatusOption
     data.departments = this.state.selecteddepartments.map(department => {
       return list.find(u => u.concurrencyStamp === department)
     })
-    data.caseStatus = this.state.selectedstatusOption
     data.departmentstxt = null
     data.id = 0
     data.concurrencyStamp = null
@@ -121,17 +121,20 @@ export default class CasesCreate extends Component {
 
     let errors = []
     if (!data.name || data.name == '') {
-      errors.push({ type: 'Error', code: 'Durumlar', description: 'İsim Boş Olamaz' })
+      errors.push({ type: 'Error', code: 'Birimler', description: 'İsim Boş Olamaz' })
+    }
+    if ((Number.isNaN(data.unittype))) {
+      errors.push({ type: 'Error', code: 'Birimler', description: 'Tür Seçili Değil' })
     }
     if (!data.departments || data.departments.length <= 0) {
-      errors.push({ type: 'Error', code: 'Durumlar', description: 'Hiç Bir Departman seçili değil' })
+      errors.push({ type: 'Error', code: 'Birimler', description: 'Hiç Bir Departman seçili değil' })
     }
     if (errors.length > 0) {
       errors.forEach(error => {
-        fillCasenotification(error)
+        fillUnitnotification(error)
       })
     } else {
-      AddCases(data, history)
+      AddUnits(data, history)
     }
   }
 
