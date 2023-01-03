@@ -7,25 +7,26 @@ import LoadingPage from '../../Utils/LoadingPage'
 import NoDataScreen from '../../Utils/NoDataScreen'
 import Popup from '../../Utils/Popup'
 
-export class Departments extends Component {
+export default class Costumertypes extends Component {
 
   constructor(props) {
     super(props)
     const open = false
     const selectedrecord = {}
-    const stationsStatus = []
+    const departmentStatus = []
     this.state = {
       open,
       selectedrecord,
-      stationsStatus
+      departmentStatus
     }
   }
 
 
   componentDidMount() {
-    const { GetDepartments } = this.props
-    GetDepartments()
+    const { GetCostumertypes } = this.props
+    GetCostumertypes()
   }
+
 
   render() {
 
@@ -34,17 +35,17 @@ export class Departments extends Component {
       { Header: 'Tekil ID', accessor: 'concurrencyStamp', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'İsim', accessor: 'name', sortable: true, canGroupBy: true, canFilter: true },
       {
-        Header: 'İstasyonlar', accessor: 'stationstxt', sortable: true, canGroupBy: true, canFilter: true, isOpen: false,
+        Header: 'Departmanlar', accessor: 'departmentstxt', sortable: true, canGroupBy: true, canFilter: true, isOpen: false,
         Cell: col => {
           if (col.value) {
             if (!col.cell.isGrouped) {
               const itemId = col.row.original.id
-              const itemStations = col.row.original.stations
+              const itemDepartments = col.row.original.departments
               return col.value.length - 35 > 20 ?
                 (
-                  !this.state.stationsStatus.includes(itemId) ?
-                    [col.value.slice(0, 35) + ' ...(' + itemStations.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandStations(itemId)}> ...Daha Fazla Göster</Link>] :
-                    [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkStations(itemId)}> ...Daha Az Göster</Link>]
+                  !this.state.departmentStatus.includes(itemId) ?
+                    [col.value.slice(0, 35) + ' ...(' + itemDepartments.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandDepartments(itemId)}> ...Daha Fazla Göster</Link>] :
+                    [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkDepartments(itemId)}> ...Daha Az Göster</Link>]
                 ) : col.value
             }
             return col.value
@@ -59,22 +60,22 @@ export class Departments extends Component {
       { accessor: 'edit', Header: "Güncelle", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' },
       { accessor: 'delete', Header: "Sil", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
 
-      const initialConfig = { hiddenColumns: ['concurrencyStamp','createdUser','updatedUser','createTime','updateTime'] };
+    const initialConfig = { hiddenColumns: ['concurrencyStamp', 'createdUser', 'updatedUser', 'createTime', 'updateTime'] };
 
-    const { Departments, removeDepartmentnotification, DeleteDepartments } = this.props
-    const { notifications, list, isLoading, isDispatching } = Departments
+    const { Costumertypes, removeCostumertypenotification, DeleteCostumertypes } = this.props
+    const { notifications, list, isLoading, isDispatching } = Costumertypes
     if (notifications && notifications.length > 0) {
       let msg = notifications[0]
       Popup(msg.type, msg.code, msg.description)
-      removeDepartmentnotification()
+      removeCostumertypenotification()
     }
 
     (list || []).map(item => {
-      var text = item.stations.map((station) => {
-        return station.name;
+      var text = item.departments.map((department) => {
+        return department.name;
       }).join(", ")
-      item.stationstxt = text;
-      item.edit = <Link to={`/Departments/${item.concurrencyStamp}/edit`} ><Icon size='large' className='row-edit' name='edit' /></Link>
+      item.departmentstxt = text;
+      item.edit = <Link to={`/Costumertypes/${item.concurrencyStamp}/edit`} ><Icon size='large' className='row-edit' name='edit' /></Link>
       item.delete = <Icon link size='large' color='red' name='alternate trash' onClick={() => { this.setState({ selectedrecord: item, open: true }) }} />
     })
 
@@ -87,13 +88,13 @@ export class Departments extends Component {
                 <Grid columns='2' >
                   <GridColumn width={8} className="">
                     <Breadcrumb size='big'>
-                      <Link to={"/Departments"}>
-                        <Breadcrumb.Section>Departmanlar</Breadcrumb.Section>
+                      <Link to={"/Costumertypes"}>
+                        <Breadcrumb.Section>Müşteri Türleri</Breadcrumb.Section>
                       </Link>
                     </Breadcrumb>
                   </GridColumn>
                   <GridColumn width={8} >
-                    <Link to={"Departments/Create"}>
+                    <Link to={"/Costumertypes/Create"}>
                       <Button color='blue' floated='right' className='list-right-green-button'>
                         Oluştur
                       </Button>
@@ -106,7 +107,7 @@ export class Departments extends Component {
             {list.length > 0 ?
               <div className='w-full mx-auto '>
                 <DataTable Columns={Columns} Data={list} Config={initialConfig} />
-              </div> : <NoDataScreen message="Tanımlı Durum Yok" />
+              </div> : <NoDataScreen message="Tanımlı Müşteri Türü Yok" />
             }
           </div>
           <Modal
@@ -114,12 +115,12 @@ export class Departments extends Component {
             onOpen={() => this.setState({ open: true })}
             open={this.state.open}
           >
-            <Modal.Header>Departman Silme</Modal.Header>
+            <Modal.Header>Müşteri Türü Silme</Modal.Header>
             <Modal.Content image>
               <Modal.Description>
                 <p>
                   <span className='font-bold'>{Object.keys(this.state.selectedrecord).length > 0 ? `${this.state.selectedrecord.name} ` : null} </span>
-                  departmanını silmek istediğinize emin misiniz?
+                  müşteri türünü silmek istediğinize emin misiniz?
                 </p>
               </Modal.Description>
             </Modal.Content>
@@ -132,31 +133,30 @@ export class Departments extends Component {
                 labelPosition='right'
                 icon='checkmark'
                 onClick={() => {
-                  DeleteDepartments(this.state.selectedrecord)
+                  DeleteCostumertypes(this.state.selectedrecord)
                   this.setState({ open: false, selectedrecord: {} })
                 }}
                 positive
               />
             </Modal.Actions>
           </Modal>
-        </React.Fragment>
+        </React.Fragment >
     )
   }
 
-  expandStations = (rowid) => {
-    const prevData = this.state.stationsStatus
+  expandDepartments = (rowid) => {
+    const prevData = this.state.departmentStatus
     prevData.push(rowid)
-    this.setState({ stationsStatus: [...prevData] })
+    this.setState({ departmentStatus: [...prevData] })
   }
 
-  shrinkStations = (rowid) => {
-    const index = this.state.stationsStatus.indexOf(rowid)
-    const prevData = this.state.stationsStatus
+  shrinkDepartments = (rowid) => {
+    const index = this.state.departmentStatus.indexOf(rowid)
+    const prevData = this.state.departmentStatus
     if (index > -1) {
       prevData.splice(index, 1)
-      this.setState({ stationsStatus: [...prevData] })
+      this.setState({ departmentStatus: [...prevData] })
     }
   }
 
 }
-export default Departments

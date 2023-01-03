@@ -17,25 +17,15 @@ export function Sidebar(props) {
         },
         {
             id: 2,
-            title: "Boş Ekran",
+            title: "Hastalar",
             isOpened: false,
             icon: <Tb3DRotate className='text-red-700' />,
             items: [
                 {
                     id: 1,
-                    subtitle: "123Kanban List",
-                    url: "/Kanbanlist"
+                    subtitle: "Hasta Tanımları",
+                    url: "/Patientdefines"
                 },
-                {
-                    id: 2,
-                    subtitle: "321Todo List",
-                    url: "/Todolist"
-                },
-                {
-                    id: 3,
-                    subtitle: "3423Kanban List",
-                    url: "/Tickets"
-                }
             ]
         },
         {
@@ -124,6 +114,16 @@ export function Sidebar(props) {
                     id: 14,
                     subtitle: "Dosyalar",
                     url: "/Files"
+                },
+                {
+                    id: 14,
+                    subtitle: "Hasta Türleri",
+                    url: "/Patienttypes"
+                },
+                {
+                    id: 14,
+                    subtitle: "Müşteri Türleri",
+                    url: "/Costumertypes"
                 },
             ]
         },

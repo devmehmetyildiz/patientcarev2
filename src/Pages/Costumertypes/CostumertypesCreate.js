@@ -6,16 +6,14 @@ import formToObject from 'form-to-object'
 import Popuputil from '../../Utils/Popup'
 import LoadingPage from '../../Utils/LoadingPage'
 
-export default class CasesCreate extends Component {
+export default class CostumertypesCreate extends Component {
 
   constructor(props) {
     super(props)
     const selecteddepartments = []
     const record = {}
-    const selectedstatusOption = {}
     this.state = {
       selecteddepartments,
-      selectedstatusOption
     }
   }
 
@@ -26,11 +24,11 @@ export default class CasesCreate extends Component {
   }
 
   render() {
-    const { Cases, Departments, removeCasenotification, removeDepartmentnotification } = this.props
-    if (Cases.notifications && Cases.notifications.length > 0) {
-      let msg = Cases.notifications[0]
+    const { Costumertypes, Departments, removeCostumertypenotification, removeDepartmentnotification } = this.props
+    if (Costumertypes.notifications && Costumertypes.notifications.length > 0) {
+      let msg = Costumertypes.notifications[0]
       Popuputil(msg.type, msg.code, msg.description)
-      removeCasenotification()
+      removeCostumertypenotification()
     }
     if (Departments.notifications && Departments.notifications.length > 0) {
       let msg = Departments.notifications[0]
@@ -42,32 +40,15 @@ export default class CasesCreate extends Component {
       return { key: department.concurrencyStamp, text: department.name, value: department.concurrencyStamp }
     })
 
-    const casestatusOption = [
-      {
-        key: '0',
-        text: 'Pasif',
-        value: 0,
-      },
-      {
-        key: '1',
-        text: 'Tamamlama',
-        value: 1,
-      },
-      {
-        key: '2',
-        text: 'İptal Etme',
-        value: 2,
-      },
-    ]
 
     return (
-      Cases.isLoading || Cases.isDispatching || Departments.isLoading || Departments.isDispatching ? <LoadingPage /> :
+      Costumertypes.isLoading || Costumertypes.isDispatching || Departments.isLoading || Departments.isDispatching ? <LoadingPage /> :
         <div className='w-full h-[calc(100vh-59px-2rem)] mx-auto flex flex-col  justify-start items-center pb-[2rem] px-[2rem]'>
           <div className='w-full mx-auto align-middle'>
             <Header style={{ backgroundColor: 'transparent', border: 'none', color: '#3d3d3d' }} as='h1' attached='top' >
               <Breadcrumb size='big'>
-                <Link to={"/Cases"}>
-                  <Breadcrumb.Section >Durumlar</Breadcrumb.Section>
+                <Link to={"/Costumertypes"}>
+                  <Breadcrumb.Section >Müşteri Türleri</Breadcrumb.Section>
                 </Link>
                 <Breadcrumb.Divider icon='right chevron' />
                 <Breadcrumb.Section>Oluştur</Breadcrumb.Section>
@@ -78,22 +59,7 @@ export default class CasesCreate extends Component {
           <div className='w-full bg-white p-4 rounded-lg shadow-md outline outline-[1px] outline-gray-200 '>
             <Form className='' onSubmit={this.handleSubmit}>
               <Form.Group widths='equal'>
-                <Form.Input label="Durum Adı" placeholder="Durum Adı" name="name" fluid />
-                <Form.Input label="Durum Kısaltma" placeholder="Durum Kısaltma" name="shortname" fluid />
-              </Form.Group>
-              <Form.Group widths='equal'>
-                <Form.Field>
-                  <label className='text-[#000000de]'>Durum Rengi<span> <Popup
-                    trigger={<Icon link name='exclamation' />}
-                    content='blue,red,green...'
-                    position='bottom left'
-                  /></span></label>
-                  <Form.Input placeholder="Durum Rengi" name="casecolor" fluid />
-                </Form.Field>
-                <Form.Field>
-                  <label className='text-[#000000de]'>Durum Türü</label>
-                  <Dropdown placeholder='Durum Türü' fluid selection options={casestatusOption} onChange={this.handleChangeOption} />
-                </Form.Field>
+                <Form.Input label="Müşteri Tür Adı" placeholder="Müşteri Tür Adı" name="name" fluid />
               </Form.Group>
               <Form.Group widths='equal'>
                 <Form.Field>
@@ -102,7 +68,7 @@ export default class CasesCreate extends Component {
                 </Form.Field>
               </Form.Group>
               <div className='flex flex-row w-full justify-between py-4  items-center'>
-                <Link to="/Cases">
+                <Link to="/Costumertypes">
                   <Button floated="left" color='grey'>Geri Dön</Button>
                 </Link>
                 <Button floated="right" type='submit' color='blue'>Oluştur</Button>
@@ -116,13 +82,12 @@ export default class CasesCreate extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    const { AddCases, history, fillCasenotification, Departments } = this.props
+    const { AddCostumertypes, history, fillCostumertypenotification, Departments } = this.props
     const { list } = Departments
     const data = formToObject(e.target)
     data.departments = this.state.selecteddepartments.map(department => {
       return list.find(u => u.concurrencyStamp === department)
     })
-    data.caseStatus = this.state.selectedstatusOption
     data.departmentstxt = null
     data.id = 0
     data.concurrencyStamp = null
@@ -136,26 +101,17 @@ export default class CasesCreate extends Component {
 
     let errors = []
     if (!data.name || data.name == '') {
-      errors.push({ type: 'Error', code: 'Durumlar', description: 'İsim Boş Olamaz' })
-    }
-    if ((!Number.isInteger(data.caseStatus))) {
-      errors.push({ type: 'Error', code: 'Durumlar', description: 'Tür seçili değil' })
-    }
-    if (!data.casecolor || data.casecolor == '') {
-      errors.push({ type: 'Error', code: 'Durumlar', description: 'Renk seçili değil' })
-    }
-    if (!data.shortname || data.shortname == '') {
-      errors.push({ type: 'Error', code: 'Durumlar', description: 'Kısaltma girili değil' })
+      errors.push({ type: 'Error', code: 'Müşteri Türleri', description: 'İsim Boş Olamaz' })
     }
     if (!data.departments || data.departments.length <= 0) {
-      errors.push({ type: 'Error', code: 'Durumlar', description: 'Hiç Bir Departman seçili değil' })
+      errors.push({ type: 'Error', code: 'Müşteri Türleri', description: 'Hiç Bir Departman seçili değil' })
     }
     if (errors.length > 0) {
       errors.forEach(error => {
-        fillCasenotification(error)
+        fillCostumertypenotification(error)
       })
     } else {
-      AddCases(data, history)
+      AddCostumertypes(data, history)
     }
   }
 

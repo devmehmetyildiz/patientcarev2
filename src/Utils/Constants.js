@@ -17,7 +17,8 @@ export const ROUTES = {
     DATATABLE: 'Datatable',
     ACTIVEPATIENT: 'Activepatient',
     PATIENTREPORT: 'Patientreport',
-    PURCHASEORDER: 'Purchaseorder'
+    PURCHASEORDER: 'Purchaseorder',
+    PATIENTDEFINE: 'Patientdefine'
 }
 
 

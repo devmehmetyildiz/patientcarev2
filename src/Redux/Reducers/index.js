@@ -11,6 +11,9 @@ import StockmovementsReducer from "./StockmovementReducer";
 import UserReducer from "./UserReducer";
 import FileReducer from "./FileReducer";
 import PurchaseorderReducer from "./PurchaseorderReducer"
+import PatienttypeReducer from "./PatienttypeReducer"
+import CostumertypeReducer from "./CostumertypeReducer"
+import PatientdefineReducer from "./PatientdefineReducer"
 
 const reducers = combineReducers({
     Units: UnitReducer,
@@ -24,7 +27,10 @@ const reducers = combineReducers({
     Stockmovements: StockmovementsReducer,
     Users: UserReducer,
     Files: FileReducer,
-    Purchaseorders: PurchaseorderReducer
+    Purchaseorders: PurchaseorderReducer,
+    Costumertypes: CostumertypeReducer,
+    Patienttypes: PatienttypeReducer,
+    Patientdefines: PatientdefineReducer,
 });
 
 export default reducers;

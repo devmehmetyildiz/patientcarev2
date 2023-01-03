@@ -39,7 +39,7 @@ export default class Stockdefines extends Component {
       { Header: 'Güncelleme Zamanı', accessor: 'updateTime', sortable: true, canGroupBy: true, canFilter: true, },
       { accessor: 'edit', Header: "Güncelle", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' },
       { accessor: 'delete', Header: "Sil", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
-    const initialConfig = { hiddenColumns: ['concurrencyStamp'] };
+    const initialConfig = { hiddenColumns: ['concurrencyStamp', 'createdUser', 'updatedUser', 'createTime', 'updateTime'] };
 
     const { Stockdefines, DeleteStockdefines, removeStockdefinenotification } = this.props
     const { notifications, list, isLoading, isDispatching } = Stockdefines

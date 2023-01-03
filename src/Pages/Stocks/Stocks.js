@@ -47,7 +47,7 @@ export default class Stocks extends Component {
       { accessor: 'kill', Header: "İtlaf Et", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' },
       { accessor: 'edit', Header: "Güncelle", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' },
       { accessor: 'delete', Header: "Sil", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
-    const initialConfig = {  };
+      const initialConfig = { hiddenColumns: ['concurrencyStamp','createdUser','updatedUser','createTime','updateTime'] };
 
     const { Stocks, DeleteStocks, removeStocknotification, DeactivateStocks } = this.props
     const { notifications, list, isLoading, isDispatching } = Stocks

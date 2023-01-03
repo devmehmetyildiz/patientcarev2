@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useMemo } from 'react'
 import { useExpanded, useFilters, useGroupBy, usePagination, useRowSelect, useSortBy, useTable } from "react-table"
 import { Icon, Pagination, Select, Popup, } from 'semantic-ui-react'
@@ -31,7 +31,7 @@ function DefaultColumnFilter({
     )
 }
 
-export const DataTable = ({ Columns, Data, Config, renderRowSubComponent }) => {
+export const DataTable = ({ Columns, Data, Config,renderRowSubComponent}) => {
     const columns = useMemo(() => Columns, [])
     const data = useMemo(() => Data, [Data])
 
@@ -47,7 +47,6 @@ export const DataTable = ({ Columns, Data, Config, renderRowSubComponent }) => {
         }),
         []
     )
-
 
     const {
         getTableProps,
@@ -71,6 +70,8 @@ export const DataTable = ({ Columns, Data, Config, renderRowSubComponent }) => {
         selectedFlatRows,
         toggleAllRowsSelected,
         toggleRowSelected,
+        toggleAllRowsExpanded,
+        toggleRowExpanded,
         state: {
             pageIndex,
             pageSize,
@@ -94,6 +95,8 @@ export const DataTable = ({ Columns, Data, Config, renderRowSubComponent }) => {
         usePagination,
         useRowSelect
     )
+
+
 
     return (
         <div className='react-table-container'>

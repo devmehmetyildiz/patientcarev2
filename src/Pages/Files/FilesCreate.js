@@ -104,7 +104,6 @@ export class FilesCreate extends Component {
     const formData = new FormData();
     files.forEach((data, index) => {
       Object.keys(data).forEach(element => {
-        console.log('data: ', data);
         formData.append(`list[${index}].${element}`, data[element])
       });
     })

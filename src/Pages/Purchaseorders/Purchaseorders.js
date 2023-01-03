@@ -1,42 +1,39 @@
 import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
-import { Divider, Icon, Loader, Modal } from 'semantic-ui-react'
+import { Divider, Icon, Loader, Modal, Table } from 'semantic-ui-react'
 import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
 import DataTable from '../../Utils/DataTable'
 import LoadingPage from '../../Utils/LoadingPage'
 import Popup from '../../Utils/Popup'
 import NoDataScreen from '../../Utils/NoDataScreen'
+import PurchaseordersList from './PurchaseordersList'
 
 export default class Purchaseorders extends Component {
 
   constructor(props) {
     super(props)
-    const open = false
-    const selectedrecord = {}
     this.state = {
-      open,
-      selectedrecord
+      open: false,
+      selectedrecord: {},
+      expandedRow: []
     }
   }
 
   componentDidMount() {
-    const { GetPurchaseorders } = this.props
+    const { GetPurchaseorders, GetStocks } = this.props
     GetPurchaseorders()
+    GetStocks()
   }
 
   render() {
 
     const Columns = [
       {
-        // Make an expander cell
-        Header: () => null, // No header
-        id: 'expander', // It needs an ID
+        Header: () => null,
+        id: 'expander',
         Cell: ({ row }) => (
-          // Use Cell to render an expander for each row.
-          // We can use the getToggleRowExpandedProps prop-getter
-          // to build the expander.
           <span {...row.getToggleRowExpandedProps()}>
-            {row.isExpanded ? '👇' : '👉'}
+            {row.isExpanded ? <Icon name='triangle down' /> : <Icon name='triangle right' />}
           </span>
         ),
       },
@@ -52,18 +49,27 @@ export default class Purchaseorders extends Component {
       { accessor: 'delete', Header: "Sil", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
     const initialConfig = { hiddenColumns: ['concurrencyStamp'] };
 
-    const { Purchaseorders, DeletePurchaseorders, removePurchaseordernotification } = this.props
+    const { Purchaseorders, DeletePurchaseorders, removePurchaseordernotification, Stocks, removeStocknotification } = this.props
     const { notifications, list, isLoading, isDispatching } = Purchaseorders
     if (notifications && notifications.length > 0) {
       let msg = notifications[0]
       Popup(msg.type, msg.code, msg.description)
       removePurchaseordernotification()
     }
+    if (Stocks.notifications && Stocks.notifications.length > 0) {
+      let msg = notifications[0]
+      Popup(msg.type, msg.code, msg.description)
+      removeStocknotification()
+    }
 
     (list || []).map(item => {
       item.edit = <Link to={`/Purchaseorders/${item.concurrencyStamp}/edit`} ><Icon size='large' className='row-edit' name='edit' /></Link>
       item.delete = <Icon link size='large' color='red' name='alternate trash' onClick={() => { this.setState({ selectedrecord: item, open: true }) }} />
     })
+
+
+
+
 
     return (
       isLoading || isDispatching ? <LoadingPage /> :
@@ -92,11 +98,10 @@ export default class Purchaseorders extends Component {
             <Divider className='w-full  h-[1px]' />
             {list.length > 0 ?
               <div className='w-full mx-auto '>
-                <DataTable
-                  Columns={Columns}
+                <PurchaseordersList
                   Data={list}
-                  Config={initialConfig}
-                  renderRowSubComponent={({ row }) => (<p>merhaba dünya</p>)}
+                  Columns={Columns}
+                  initialConfig={initialConfig}
                 />
               </div> : <NoDataScreen message="Açık sipariş bulunamadı" />
             }
@@ -137,6 +142,10 @@ export default class Purchaseorders extends Component {
 
   handleChangeModal = (value) => {
     this.setState({ modal: value })
+  }
+
+  handleRowExpender = (newvalue) => {
+    this.setState({ expandedRow: newvalue })
   }
 
 }

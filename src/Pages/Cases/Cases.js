@@ -89,7 +89,7 @@ export default class Cases extends Component {
       { accessor: 'edit', Header: "Güncelle", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' },
       { accessor: 'delete', Header: "Sil", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
 
-    const initialConfig = { hiddenColumns: ['concurrencyStamp'] };
+    const initialConfig = { hiddenColumns: ['concurrencyStamp','createdUser','updatedUser','createTime','updateTime'] };
 
     const { Cases, removeCasenotification, DeleteCases } = this.props
     const { notifications, list, isLoading, isDispatching } = Cases

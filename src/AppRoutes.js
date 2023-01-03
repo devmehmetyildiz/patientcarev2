@@ -39,6 +39,18 @@ const Purchaseorders = lazy(() => import('./Containers/Purchaseorders/Purchaseor
 const PurchaseordersCreate = lazy(() => import('./Containers/Purchaseorders/PurchaseordersCreate'));
 const PurchaseordersEdit = lazy(() => import('./Containers/Purchaseorders/PurchaseordersEdit'));
 
+const Patienttypes = lazy(() => import('./Containers/Patienttypes/Patienttypes'));
+const PatienttypesCreate = lazy(() => import('./Containers/Patienttypes/PatienttypesCreate'));
+const PatienttypesEdit = lazy(() => import('./Containers/Patienttypes/PatienttypesEdit'));
+
+const Costumertypes = lazy(() => import('./Containers/Costumertypes/Costumertypes'));
+const CostumertypesCreate = lazy(() => import('./Containers/Costumertypes/CostumertypesCreate'));
+const CostumertypesEdit = lazy(() => import('./Containers/Costumertypes/CostumertypesEdit'));
+
+const Patientdefines = lazy(() => import('./Containers/Patientdefines/Patientdefines'));
+const PatientdefinesCreate = lazy(() => import('./Containers/Patientdefines/PatientdefinesCreate'));
+const PatientdefinesEdit = lazy(() => import('./Containers/Patientdefines/PatientdefinesEdit'));
+
 const Stocks = lazy(() => import('./Containers/Stocks/Stocks'));
 const StocksCreate = lazy(() => import('./Containers/Stocks/StocksCreate'));
 const StocksEdit = lazy(() => import('./Containers/Stocks/StocksEdit'));
@@ -90,6 +102,15 @@ class AppRoutes extends Component {
           <Route exact path="/Purchaseorders" component={Purchaseorders} />
           <Route exact path="/Purchaseorders/Create" component={PurchaseordersCreate} />
           <Route exact path="/Purchaseorders/:PurchaseorderID/Edit" component={PurchaseordersEdit} />
+          <Route exact path="/Costumertypes" component={Costumertypes} />
+          <Route exact path="/Costumertypes/Create" component={CostumertypesCreate} />
+          <Route exact path="/Costumertypes/:CostumertypeID/Edit" component={CostumertypesEdit} />
+          <Route exact path="/Patienttypes" component={Patienttypes} />
+          <Route exact path="/Patienttypes/Create" component={PatienttypesCreate} />
+          <Route exact path="/Patienttypes/:PatienttypeID/Edit" component={PatienttypesEdit} />
+          <Route exact path="/Patientdefines" component={Patientdefines} />
+          <Route exact path="/Patientdefines/Create" component={PatientdefinesCreate} />
+          <Route exact path="/Patientdefines/:PatientdefineID/Edit" component={PatientdefinesEdit} />
           <Route exact path="/Profile/Edit" component={ProfileEdit} />
           <Redirect to="/" />
         </Switch>

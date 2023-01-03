@@ -112,7 +112,7 @@ export default class Users extends Component {
       { accessor: 'edit', Header: "Güncelle", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' },
       { accessor: 'delete', Header: "Sil", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
 
-    const initialConfig = { hiddenColumns: ['concurrencyStamp'] };
+      const initialConfig = { hiddenColumns: ['concurrencyStamp','createdUser','updatedUser','createTime','updateTime'] };
 
     const { Users, removeUsernotification, DeleteUsers } = this.props
     const { notifications, list, isLoading, isDispatching } = Users
