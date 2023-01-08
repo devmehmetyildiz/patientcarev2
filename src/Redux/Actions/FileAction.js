@@ -56,18 +56,19 @@ export const GetFile = (guid) => async (dispatch, getState) => {
         })
 }
 
-export const AddFiles = (data, historypusher) => async (dispatch, getState) => {
+export const AddFiles = (data, historypusher, url) => async (dispatch, getState) => {
     const localcookies = new cookies();
     dispatch({ type: ACTION_TYPES.ADD_FILE_INIT })
     axios({
         method: `post`,
         url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.FILE}/Add`,
-        headers: { Authorization: "Bearer  " + localcookies.get('patientcare'), contentType: 'multipart/form-data' },
+        headers: { Authorization: "Bearer  " + localcookies.get('patientcare'), contentType: 'mime/form-data' },
         data: data
     })
         .then(() => {
             dispatch({ type: ACTION_TYPES.ADD_FILE_SUCCESS })
-            historypusher.push("/Files")
+            historypusher.push(url ? url : '/Files')
+
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_FILES_NOTIFICATION, payload: axiosErrorHelper(error) })
@@ -75,13 +76,19 @@ export const AddFiles = (data, historypusher) => async (dispatch, getState) => {
         })
 }
 
-export const EditFiles = (data, historypusher) => async (dispatch, getState) => {
+export const EditFiles = (data, historypusher, url) => async (dispatch, getState) => {
+    const localcookies = new cookies();
     dispatch({ type: ACTION_TYPES.EDIT_FILE_INIT })
-    await instanse.post(ROUTES.FILE + "/Update", data)
+    axios({
+        method: `post`,
+        url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.FILE}/update`,
+        headers: { Authorization: "Bearer  " + localcookies.get('patientcare'), contentType: 'mime/form-data' },
+        data: data
+    })
         .then(response => {
             {
                 dispatch({ type: ACTION_TYPES.EDIT_FILE_SUCCESS, payload: response.data })
-                historypusher.push('/Files')
+                historypusher.push(url ? url : '/Files')
             }
         })
         .catch(error => {

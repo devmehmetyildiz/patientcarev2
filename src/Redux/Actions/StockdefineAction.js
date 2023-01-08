@@ -64,7 +64,7 @@ export const AddStockdefines = (data, historypusher) => async (dispatch, getStat
         .then(response => {
             {
                 dispatch({ type: ACTION_TYPES.ADD_STOCKDEFINE_SUCCESS, payload: response.data })
-                historypusher.push('/Stockdefines')
+                historypusher && historypusher.push('/Stockdefines')
             }
         })
         .catch(error => {

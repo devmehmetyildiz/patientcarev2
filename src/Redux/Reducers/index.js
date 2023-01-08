@@ -14,6 +14,7 @@ import PurchaseorderReducer from "./PurchaseorderReducer"
 import PatienttypeReducer from "./PatienttypeReducer"
 import CostumertypeReducer from "./CostumertypeReducer"
 import PatientdefineReducer from "./PatientdefineReducer"
+import PatientReducer from "./PatientReducer";
 
 const reducers = combineReducers({
     Units: UnitReducer,
@@ -31,6 +32,7 @@ const reducers = combineReducers({
     Costumertypes: CostumertypeReducer,
     Patienttypes: PatienttypeReducer,
     Patientdefines: PatientdefineReducer,
+    Patients:PatientReducer
 });
 
 export default reducers;

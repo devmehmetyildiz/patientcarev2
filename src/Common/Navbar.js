@@ -37,8 +37,8 @@ export class Navbar extends Component {
         </div>
         < div className='p-2 w-[250px] flex justify-center items-center' >
           <p className='select-none m-0 font-Common font-bold text-[1.84em] line-none text-white dark:text-TextColor'>
-            AR
-            <span className='text-[#c5a47e]'>MS</span>
+            ELDER
+            <span className='text-[#c5a47e]'>CAMP</span>
           </p>
         </div >
         <div className='flex flex-row justify-center items-center h-full'>

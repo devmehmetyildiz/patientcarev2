@@ -5,18 +5,16 @@ import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
 import Popup from '../../Utils/Popup'
 import LoadingPage from '../../Utils/LoadingPage'
+import Notification from '../../Utils/Notification'
 
-export class StationsCreate extends Component {
+export default class StationsCreate extends Component {
   render() {
 
-    const { removeStationnotification, Stations ,isLoading , isDispatching} = this.props
-    const { notifications, } = Stations
+    const { removeStationnotification, Stations } = this.props
+    const { notifications, isLoading, isDispatching } = Stations
 
-    if (notifications && notifications.length > 0) {
-      let msg = notifications[0]
-      Popup(msg.type, msg.code, msg.description)
-      removeStationnotification()
-    }
+    Notification(notifications, removeStationnotification)
+
 
     return (
       isLoading || isDispatching ? <LoadingPage /> :
@@ -78,9 +76,8 @@ export class StationsCreate extends Component {
       })
     } else {
       AddStations(data, history)
-    } 
+    }
   }
 
 
 }
-export default withRouter(StationsCreate)

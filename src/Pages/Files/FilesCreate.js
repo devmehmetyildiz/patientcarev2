@@ -142,6 +142,7 @@ export class FilesCreate extends Component {
         createdUser: '',
         updatedUser: '',
         deleteUser: '',
+        willDelete:false,
         isActive: true,
       }]
     })

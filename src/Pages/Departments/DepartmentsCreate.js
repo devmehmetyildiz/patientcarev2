@@ -61,7 +61,7 @@ export class DepartmentsCreate extends Component {
                 <Form.Input label="Departman Adı" placeholder="Departman Adı" name="name" fluid />
               </Form.Field>
               <Form.Field>
-                <label className='text-[#000000de]'>İstasyonlar</label>
+                <label className='text-[#000000de]'>Tanımlı Hastalar</label>
                 <Dropdown label="İstasyonlar" placeholder='İstasyonlar' clearable search fluid multiple selection options={Stationoptions} onChange={this.handleChange} />
               </Form.Field>
               <div className='flex flex-row w-full justify-between py-4  items-center'>

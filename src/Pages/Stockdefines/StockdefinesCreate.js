@@ -29,7 +29,7 @@ export default class StockdefinesCreate extends Component {
 
   render() {
     const { removeStockdefinenotification, Departments, Units, Stockdefines,
-      removeUnitnotification, removeDepartmentnotification
+      removeUnitnotification, removeDepartmentnotification, history
     } = this.props
 
     if (Departments.notifications && Departments.notifications.length > 0) {
@@ -88,14 +88,14 @@ export default class StockdefinesCreate extends Component {
                 </FormField>
               </Form.Group>
               <div className='flex flex-row w-full justify-between py-4  items-center'>
-                <Link to="/Stockdefines">
+                {history && <Link to="/Stockdefines">
                   <Button floated="left" color='grey'>Geri Dön</Button>
-                </Link>
+                </Link>}
                 <Button floated="right" type='submit' color='blue'>Oluştur</Button>
               </div>
             </Form>
-          </div>
-        </div>
+          </div >
+        </div >
     )
   }
 

@@ -11,7 +11,7 @@ export function Sidebar(props) {
     const [Pages, setPages] = useState([
         {
             id: 1,
-            title: "Boş Ekran",
+            title: "Kurum Yönetimi",
             url: "/Dashboard",
             icon: <TbGauge className=' text-blue-700' />
         },
@@ -21,6 +21,16 @@ export function Sidebar(props) {
             isOpened: false,
             icon: <Tb3DRotate className='text-red-700' />,
             items: [
+                {
+                    id: 1,
+                    subtitle: "Ön Kayıtlar",
+                    url: "/Preregistrations"
+                },
+                {
+                    id: 1,
+                    subtitle: "Kurumdaki Hastalar",
+                    url: "/Patients"
+                },
                 {
                     id: 1,
                     subtitle: "Hasta Tanımları",
@@ -130,6 +140,7 @@ export function Sidebar(props) {
     ])
 
     const openCollapse = (e) => {
+        console.log('e: ', e);
         const olddata = Pages
         olddata.forEach(element => {
             if (element.id === e) {
@@ -146,12 +157,18 @@ export function Sidebar(props) {
             <div className='flex flex-col w-full'>
                 <div className=''>
                     {Pages.map((item, index) => {
-                        return <div key={index} className=' w-full flex items-start flex-col relative'>
+                        return <div key={index} className='w-full flex items-start flex-col relative'>
                             <div onMouseEnter={() => {
                                 if (iconOnly) {
                                     openCollapse(item.id)
                                 }
-                            }} onClick={() => { openCollapse(item.id) }} className='group py-2 mr-8 flex flex-row rounded-r-full hover:bg-[#c1d8e159] dark:hover:bg-NavHoverbg w-full justify-between items-center cursor-pointer transition-all duration-300'>
+                            }}
+                                onMouseLeave={() => {
+                                    if (iconOnly) {
+                                        openCollapse(item.id)
+                                    }
+                                }}
+                                onClick={() => { openCollapse(item.id) }} className='group py-2 mr-8 flex flex-row rounded-r-full hover:bg-[#c1d8e159] dark:hover:bg-NavHoverbg w-full justify-between items-center cursor-pointer transition-all duration-300'>
                                 <div className='flex flex-row items-center justify-center'>
                                     <div className='ml-2 p-2 text-lg text-purple-600 rounded-full bg-[#6c729333] group-hover:bg-[#7eb7ce] dark:group-hover:bg-Contentfg transition-all duration-300'>
                                         {item.icon}
@@ -170,8 +187,8 @@ export function Sidebar(props) {
                                 </Collapse>
                                 : null}
                             {iconOnly ?
-                                <div className={`${item.isOpened ? 'visible' : 'hidden'} transition-all ease-in-out p-4 whitespace-nowrap duration-500 cursor-pointer shadow-lg left-[50px] top-0 absolute bg-white dark:bg-NavHoverbg`} onMouseLeave={() => { openCollapse(item.id) }}>
-                                    {item.url ? <h1 className='m-0 cursor-pointer hover:text-[#2b7694] dark:hover:text-white text-TextColor font-bold font-Common'>{item.title}</h1> : <h1 className='text-TextColor font-bold font-Common'>{item.title}</h1>}
+                                <div className={`${item.isOpened ? 'visible' : 'hidden'} transition-all ease-in-out p-4 whitespace-nowrap duration-500 cursor-pointer shadow-lg left-[50px] top-0 z-50 absolute bg-white dark:bg-NavHoverbg`} onMouseLeave={() => { openCollapse(item.id) }}>
+                                    {item.url ? <h3 className='m-0 cursor-pointer hover:text-[#2b7694] dark:hover:text-white text-TextColor font-bold font-Common'>{item.title}</h3> : <h3 className='text-TextColor font-bold font-Common'>{item.title}</h3>}
                                     {item.items ?
                                         <Collapse isOpened={item.isOpened}>
                                             {item.items.map((subitem, index) => {

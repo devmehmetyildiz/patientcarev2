@@ -51,6 +51,16 @@ const Patientdefines = lazy(() => import('./Containers/Patientdefines/Patientdef
 const PatientdefinesCreate = lazy(() => import('./Containers/Patientdefines/PatientdefinesCreate'));
 const PatientdefinesEdit = lazy(() => import('./Containers/Patientdefines/PatientdefinesEdit'));
 
+const Patients = lazy(() => import('./Containers/Patients/Patients'));
+const PatientsCreate = lazy(() => import('./Containers/Patients/PatientsCreate'));
+const PatientsEdit = lazy(() => import('./Containers/Patients/PatientsEdit'));
+
+const Preregistrations = lazy(() => import('./Containers/Preregistrations/Preregistrations'));
+const PreregistrationsCreate = lazy(() => import('./Containers/Preregistrations/PreregistrationsCreate'));
+const PreregistrationsEdit = lazy(() => import('./Containers/Preregistrations/PreregistrationsEdit'));
+const PreregistrationsEditfile = lazy(() => import('./Containers/Preregistrations/PreregistrationsEditfile'));
+const PreregistrationsEditstock = lazy(() => import('./Containers/Preregistrations/PreregistrationsEditstock'));
+
 const Stocks = lazy(() => import('./Containers/Stocks/Stocks'));
 const StocksCreate = lazy(() => import('./Containers/Stocks/StocksCreate'));
 const StocksEdit = lazy(() => import('./Containers/Stocks/StocksEdit'));
@@ -111,6 +121,14 @@ class AppRoutes extends Component {
           <Route exact path="/Patientdefines" component={Patientdefines} />
           <Route exact path="/Patientdefines/Create" component={PatientdefinesCreate} />
           <Route exact path="/Patientdefines/:PatientdefineID/Edit" component={PatientdefinesEdit} />
+          <Route exact path="/Patients" component={Patients} />
+          <Route exact path="/Patients/Create" component={PatientsCreate} />
+          <Route exact path="/Patients/:PatientID/Edit" component={PatientsEdit} />
+          <Route exact path="/Preregistrations" component={Preregistrations} />
+          <Route exact path="/Preregistrations/Create" component={PreregistrationsCreate} />
+          <Route exact path="/Preregistrations/:PatientID/Edit" component={PreregistrationsEdit} />
+          <Route exact path="/Preregistrations/:PatientID/Editfile" component={PreregistrationsEditfile} />
+          <Route exact path="/Preregistrations/:PatientID/Editstock" component={PreregistrationsEditstock} />
           <Route exact path="/Profile/Edit" component={ProfileEdit} />
           <Redirect to="/" />
         </Switch>
