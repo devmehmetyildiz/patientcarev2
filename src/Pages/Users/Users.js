@@ -154,7 +154,7 @@ export default class Users extends Component {
                     </Breadcrumb>
                   </GridColumn>
                   <GridColumn width={8} >
-                    <Link to={"Users/Create"}>
+                    <Link to={"/Users/Create"}>
                       <Button color='blue' floated='right' className='list-right-green-button'>
                         Oluştur
                       </Button>

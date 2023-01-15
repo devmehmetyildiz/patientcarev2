@@ -1,6 +1,8 @@
 import instanse from "./axios"
 import cookies from 'universal-cookie';
-import { axiosErrorHelper } from '../../Utils/ErrorHelper';
+import AxiosErrorHelper from '../../Utils/AxiosErrorHelper';
+import { AuthContext } from "../../Provider/AuthProvider";
+import { useContext } from "react";
 
 export const ACTION_TYPES = {
   LOGIN_REQUEST_INIT: 'LOGIN_REQUEST_INIT',
@@ -33,14 +35,15 @@ export const ACTION_TYPES = {
 export const logIn = (data, historyPusher, redirecturl) => {
   return (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.LOGIN_REQUEST_INIT })
-    return instanse.post(`/auth/login`, data)
+    instanse.post(`/auth/login`, data)
       .then(result => {
         dispatch({ type: ACTION_TYPES.LOGIN_REQUEST_SUCCESS })
-        redirecturl ? window.location = (redirecturl) : window.location = ('Home')
+        // redirecturl ? window.location = (redirecturl) : window.location = ('Home')
+         window.location = ('Home')
       })
       .catch(error => {
-        dispatch({ type: ACTION_TYPES.FILL_USER_NOTIFICATION, payload: axiosErrorHelper(error) })
-        dispatch({ type: ACTION_TYPES.LOGIN_REQUEST_ERROR, payload: axiosErrorHelper(error) })
+        dispatch({ type: ACTION_TYPES.FILL_USER_NOTIFICATION, payload: AxiosErrorHelper(error) })
+        dispatch({ type: ACTION_TYPES.LOGIN_REQUEST_ERROR, payload: AxiosErrorHelper(error) })
       })
   }
 }
@@ -49,11 +52,11 @@ export const GetActiveUser = () => async (dispatch, getState) => {
   dispatch({ type: ACTION_TYPES.GET_ACTIVEUSER_INIT })
   await instanse.get("Auth/GetActiveUser")
     .then(response => {
-       dispatch({ type: ACTION_TYPES.GET_ACTIVEUSER_SUCCESS, payload: response.data }) 
+      dispatch({ type: ACTION_TYPES.GET_ACTIVEUSER_SUCCESS, payload: response.data })
     })
     .catch(error => {
-      dispatch({ type: ACTION_TYPES.FILL_USER_NOTIFICATION, payload: axiosErrorHelper(error) })
-      dispatch({ type: ACTION_TYPES.GET_ACTIVEUSER_ERROR, payload: axiosErrorHelper(error) })
+      dispatch({ type: ACTION_TYPES.FILL_USER_NOTIFICATION, payload: AxiosErrorHelper(error) })
+      dispatch({ type: ACTION_TYPES.GET_ACTIVEUSER_ERROR, payload: AxiosErrorHelper(error) })
     })
 }
 
@@ -61,22 +64,22 @@ export const GetUserMeta = () => async (dispatch, getState) => {
   dispatch({ type: ACTION_TYPES.GET_USERMETA_INIT })
   await instanse.get("Auth/GetUserMeta")
     .then(response => {
-       dispatch({ type: ACTION_TYPES.GET_USERMETA_SUCCESS, payload: response.data }) 
+      dispatch({ type: ACTION_TYPES.GET_USERMETA_SUCCESS, payload: response.data })
     })
     .catch(error => {
-      dispatch({ type: ACTION_TYPES.FILL_USER_NOTIFICATION, payload: axiosErrorHelper(error) })
-      dispatch({ type: ACTION_TYPES.GET_USERMETA_ERROR, payload: axiosErrorHelper(error) })
+      dispatch({ type: ACTION_TYPES.FILL_USER_NOTIFICATION, payload: AxiosErrorHelper(error) })
+      dispatch({ type: ACTION_TYPES.GET_USERMETA_ERROR, payload: AxiosErrorHelper(error) })
     })
 }
 export const GetUserRoles = () => async (dispatch, getState) => {
   dispatch({ type: ACTION_TYPES.GET_USERSROLES_INIT })
   await instanse.get("Auth/GetUserRoles")
     .then(response => {
-       dispatch({ type: ACTION_TYPES.GET_USERSROLES_SUCCESS, payload: response.data }) 
+      dispatch({ type: ACTION_TYPES.GET_USERSROLES_SUCCESS, payload: response.data })
     })
     .catch(error => {
-      dispatch({ type: ACTION_TYPES.FILL_USER_NOTIFICATION, payload: axiosErrorHelper(error) })
-      dispatch({ type: ACTION_TYPES.GET_USERSROLES_ERROR, payload: axiosErrorHelper(error) })
+      dispatch({ type: ACTION_TYPES.FILL_USER_NOTIFICATION, payload: AxiosErrorHelper(error) })
+      dispatch({ type: ACTION_TYPES.GET_USERSROLES_ERROR, payload: AxiosErrorHelper(error) })
     })
 }
 
@@ -87,8 +90,8 @@ export const ChangePassword = (data) => async (dispatch, getState) => {
       { dispatch({ type: ACTION_TYPES.GET_USERSROLES_SUCCESS, payload: response.data }) }
     })
     .catch(error => {
-      dispatch({ type: ACTION_TYPES.FILL_USER_NOTIFICATION, payload: axiosErrorHelper(error) })
-      dispatch({ type: ACTION_TYPES.GET_USERSROLES_ERROR, payload: axiosErrorHelper(error) })
+      dispatch({ type: ACTION_TYPES.FILL_USER_NOTIFICATION, payload: AxiosErrorHelper(error) })
+      dispatch({ type: ACTION_TYPES.GET_USERSROLES_ERROR, payload: AxiosErrorHelper(error) })
     })
 }
 

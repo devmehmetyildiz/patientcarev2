@@ -1,5 +1,5 @@
 import { ROUTES } from "../../Utils/Constants";
-import { axiosErrorHelper } from "../../Utils/ErrorHelper";
+import AxiosErrorHelper from "../../Utils/AxiosErrorHelper";
 import Popup from "../../Utils/Popup";
 import instanse from "./axios"
 
@@ -25,8 +25,8 @@ export const GetStockmovements = () => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_STOCKMOVEMENTS_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_STOCKMOVEMENT_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_STOCKMOVEMENTS_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_STOCKMOVEMENT_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_STOCKMOVEMENTS_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -37,8 +37,8 @@ export const GetStockmovement = (guid) => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_STOCKMOVEMENT_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_STOCKMOVEMENT_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_STOCKMOVEMENT_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_STOCKMOVEMENT_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_STOCKMOVEMENT_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 

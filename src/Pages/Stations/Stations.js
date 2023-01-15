@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link, withRouter } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Divider, Icon, Loader, Modal } from 'semantic-ui-react'
 import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
 import DataTable from '../../Utils/DataTable'
@@ -67,7 +67,7 @@ export class Stations extends Component {
                     </Breadcrumb>
                   </GridColumn>
                   <GridColumn width={8} >
-                    <Link to={"Stations/Create"}>
+                    <Link to={"/Stations/Create"}>
                       <Button color='blue' floated='right' className='list-right-green-button'>
                         Oluştur
                       </Button>

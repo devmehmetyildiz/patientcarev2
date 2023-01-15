@@ -1,5 +1,5 @@
 import { ROUTES } from "../../Utils/Constants";
-import { axiosErrorHelper } from "../../Utils/ErrorHelper";
+import AxiosErrorHelper from "../../Utils/AxiosErrorHelper";
 import instanse from "./axios"
 
 export const ACTION_TYPES = {
@@ -36,8 +36,8 @@ export const GetPatients = () => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_PATIENTS_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_PATIENTS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_PATIENTS_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_PATIENTS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_PATIENTS_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -48,8 +48,8 @@ export const Getpreregistrations = () => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_PATIENTS_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_PATIENTS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_PATIENTS_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_PATIENTS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_PATIENTS_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -60,8 +60,8 @@ export const GetPatient = (guid) => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_PATIENT_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_PATIENTS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_PATIENT_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_PATIENTS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_PATIENT_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -75,8 +75,8 @@ export const AddPatients = (data, historypusher, url) => async (dispatch, getSta
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_PATIENTS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.ADD_PATIENT_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_PATIENTS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.ADD_PATIENT_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -90,8 +90,8 @@ export const EditPatients = (data, historypusher,url) => async (dispatch, getSta
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_PATIENTS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.EDIT_PATIENT_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_PATIENTS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.EDIT_PATIENT_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -105,8 +105,8 @@ export const EditPatientstocks = (data, historypusher,url) => async (dispatch, g
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_PATIENTS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.EDIT_PATIENT_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_PATIENTS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.EDIT_PATIENT_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -120,8 +120,8 @@ export const DeletePatients = (data) => async (dispatch, getState) => {
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_PATIENTS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.DELETE_PATIENT_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_PATIENTS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.DELETE_PATIENT_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 

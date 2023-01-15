@@ -3,10 +3,11 @@ import { TbGauge, Tb3DRotate, TbAccessPoint, TbActivity, TbAd } from "react-icon
 import { IoIosArrowDown, IoSettingsSharp } from "react-icons/io";
 import { MdSettings } from "react-icons/md";
 import { Collapse } from 'react-collapse';
-import { withRouter } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export function Sidebar(props) {
 
+    const navigate = useNavigate()
     const { iconOnly, seticonOnly } = props
     const [Pages, setPages] = useState([
         {
@@ -182,7 +183,7 @@ export function Sidebar(props) {
                             {!iconOnly && item.items ?
                                 <Collapse isOpened={item.isOpened}>
                                     {item.items.map((subitem, index) => {
-                                        return <h1 key={index + index} onClick={() => { props.history.push(subitem.url) }} className=' m-0 cursor-pointer hover:text-[#2b7694] whitespace-nowrap dark:hover:text-white text-TextColor text-sm w-full px-8 py-1' > {subitem.subtitle}</h1>
+                                        return <h1 key={index + index} onClick={() => { navigate(subitem.url) }} className=' m-0 cursor-pointer hover:text-[#2b7694] whitespace-nowrap dark:hover:text-white text-TextColor text-sm w-full px-8 py-1' > {subitem.subtitle}</h1>
                                     })}
                                 </Collapse>
                                 : null}
@@ -206,4 +207,4 @@ export function Sidebar(props) {
         </div >
     )
 }
-export default withRouter(Sidebar)
+export default Sidebar

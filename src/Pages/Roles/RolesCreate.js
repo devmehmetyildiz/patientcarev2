@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link, withRouter } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Checkbox, Container, Divider, Form, Icon } from 'semantic-ui-react'
 import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
@@ -139,4 +139,4 @@ export class RolesCreate extends Component {
             : this.setState({ selectedauths: this.state.selectedauths.filter(function (el) { return el.name != e.target.id; }) })
     }
 }
-export default withRouter(RolesCreate)
+export default RolesCreate

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link, withRouter } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Divider, Icon, Loader, Modal, Popup } from 'semantic-ui-react'
 import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
 import DataTable from '../../Utils/DataTable'
@@ -160,7 +160,7 @@ export default class Preregistrations extends Component {
                     </Breadcrumb>
                   </GridColumn>
                   <GridColumn width={8} >
-                    <Link to={"Preregistrations/Create"}>
+                    <Link to={"/Preregistrations/Create"}>
                       <Button color='blue' floated='right' className='list-right-green-button'>
                         Oluştur
                       </Button>

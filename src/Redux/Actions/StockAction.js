@@ -1,5 +1,5 @@
 import { ROUTES } from "../../Utils/Constants";
-import { axiosErrorHelper } from "../../Utils/ErrorHelper";
+import AxiosErrorHelper from "../../Utils/AxiosErrorHelper";
 import Popup from "../../Utils/Popup";
 import instanse from "./axios"
 
@@ -50,8 +50,8 @@ export const GetStocks = () => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_STOCKS_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_STOCKS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_STOCKS_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_STOCKS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_STOCKS_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -62,8 +62,8 @@ export const GetStock = (guid) => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_STOCK_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_STOCKS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_STOCK_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_STOCKS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_STOCK_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -77,8 +77,8 @@ export const AddStocks = (data, historypusher) => async (dispatch, getState) => 
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_STOCKS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.ADD_STOCK_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_STOCKS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.ADD_STOCK_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -92,8 +92,8 @@ export const EditStocks = (data, historypusher) => async (dispatch, getState) =>
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_STOCKS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.EDIT_STOCK_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_STOCKS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.EDIT_STOCK_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -108,8 +108,8 @@ export const DeleteStocks = (data) => async (dispatch, getState) => {
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_STOCKS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.DELETE_STOCK_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_STOCKS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.DELETE_STOCK_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -141,8 +141,8 @@ export const MoveStocks = (data, historypusher) => async (dispatch, getState) =>
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_STOCKS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.MOVE_STOCK_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_STOCKS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.MOVE_STOCK_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -156,8 +156,8 @@ export const DeactivateStocks = (data, historypusher) => async (dispatch, getSta
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_STOCKS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.DEACTIVATE_STOCK_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_STOCKS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.DEACTIVATE_STOCK_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 

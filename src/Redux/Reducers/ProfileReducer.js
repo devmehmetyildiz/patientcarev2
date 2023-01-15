@@ -9,7 +9,8 @@ const defaultState = {
   notifications: [],
   meta: {},
   username: "",
-  roles: []
+  roles: [],
+  auth: false
 }
 const ProfileReducer = (state = defaultState, { type, payload }) => {
   switch (type) {

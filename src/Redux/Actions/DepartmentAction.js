@@ -1,5 +1,5 @@
 import { ROUTES } from "../../Utils/Constants";
-import { axiosErrorHelper } from "../../Utils/ErrorHelper";
+import AxiosErrorHelper from "../../Utils/AxiosErrorHelper";
 import Popup from "../../Utils/Popup";
 import instanse from "./axios"
 
@@ -41,8 +41,8 @@ export const GetDepartments = () => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_DEPARTMENTS_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_DEPARTMENTS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_DEPARTMENTS_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_DEPARTMENTS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_DEPARTMENTS_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -53,8 +53,8 @@ export const GetDepartment = (guid) => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_DEPARTMENT_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_DEPARTMENTS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_DEPARTMENT_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_DEPARTMENTS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_DEPARTMENT_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -68,8 +68,8 @@ export const AddDepartments = (data, historypusher) => async (dispatch, getState
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_DEPARTMENTS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.ADD_DEPARTMENT_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_DEPARTMENTS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.ADD_DEPARTMENT_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -83,8 +83,8 @@ export const EditDepartments = (data, historypusher) => async (dispatch, getStat
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_DEPARTMENTS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.EDIT_DEPARTMENT_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_DEPARTMENTS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.EDIT_DEPARTMENT_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -99,8 +99,8 @@ export const DeleteDepartments = (data) => async (dispatch, getState) => {
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_DEPARTMENTS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.DELETE_DEPARTMENT_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_DEPARTMENTS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.DELETE_DEPARTMENT_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 

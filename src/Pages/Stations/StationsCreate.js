@@ -1,13 +1,16 @@
 import React, { Component } from 'react'
-import { Link, withRouter } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Checkbox, Container, Divider, Form, Icon } from 'semantic-ui-react'
 import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
 import Popup from '../../Utils/Popup'
 import LoadingPage from '../../Utils/LoadingPage'
 import Notification from '../../Utils/Notification'
+import { createBrowserHistory } from 'history';
+import withRouter from '../../Utils/WithRouter'
+const history = createBrowserHistory();
 
-export default class StationsCreate extends Component {
+export  class StationsCreate extends Component {
   render() {
 
     const { removeStationnotification, Stations } = this.props
@@ -53,7 +56,7 @@ export default class StationsCreate extends Component {
   handleSubmit = (e) => {
     e.preventDefault()
 
-    const { AddStations, history, fillStationnotification } = this.props
+    const { AddStations, navigate,fillStationnotification } = this.props
 
     const data = formToObject(e.target)
     data.id = 0
@@ -75,9 +78,10 @@ export default class StationsCreate extends Component {
         fillStationnotification(error)
       })
     } else {
-      AddStations(data, history)
+      AddStations(data, navigate)
     }
   }
 
 
 }
+export default withRouter(StationsCreate)

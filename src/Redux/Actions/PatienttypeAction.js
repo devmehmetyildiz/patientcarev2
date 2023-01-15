@@ -1,5 +1,5 @@
 import { ROUTES } from "../../Utils/Constants";
-import { axiosErrorHelper } from "../../Utils/ErrorHelper";
+import AxiosErrorHelper from "../../Utils/AxiosErrorHelper";
 import Popup from "../../Utils/Popup";
 import instanse from "./axios"
 
@@ -41,8 +41,8 @@ export const GetPatienttypes = () => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_PATIENTTYPES_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_PATIENTTYPES_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_PATIENTTYPES_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_PATIENTTYPES_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_PATIENTTYPES_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -53,8 +53,8 @@ export const GetPatienttype = (guid) => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_PATIENTTYPE_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_PATIENTTYPES_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_PATIENTTYPE_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_PATIENTTYPES_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_PATIENTTYPE_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -68,8 +68,8 @@ export const AddPatienttypes = (data, historypusher) => async (dispatch, getStat
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_PATIENTTYPES_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.ADD_PATIENTTYPE_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_PATIENTTYPES_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.ADD_PATIENTTYPE_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -83,8 +83,8 @@ export const EditPatienttypes = (data, historypusher) => async (dispatch, getSta
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_PATIENTTYPES_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.EDIT_PATIENTTYPE_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_PATIENTTYPES_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.EDIT_PATIENTTYPE_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -99,8 +99,8 @@ export const DeletePatienttypes = (data) => async (dispatch, getState) => {
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_PATIENTTYPES_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.DELETE_PATIENTTYPE_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_PATIENTTYPES_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.DELETE_PATIENTTYPE_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 

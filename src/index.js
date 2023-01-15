@@ -9,6 +9,7 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import TimerMiddleware from './Utils/TimerMiddleware';
 import 'semantic-ui-css/semantic.min.css'
+import AuthProvider from "./Provider/AuthProvider";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk, TimerMiddleware)))
@@ -22,11 +23,13 @@ const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk, T
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-  <Provider store={store}>
-    <BrowserRouter >
-      <App />
-    </BrowserRouter>
-  </Provider>
+  <AuthProvider>
+    <Provider store={store}>
+      <BrowserRouter >
+        <App />
+      </BrowserRouter>
+    </Provider>
+  </AuthProvider>
 );
 
 

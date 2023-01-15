@@ -1,5 +1,5 @@
 import { ROUTES } from "../../Utils/Constants";
-import { axiosErrorHelper } from "../../Utils/ErrorHelper";
+import AxiosErrorHelper from "../../Utils/AxiosErrorHelper";
 import instanse from "./axios"
 
 export const ACTION_TYPES = {
@@ -40,8 +40,8 @@ export const GetPurchaseorders = () => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_PURCHASEORDERS_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_PURCHASEORDERS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_PURCHASEORDERS_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_PURCHASEORDERS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_PURCHASEORDERS_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -52,8 +52,8 @@ export const GetPurchaseorder = (guid) => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_PURCHASEORDER_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_PURCHASEORDERS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_PURCHASEORDER_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_PURCHASEORDERS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_PURCHASEORDER_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -67,8 +67,8 @@ export const AddPurchaseorders = (data, historypusher) => async (dispatch, getSt
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_PURCHASEORDERS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.ADD_PURCHASEORDER_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_PURCHASEORDERS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.ADD_PURCHASEORDER_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -82,8 +82,8 @@ export const EditPurchaseorders = (data, historypusher) => async (dispatch, getS
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_PURCHASEORDERS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.EDIT_PURCHASEORDER_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_PURCHASEORDERS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.EDIT_PURCHASEORDER_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -98,8 +98,8 @@ export const DeletePurchaseorders = (data) => async (dispatch, getState) => {
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_PURCHASEORDERS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.DELETE_PURCHASEORDER_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_PURCHASEORDERS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.DELETE_PURCHASEORDER_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 

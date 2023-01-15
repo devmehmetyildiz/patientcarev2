@@ -1,5 +1,5 @@
 import { ROUTES } from "../../Utils/Constants";
-import { axiosErrorHelper } from "../../Utils/ErrorHelper";
+import AxiosErrorHelper from "../../Utils/AxiosErrorHelper";
 import instanse from "./axios"
 
 export const ACTION_TYPES = {
@@ -36,8 +36,8 @@ export const GetUsers = () => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_USERS_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_USERS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_USERS_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_USERS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_USERS_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -48,8 +48,8 @@ export const GetUser = (guid) => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_USER_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_USERS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_USER_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_USERS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_USER_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -63,8 +63,8 @@ export const AddUsers = (data, historypusher) => async (dispatch, getState) => {
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_USERS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.ADD_USER_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_USERS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.ADD_USER_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -78,8 +78,8 @@ export const EditUsers = (data, historypusher) => async (dispatch, getState) => 
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_USERS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.EDIT_USER_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_USERS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.EDIT_USER_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -94,8 +94,8 @@ export const DeleteUsers = (data) => async (dispatch, getState) => {
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_USERS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.DELETE_USER_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_USERS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.DELETE_USER_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 

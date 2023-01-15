@@ -1,5 +1,5 @@
 import { ROUTES } from "../../Utils/Constants";
-import { axiosErrorHelper } from "../../Utils/ErrorHelper";
+import AxiosErrorHelper from "../../Utils/AxiosErrorHelper";
 import Popup from "../../Utils/Popup";
 import instanse from "./axios"
 import cookies from 'universal-cookie';
@@ -39,8 +39,8 @@ export const GetFiles = () => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_FILES_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_FILES_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_FILES_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_FILES_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_FILES_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -51,8 +51,8 @@ export const GetFile = (guid) => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_FILE_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_FILES_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_FILE_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_FILES_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_FILE_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -71,7 +71,7 @@ export const AddFiles = (data, historypusher, url) => async (dispatch, getState)
 
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_FILES_NOTIFICATION, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_FILES_NOTIFICATION, payload: AxiosErrorHelper(error) })
             dispatch({ type: ACTION_TYPES.ADD_FILE_ERROR, payload: error })
         })
 }
@@ -92,8 +92,8 @@ export const EditFiles = (data, historypusher, url) => async (dispatch, getState
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_FILES_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.EDIT_FILE_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_FILES_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.EDIT_FILE_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -108,8 +108,8 @@ export const DeleteFiles = (data) => async (dispatch, getState) => {
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_FILES_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.DELETE_FILE_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_FILES_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.DELETE_FILE_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 

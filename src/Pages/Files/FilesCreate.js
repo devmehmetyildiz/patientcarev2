@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link, withRouter } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Checkbox, Container, Divider, Form, Icon, Table } from 'semantic-ui-react'
 import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
@@ -162,4 +162,4 @@ export class FilesCreate extends Component {
   }
 
 }
-export default withRouter(FilesCreate)
+export default FilesCreate

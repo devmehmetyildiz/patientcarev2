@@ -1,5 +1,5 @@
 import { ROUTES } from "../../Utils/Constants";
-import { axiosErrorHelper } from "../../Utils/ErrorHelper";
+import AxiosErrorHelper from "../../Utils/AxiosErrorHelper";
 import Popup from "../../Utils/Popup";
 import instanse from "./axios"
 
@@ -41,8 +41,8 @@ export const GetStockdefines = () => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_STOCKDEFINES_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_STOCKDEFINES_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_STOCKDEFINES_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_STOCKDEFINES_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_STOCKDEFINES_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -53,8 +53,8 @@ export const GetStockdefine = (guid) => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_STOCKDEFINE_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_STOCKDEFINES_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_STOCKDEFINE_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_STOCKDEFINES_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_STOCKDEFINE_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -68,8 +68,8 @@ export const AddStockdefines = (data, historypusher) => async (dispatch, getStat
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_STOCKDEFINES_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.ADD_STOCKDEFINE_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_STOCKDEFINES_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.ADD_STOCKDEFINE_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -83,8 +83,8 @@ export const EditStockdefines = (data, historypusher) => async (dispatch, getSta
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_STOCKDEFINES_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.EDIT_STOCKDEFINE_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_STOCKDEFINES_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.EDIT_STOCKDEFINE_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -99,8 +99,8 @@ export const DeleteStockdefines = (data) => async (dispatch, getState) => {
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_STOCKDEFINES_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.DELETE_STOCKDEFINE_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_STOCKDEFINES_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.DELETE_STOCKDEFINE_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { FaUserAlt } from 'react-icons/fa'
-import { Link, withRouter } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Button, Dropdown, Header, Icon, Modal, Segment, TransitionablePortal } from 'semantic-ui-react'
 
 export class Navbar extends Component {
@@ -88,4 +88,4 @@ export class Navbar extends Component {
   }
 
 }
-export default withRouter(Navbar)
+export default Navbar

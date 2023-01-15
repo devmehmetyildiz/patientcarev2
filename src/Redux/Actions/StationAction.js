@@ -1,5 +1,5 @@
 import { ROUTES } from "../../Utils/Constants";
-import { axiosErrorHelper } from "../../Utils/ErrorHelper";
+import AxiosErrorHelper from "../../Utils/AxiosErrorHelper";
 import Popup from "../../Utils/Popup";
 import instanse from "./axios"
 
@@ -41,8 +41,8 @@ export const GetStations = () => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_STATIONS_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_STATIONS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_STATIONS_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_STATIONS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_STATIONS_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -53,8 +53,8 @@ export const GetStation = (guid) => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_STATION_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_STATIONS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_STATION_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_STATIONS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_STATION_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -64,12 +64,12 @@ export const AddStations = (data, historypusher) => async (dispatch, getState) =
         .then(response => {
             {
                 dispatch({ type: ACTION_TYPES.ADD_STATION_SUCCESS, payload: response.data })
-                historypusher.push('/Stations')
+                historypusher('/Stations')
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_STATIONS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.ADD_STATION_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_STATIONS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.ADD_STATION_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -83,8 +83,8 @@ export const EditStations = (data, historypusher) => async (dispatch, getState) 
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_STATIONS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.EDIT_STATION_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_STATIONS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.EDIT_STATION_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -99,8 +99,8 @@ export const DeleteStations = (data) => async (dispatch, getState) => {
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_STATIONS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.DELETE_STATION_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_STATIONS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.DELETE_STATION_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 

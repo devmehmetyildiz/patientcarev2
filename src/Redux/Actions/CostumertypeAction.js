@@ -1,5 +1,5 @@
 import { ROUTES } from "../../Utils/Constants";
-import { axiosErrorHelper } from "../../Utils/ErrorHelper";
+import AxiosErrorHelper from "../../Utils/AxiosErrorHelper";
 import Popup from "../../Utils/Popup";
 import instanse from "./axios"
 
@@ -41,8 +41,8 @@ export const GetCostumertypes = () => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_COSTUMERTYPES_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_COSTUMERTYPES_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_COSTUMERTYPES_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_COSTUMERTYPES_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_COSTUMERTYPES_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -53,8 +53,8 @@ export const GetCostumertype = (guid) => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_COSTUMERTYPE_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_COSTUMERTYPES_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_COSTUMERTYPE_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_COSTUMERTYPES_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_COSTUMERTYPE_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -68,8 +68,8 @@ export const AddCostumertypes = (data, historypusher) => async (dispatch, getSta
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_COSTUMERTYPES_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.ADD_COSTUMERTYPE_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_COSTUMERTYPES_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.ADD_COSTUMERTYPE_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -83,8 +83,8 @@ export const EditCostumertypes = (data, historypusher) => async (dispatch, getSt
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_COSTUMERTYPES_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.EDIT_COSTUMERTYPE_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_COSTUMERTYPES_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.EDIT_COSTUMERTYPE_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -99,8 +99,8 @@ export const DeleteCostumertypes = (data) => async (dispatch, getState) => {
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_COSTUMERTYPES_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.DELETE_COSTUMERTYPE_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_COSTUMERTYPES_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.DELETE_COSTUMERTYPE_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 

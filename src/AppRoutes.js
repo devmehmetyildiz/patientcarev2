@@ -1,6 +1,7 @@
 import React, { Component, Suspense, lazy } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Spinner from './Common/Spinner'
+import PrivateRoute from './Utils/Protectedroutes';
 
 const Login = lazy(() => import('./Containers/Auth/Login'));
 const Roles = lazy(() => import('./Containers/Roles/Roles'));
@@ -74,64 +75,72 @@ const Home = lazy(() => import('./Pages/Home'));
 
 class AppRoutes extends Component {
   render() {
+
+    const routes = [
+      { exact: true, path: "/Login", auth: false, component: <Login /> },
+      { exact: true, path: "/Home", auth: true, component: <Home /> },
+      { exact: true, path: "/Roles", auth: true, component: <Roles /> },
+      { exact: true, path: "/Roles/Create", auth: true, component: <RolesCreate /> },
+      { exact: true, path: "/Roles/:RoleID/Edit", auth: true, component: <RolesEdit /> },
+      { exact: true, path: "/Departments", auth: true, component: <Departments /> },
+      { exact: true, path: "/Departments/Create", auth: true, component: <DepartmentsCreate /> },
+      { exact: true, path: "/Departments/:DepartmentID/Edit", auth: true, component: <DepartmentsEdit /> },
+      { exact: true, path: "/Stations", auth: true, component: <Stations /> },
+      { exact: true, path: "/Stations/Create", auth: true, component: <StationsCreate /> },
+      { exact: true, path: "/Stations/:StationID/Edit", auth: true, component: <StationsEdit /> },
+      { exact: true, path: "/Cases", auth: true, component: <Cases /> },
+      { exact: true, path: "/Cases/Create", auth: true, component: <CasesCreate /> },
+      { exact: true, path: "/Cases/:CaseID/Edit", auth: true, component: <CasesEdit /> },
+      { exact: true, path: "/Units", auth: true, component: <Units /> },
+      { exact: true, path: "/Units/Create", auth: true, component: <UnitsCreate /> },
+      { exact: true, path: "/Units/:UnitID/Edit", auth: true, component: <UnitsEdit /> },
+      { exact: true, path: "/Stockdefines", auth: true, component: <Stockdefines /> },
+      { exact: true, path: "/Stockdefines/Create", auth: true, component: < StockdefinesCreate /> },
+      { exact: true, path: "/Stockdefines/:StockdefineID/Edit", auth: true, component: <StockdefinesEdit /> },
+      { exact: true, path: "/Stocks", auth: true, component: <Stocks /> },
+      { exact: true, path: "/Stocks/Create", auth: true, component: < StocksCreate /> },
+      { exact: true, path: "/Stocks/:StockID/Edit", auth: true, component: <StocksEdit /> },
+      { exact: true, path: "/Stockmovements", auth: true, component: < Stocksmovements /> },
+      { exact: true, path: "/Stockmovement/:StockmovementID", auth: true, component: <Stockmovementsdetail /> },
+      { exact: true, path: "/Stockmovement", auth: true, component: < Stockmovementsdetail /> },
+      { exact: true, path: "/Users", auth: true, component: < Users /> },
+      { exact: true, path: "/Users/Create", auth: true, component: < UsersCreate /> },
+      { exact: true, path: "/Users/:UserID/Edit", auth: true, component: <UsersEdit /> },
+      { exact: true, path: "/Files", auth: true, component: <Files /> },
+      { exact: true, path: "/Files/Create", auth: true, component: <FilesCreate /> },
+      { exact: true, path: "/Files/:FileID/Edit", auth: true, component: <FilesEdit /> },
+      { exact: true, path: "/Purchaseorders", auth: true, component: < Purchaseorders /> },
+      { exact: true, path: "/Purchaseorders/Create", auth: true, component: <PurchaseordersCreate /> },
+      { exact: true, path: "/Purchaseorders/:PurchaseorderID/Edit", auth: true, component: <PurchaseordersEdit /> },
+      { exact: true, path: "/Costumertypes", auth: true, component: < Costumertypes /> },
+      { exact: true, path: "/Costumertypes/Create", auth: true, component: <CostumertypesCreate /> },
+      { exact: true, path: "/Costumertypes/:CostumertypeID/Edit", auth: true, component: <CostumertypesEdit /> },
+      { exact: true, path: "/Patienttypes", auth: true, component: <Patienttypes /> },
+      { exact: true, path: "/Patienttypes/Create", auth: true, component: <PatienttypesCreate /> },
+      { exact: true, path: "/Patienttypes/:PatienttypeID/Edit", auth: true, component: < PatienttypesEdit /> },
+      { exact: true, path: "/Patientdefines", auth: true, component: <Patientdefines /> },
+      { exact: true, path: "/Patientdefines/Create", auth: true, component: <PatientdefinesCreate /> },
+      { exact: true, path: "/Patientdefines/:PatientdefineID/Edit", auth: true, component: <PatientdefinesEdit /> },
+      { exact: true, path: "/Patients", auth: true, component: <Patients /> },
+      { exact: true, path: "/Patients/Create", auth: true, component: <PatientsCreate /> },
+      { exact: true, path: "/Patients/:PatientID/Edit", auth: true, component: <PatientsEdit /> },
+      { exact: true, path: "/Preregistrations", auth: true, component: <Preregistrations /> },
+      { exact: true, path: "/Preregistrations/Create", auth: true, component: <PreregistrationsCreate /> },
+      { exact: true, path: "/Preregistrations/:PatientID/Edit", auth: true, component: <PreregistrationsEdit /> },
+      { exact: true, path: "/Preregistrations/:PatientID/Editfile", auth: true, component: <PreregistrationsEditfile /> },
+      { exact: true, path: "/Preregistrations/:PatientID/Editstock", auth: true, component: <PreregistrationsEditstock /> },
+      { exact: true, path: "/Profile/Edit", auth: true, component: <ProfileEdit /> }
+    ]
+
     return (
       <Suspense fallback={<Spinner />}>
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route exact path="/Login" component={Login} />
-          <Route exact path="/Roles" component={Roles} />
-          <Route exact path="/Roles/Create" component={RolesCreate} />
-          <Route exact path="/Roles/:RoleID/Edit" component={RolesEdit} />
-          <Route exact path="/Departments" component={Departments} />
-          <Route exact path="/Departments/Create" component={DepartmentsCreate} />
-          <Route exact path="/Departments/:DepartmentID/Edit" component={DepartmentsEdit} />
-          <Route exact path="/Stations" component={Stations} />
-          <Route exact path="/Stations/Create" component={StationsCreate} />
-          <Route exact path="/Stations/:StationID/Edit" component={StationsEdit} />
-          <Route exact path="/Cases" component={Cases} />
-          <Route exact path="/Cases/Create" component={CasesCreate} />
-          <Route exact path="/Cases/:CaseID/Edit" component={CasesEdit} />
-          <Route exact path="/Units" component={Units} />
-          <Route exact path="/Units/Create" component={UnitsCreate} />
-          <Route exact path="/Units/:UnitID/Edit" component={UnitsEdit} />
-          <Route exact path="/Stockdefines" component={Stockdefines} />
-          <Route exact path="/Stockdefines/Create" component={StockdefinesCreate} />
-          <Route exact path="/Stockdefines/:StockdefineID/Edit" component={StockdefinesEdit} />
-          <Route exact path="/Stocks" component={Stocks} />
-          <Route exact path="/Stocks/Create" component={StocksCreate} />
-          <Route exact path="/Stocks/:StockID/Edit" component={StocksEdit} />
-          <Route exact path="/Stockmovements" component={Stocksmovements} />
-          <Route exact path="/Stockmovement/:StockmovementID" component={Stockmovementsdetail} />
-          <Route exact path="/Stockmovement" component={Stockmovementsdetail} />
-          <Route exact path="/Users" component={Users} />
-          <Route exact path="/Users/Create" component={UsersCreate} />
-          <Route exact path="/Users/:UserID/Edit" component={UsersEdit} />
-          <Route exact path="/Files" component={Files} />
-          <Route exact path="/Files/Create" component={FilesCreate} />
-          <Route exact path="/Files/:FileID/Edit" component={FilesEdit} />
-          <Route exact path="/Purchaseorders" component={Purchaseorders} />
-          <Route exact path="/Purchaseorders/Create" component={PurchaseordersCreate} />
-          <Route exact path="/Purchaseorders/:PurchaseorderID/Edit" component={PurchaseordersEdit} />
-          <Route exact path="/Costumertypes" component={Costumertypes} />
-          <Route exact path="/Costumertypes/Create" component={CostumertypesCreate} />
-          <Route exact path="/Costumertypes/:CostumertypeID/Edit" component={CostumertypesEdit} />
-          <Route exact path="/Patienttypes" component={Patienttypes} />
-          <Route exact path="/Patienttypes/Create" component={PatienttypesCreate} />
-          <Route exact path="/Patienttypes/:PatienttypeID/Edit" component={PatienttypesEdit} />
-          <Route exact path="/Patientdefines" component={Patientdefines} />
-          <Route exact path="/Patientdefines/Create" component={PatientdefinesCreate} />
-          <Route exact path="/Patientdefines/:PatientdefineID/Edit" component={PatientdefinesEdit} />
-          <Route exact path="/Patients" component={Patients} />
-          <Route exact path="/Patients/Create" component={PatientsCreate} />
-          <Route exact path="/Patients/:PatientID/Edit" component={PatientsEdit} />
-          <Route exact path="/Preregistrations" component={Preregistrations} />
-          <Route exact path="/Preregistrations/Create" component={PreregistrationsCreate} />
-          <Route exact path="/Preregistrations/:PatientID/Edit" component={PreregistrationsEdit} />
-          <Route exact path="/Preregistrations/:PatientID/Editfile" component={PreregistrationsEditfile} />
-          <Route exact path="/Preregistrations/:PatientID/Editstock" component={PreregistrationsEditstock} />
-          <Route exact path="/Profile/Edit" component={ProfileEdit} />
-          <Redirect to="/" />
-        </Switch>
+        <Routes>
+          {routes.map((route, index) => {
+            return route.auth ? <Route key={index} exact={route.exact} path={route.path} element={<PrivateRoute />}>
+              <Route key={index} exact={route.exact} path={route.path} element={route.component} />
+            </Route> : <Route key={index} exact={route.exact} path={route.path} element={route.component} />
+          })}
+        </Routes>
       </Suspense>
     );
   }

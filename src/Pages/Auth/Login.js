@@ -1,10 +1,12 @@
 
-import React, { Component } from 'react'
+import React, { Component, useContext } from 'react'
 import img from "../../Assets/img"
 import { Button, Form, Grid, Header, Divider } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
 import Popup from '../../Utils/Popup'
-import { withRouter } from 'react-router-dom'
+import WithRouter from '../../Utils/WithRouter'
+import { useNavigate } from 'react-router-dom'
+import { AuthContext } from '../../Provider/AuthProvider'
 
 class Login extends Component {
     render() {
@@ -56,18 +58,18 @@ class Login extends Component {
     }
     LoginHandler = (event) => {
         event.preventDefault()
-        const { history, match, logIn, LogOut, Profile, removenotification, fillnotification } = this.props
-        const redirecturl = history.location.search.split('=').length > 1 ?
-            (history.location.search.split('='))[1] : null
+        const { location, match, logIn, LogOut, Profile, removenotification, fillnotification } = this.props
+        /*   const redirecturl = history.location.search.split('=').length > 1 ?
+              (history.location.search.split('='))[1] : null */
         if (Profile.isLogging) {
             return false
         }
         const data = formToObject(event.target)
         if (data.username && data.password) {
-            logIn(data, history, redirecturl)
+            logIn(data, location, null)
         } else {
             fillnotification({ type: 'Error', code: 'USERNAME_PASSWORD_REQUIRED', description: 'Lütfen Kullanıcı ve ya şifre giriniz' })
         }
     }
 }
-export default withRouter(Login)
+export default WithRouter(Login)

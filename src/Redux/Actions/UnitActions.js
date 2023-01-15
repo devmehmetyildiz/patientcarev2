@@ -1,5 +1,5 @@
 import { ROUTES } from "../../Utils/Constants";
-import { axiosErrorHelper } from "../../Utils/ErrorHelper";
+import AxiosErrorHelper from "../../Utils/AxiosErrorHelper";
 import instanse from "./axios"
 
 export const ACTION_TYPES = {
@@ -40,8 +40,8 @@ export const GetUnits = () => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_UNITS_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_UNITS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_UNITS_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_UNITS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_UNITS_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -52,8 +52,8 @@ export const GetUnit = (guid) => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_UNIT_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_UNITS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.GET_UNIT_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_UNITS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.GET_UNIT_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -67,8 +67,8 @@ export const AddUnits = (data, historypusher) => async (dispatch, getState) => {
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_UNITS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.ADD_UNIT_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_UNITS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.ADD_UNIT_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -82,8 +82,8 @@ export const EditUnits = (data, historypusher) => async (dispatch, getState) => 
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_UNITS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.EDIT_UNIT_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_UNITS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.EDIT_UNIT_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -98,8 +98,8 @@ export const DeleteUnits = (data) => async (dispatch, getState) => {
             }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_UNITS_NOTIFICATION, payload: axiosErrorHelper(error) })
-            dispatch({ type: ACTION_TYPES.DELETE_UNIT_ERROR, payload: axiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_UNITS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.DELETE_UNIT_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
