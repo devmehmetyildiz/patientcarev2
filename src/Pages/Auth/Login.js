@@ -4,11 +4,13 @@ import img from "../../Assets/img"
 import { Button, Form, Grid, Header, Divider } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
 import Popup from '../../Utils/Popup'
-import WithRouter from '../../Utils/WithRouter'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, withRouter } from 'react-router-dom'
 import { AuthContext } from '../../Provider/AuthProvider'
 
 class Login extends Component {
+
+
+
     render() {
         const { history, match, LogIn, LogOut, Profile, removenotification, fillnotification } = this.props
 
@@ -17,8 +19,6 @@ class Login extends Component {
             Popup(msg.type, msg.code, msg.description)
             removenotification()
         }
-
-
 
         return (
             <div style={{ backgroundImage: `url(${img.loginbg})` }} className=' font-Common w-full h-[100vh] justify-center items-center flex ' >
@@ -33,7 +33,7 @@ class Login extends Component {
                                 <br />
                                 <p>Patient Care Hasta Bakım Sistemi</p>
                             </Header>
-                            <Form size='large' className='p-4' onSubmit={this.LoginHandler.bind(this)}>
+                            <Form size='large' className='p-4' onSubmit={this.LoginHandler}>
                                 <Form.Input transparent placeholder="Kullanıcı Adı" name="username" fluid icon='user' iconPosition='left' />
                                 <Divider />
                                 <Form.Input type='password' transparent placeholder="Parola" name="password" fluid icon='lock' iconPosition='left' />
@@ -58,18 +58,23 @@ class Login extends Component {
     }
     LoginHandler = (event) => {
         event.preventDefault()
-        const { location, match, logIn, LogOut, Profile, removenotification, fillnotification } = this.props
-        /*   const redirecturl = history.location.search.split('=').length > 1 ?
-              (history.location.search.split('='))[1] : null */
+        const { location,history, match, logIn, LogOut, Profile, removenotification, fillnotification } = this.props
+
+        let redirectUrl = null
+        const paths = history.location.search?.split('=')
+        if (Array.isArray(paths) && paths.length > 0) {
+            paths[0] === "?redirecturl" && (redirectUrl = paths[1])
+        }
+
         if (Profile.isLogging) {
             return false
         }
         const data = formToObject(event.target)
         if (data.username && data.password) {
-            logIn(data, location, null)
+            logIn(data, history, redirectUrl)
         } else {
             fillnotification({ type: 'Error', code: 'USERNAME_PASSWORD_REQUIRED', description: 'Lütfen Kullanıcı ve ya şifre giriniz' })
         }
     }
 }
-export default WithRouter(Login)
+export default withRouter(Login)

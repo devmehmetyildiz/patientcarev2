@@ -1,14 +1,8 @@
 import { useContext } from "react"
-import { useNavigate } from "react-router-dom";
+import { Redirect, } from "react-router-dom";
 import Cookies from "universal-cookie";
-import { AuthContext } from "../Provider/AuthProvider"
-import React from 'react'
-import { createBrowserHistory } from 'history';
 
-const history = createBrowserHistory();
 export default function AxiosErrorHelper(error) {
-
-
     if (error) {
         if (error.code === 'ERR_NETWORK') {
             return { type: 'Error', code: 'ERR_NETWORK', description: 'Server Kapalı yada Erişim Yok' }
@@ -16,17 +10,16 @@ export default function AxiosErrorHelper(error) {
         if (error.code === 'ERR_BAD_REQUEST' && error.response) {
             switch (error.response.status) {
                 case 401:
-                    console.log("401geldim")
-                    console.log('window.location.pathname: ', window.location.pathname);
                     const localcookies = new Cookies();
                     localcookies.remove("patientcare")
                     if (window.location.pathname !== "/Login") {
-                        history.push({
-                            pathname: '/Login',
-                            search: `?redirectUrl=${window.location.pathname}`
-                        });
+                        window.location = `/Login?redirecturl=${window.location.pathname}`
                     }
-                    return { type: 'Error', code: error.code, description: 'Kullanıcı Adı veya şifre Hatalı' }
+                    if (window.location.pathname === "/Login") {
+                        return { type: 'Error', code: error.code, description: 'Kullanıcı Adı veya şifre Hatalı' }
+                    } else {
+                        return { type: 'Error', code: error.code, description: 'Lütfen Tekrardan Giriş Yapınız' }
+                    }
                 case 404:
                     return { type: 'Error', code: error.code, description: 'URL BULUNAMADI' }
                 case 400:

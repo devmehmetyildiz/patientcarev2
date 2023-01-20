@@ -38,8 +38,7 @@ export const logIn = (data, historyPusher, redirecturl) => {
     instanse.post(`/auth/login`, data)
       .then(result => {
         dispatch({ type: ACTION_TYPES.LOGIN_REQUEST_SUCCESS })
-        // redirecturl ? window.location = (redirecturl) : window.location = ('Home')
-         window.location = ('Home')
+        redirecturl ? window.location = (redirecturl) : window.location = ('Home')
       })
       .catch(error => {
         dispatch({ type: ACTION_TYPES.FILL_USER_NOTIFICATION, payload: AxiosErrorHelper(error) })

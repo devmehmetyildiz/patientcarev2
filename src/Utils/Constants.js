@@ -1,24 +1,34 @@
 export const ROUTES = {
+    DATATABLE: 'Datatable',
+
     AUTH: 'Auth',
-    CASE: 'Case',
+    ROLE: 'Roles',
+    USER: 'Users',
+
+    ACTIVEPATIENT: 'Activepatient',
+    PATIENT: 'Patient',
+
+    PATIENTTYPE: 'Patienttype',
+    PATIENTREPORT: 'Patientreport',
+    PATIENTDEFINE: 'Patientdefine',
+
     COSTUMERTYPE: 'Costumertype',
+    CASE: 'Case',
     DEPARTMENT: 'Department',
     FILE: 'File',
-    PATIENT: 'Patient',
-    PATIENTTYPE: 'Patienttype',
-    ROLE: 'Roles',
     STATION: 'Station',
     STOCKDEFINE: 'Stockdefine',
     UNIT: 'Unit',
-    USER: 'Users',
-    DEACTIVESTOCK: 'Deactivestock',
-    STOCKMOVEMENT: 'Stockmovement',
-    STOCK: 'Stock',
-    DATATABLE: 'Datatable',
-    ACTIVEPATIENT: 'Activepatient',
-    PATIENTREPORT: 'Patientreport',
+
     PURCHASEORDER: 'Purchaseorder',
-    PATIENTDEFINE: 'Patientdefine'
+    PURCHASEORDERSTOCK: 'Purchaseorderstock',
+    PURCHASEORDERSTOCKMOVEMENT: 'Purchaseorderstockmovement',
+    DEACTIVESTOCK: 'Deactivestock',
+    STOCK: 'Stock',
+    STOCKMOVEMENT: 'Stockmovement',
+    WAREHOUSE: 'Warehouse',
+    PATIENTSTOCK: 'Patientstock',
+    PATIENTSTOCKMOVEMENT: 'Patientstockmovement'
 }
 
 

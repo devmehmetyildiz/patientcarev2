@@ -3,11 +3,10 @@ import { TbGauge, Tb3DRotate, TbAccessPoint, TbActivity, TbAd } from "react-icon
 import { IoIosArrowDown, IoSettingsSharp } from "react-icons/io";
 import { MdSettings } from "react-icons/md";
 import { Collapse } from 'react-collapse';
-import { useNavigate } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 export function Sidebar(props) {
 
-    const navigate = useNavigate()
     const { iconOnly, seticonOnly } = props
     const [Pages, setPages] = useState([
         {
@@ -22,21 +21,11 @@ export function Sidebar(props) {
             isOpened: false,
             icon: <Tb3DRotate className='text-red-700' />,
             items: [
-                {
-                    id: 1,
-                    subtitle: "Ön Kayıtlar",
-                    url: "/Preregistrations"
-                },
-                {
-                    id: 1,
-                    subtitle: "Kurumdaki Hastalar",
-                    url: "/Patients"
-                },
-                {
-                    id: 1,
-                    subtitle: "Hasta Tanımları",
-                    url: "/Patientdefines"
-                },
+                { id: 1, subtitle: "Ön Kayıtlar", url: "/Preregistrations" },
+                { id: 2, subtitle: "Kurumdaki Hastalar", url: "/Patients" },
+                { id: 3, subtitle: "Hasta Tanımları", url: "/Patientdefines" },
+                { id: 4, subtitle: "Hasta Stokları", url: "/Patientstocks" },
+                { id: 5, subtitle: "Hasta Stok Hareketleri", url: "/Patientstockmovements" },
             ]
         },
         {
@@ -45,34 +34,21 @@ export function Sidebar(props) {
             isOpened: false,
             icon: <TbAccessPoint className='text-orange-300' />,
             items: [
-                {
-                    id: 4,
-                    subtitle: "Açık Siparişler",
-                    url: "/Purchaseorders"
-                },
+                { id: 1, subtitle: "Açık Siparişler", url: "/Purchaseorders" },
+                { id: 2, subtitle: "Sipariş Stokları", url: "/Purchaseorderstocks" },
+                { id: 3, subtitle: "Sipariş Stok Hareketleri", url: "/Purchaseorderstockmovements" },
             ]
         },
         {
             id: 4,
-            title: "Stok Yönetimi",
+            title: "Ambar Yönetimi",
             isOpened: false,
             icon: <TbActivity className='text-green-400' />,
             items: [
-                {
-                    id: 7,
-                    subtitle: "Ürünler",
-                    url: "/Stocks"
-                },
-                {
-                    id: 7,
-                    subtitle: "Ürün Hareketleri",
-                    url: "/Stockmovements"
-                },
-                {
-                    id: 7,
-                    subtitle: "Ürün Hareketi İncele",
-                    url: "/Stockmovement"
-                },
+                { id: 1, subtitle: "Ambarlar", url: "/Warehouses" },
+                { id: 2, subtitle: "Ürünler", url: "/Stocks" },
+                { id: 3, subtitle: "Ürün Hareketleri", url: "/Stockmovements" },
+                { id: 4, subtitle: "Ürün Hareketi İncele", url: "/Stockmovement" },
             ]
         },
         {
@@ -81,67 +57,22 @@ export function Sidebar(props) {
             isOpened: false,
             icon: <MdSettings className='text-green-800' />,
             items: [
-                {
-                    id: 10,
-                    subtitle: "Roller",
-                    url: "/Roles"
-                },
-                {
-                    id: 10,
-                    subtitle: "Departmanlar",
-                    url: "/Departments"
-                },
-                {
-                    id: 10,
-                    subtitle: "İstasyonlar",
-                    url: "/Stations"
-                },
-                {
-                    id: 11,
-                    subtitle: "Kullanıcılar",
-                    url: "/Users"
-                },
-                {
-                    id: 12,
-                    subtitle: "Durumlar",
-                    url: "/Cases"
-                },
-                {
-                    id: 13,
-                    subtitle: "Birimler",
-                    url: "/Units"
-                },
-                {
-                    id: 14,
-                    subtitle: "Stok Tanımları",
-                    url: "/Stockdefines"
-                },
-                {
-                    id: 14,
-                    subtitle: "Kullanııclar",
-                    url: "/Users"
-                },
-                {
-                    id: 14,
-                    subtitle: "Dosyalar",
-                    url: "/Files"
-                },
-                {
-                    id: 14,
-                    subtitle: "Hasta Türleri",
-                    url: "/Patienttypes"
-                },
-                {
-                    id: 14,
-                    subtitle: "Müşteri Türleri",
-                    url: "/Costumertypes"
-                },
+                { id: 1, subtitle: "Roller", url: "/Roles" },
+                { id: 2, subtitle: "Departmanlar", url: "/Departments" },
+                { id: 3, subtitle: "İstasyonlar", url: "/Stations" },
+                { id: 4, subtitle: "Kullanıcılar", url: "/Users" },
+                { id: 5, subtitle: "Durumlar", url: "/Cases" },
+                { id: 6, subtitle: "Birimler", url: "/Units" },
+                { id: 7, subtitle: "Stok Tanımları", url: "/Stockdefines" },
+                { id: 8, subtitle: "Kullanııclar", url: "/Users" },
+                { id: 9, subtitle: "Dosyalar", url: "/Files" },
+                { id: 10, subtitle: "Hasta Türleri", url: "/Patienttypes" },
+                { id: 11, subtitle: "Müşteri Türleri", url: "/Costumertypes" },
             ]
         },
     ])
 
     const openCollapse = (e) => {
-        console.log('e: ', e);
         const olddata = Pages
         olddata.forEach(element => {
             if (element.id === e) {
@@ -183,7 +114,7 @@ export function Sidebar(props) {
                             {!iconOnly && item.items ?
                                 <Collapse isOpened={item.isOpened}>
                                     {item.items.map((subitem, index) => {
-                                        return <h1 key={index + index} onClick={() => { navigate(subitem.url) }} className=' m-0 cursor-pointer hover:text-[#2b7694] whitespace-nowrap dark:hover:text-white text-TextColor text-sm w-full px-8 py-1' > {subitem.subtitle}</h1>
+                                        return <h1 key={index + index} onClick={() => { props.history.push(subitem.url) }} className=' m-0 cursor-pointer hover:text-[#2b7694] whitespace-nowrap dark:hover:text-white text-TextColor text-sm w-full px-8 py-1' > {subitem.subtitle}</h1>
                                     })}
                                 </Collapse>
                                 : null}
@@ -207,4 +138,4 @@ export function Sidebar(props) {
         </div >
     )
 }
-export default Sidebar
+export default withRouter(Sidebar)

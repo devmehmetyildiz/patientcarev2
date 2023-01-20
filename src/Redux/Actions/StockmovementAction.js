@@ -8,14 +8,30 @@ export const ACTION_TYPES = {
     GET_STOCKMOVEMENTS_SUCCESS: 'GET_STOCKMOVEMENTS_SUCCESS',
     GET_STOCKMOVEMENTS_ERROR: 'GET_STOCKMOVEMENTS_ERROR',
 
+    GET_ALLSTOCKMOVEMENTS_INIT: 'GET_ALLSTOCKMOVEMENTS_INIT',
+    GET_ALLSTOCKMOVEMENTS_SUCCESS: 'GET_ALLSTOCKMOVEMENTS_SUCCESS',
+    GET_ALLSTOCKMOVEMENTS_ERROR: 'GET_ALLSTOCKMOVEMENTS_ERROR',
+
     GET_STOCKMOVEMENT_INIT: 'GET_STOCKMOVEMENT_INIT',
     GET_STOCKMOVEMENT_SUCCESS: 'GET_STOCKMOVEMENT_SUCCESS',
     GET_STOCKMOVEMENT_ERROR: 'GET_STOCKMOVEMENT_ERROR',
 
+    ADD_STOCKMOVEMENT_INIT: 'ADD_STOCKMOVEMENT_INIT',
+    ADD_STOCKMOVEMENT_SUCCESS: 'ADD_STOCKMOVEMENT_SUCCESS',
+    ADD_STOCKMOVEMENT_ERROR: 'ADD_STOCKMOVEMENT_ERROR',
+
+    EDIT_STOCKMOVEMENT_INIT: 'EDIT_STOCKMOVEMENT_INIT',
+    EDIT_STOCKMOVEMENT_SUCCESS: 'EDIT_STOCKMOVEMENT_SUCCESS',
+    EDIT_STOCKMOVEMENT_ERROR: 'EDIT_STOCKMOVEMENT_ERROR',
+
+    DELETE_STOCKMOVEMENT_INIT: 'DELETE_STOCKMOVEMENT_INIT',
+    DELETE_STOCKMOVEMENT_SUCCESS: 'DELETE_STOCKMOVEMENT_SUCCESS',
+    DELETE_STOCKMOVEMENT_ERROR: 'DELETE_STOCKMOVEMENT_ERROR',
+
     REMOVE_SELECTED_STOCKMOVEMENT: 'REMOVE_SELECTED_STOCKMOVEMENT',
 
-    FILL_STOCKMOVEMENT_NOTIFICATION: 'FILL_STOCKMOVEMENT_NOTIFICATION',
-    REMOVE_STOCKMOVEMENT_NOTIFICATION: 'REMOVE_STOCKMOVEMENT_NOTIFICATION',
+    FILL_STOCKMOVEMENTS_NOTIFICATION: 'FILL_STOCKMOVEMENTS_NOTIFICATION',
+    REMOVE_STOCKMOVEMENTS_NOTIFICATION: 'REMOVE_STOCKMOVEMENTS_NOTIFICATION',
 }
 
 export const GetStockmovements = () => async (dispatch, getState) => {
@@ -25,7 +41,7 @@ export const GetStockmovements = () => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_STOCKMOVEMENTS_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_STOCKMOVEMENT_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_STOCKMOVEMENTS_NOTIFICATION, payload: AxiosErrorHelper(error) })
             dispatch({ type: ACTION_TYPES.GET_STOCKMOVEMENTS_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
@@ -37,8 +53,54 @@ export const GetStockmovement = (guid) => async (dispatch, getState) => {
             { dispatch({ type: ACTION_TYPES.GET_STOCKMOVEMENT_SUCCESS, payload: response.data }) }
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.FILL_STOCKMOVEMENT_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.FILL_STOCKMOVEMENTS_NOTIFICATION, payload: AxiosErrorHelper(error) })
             dispatch({ type: ACTION_TYPES.GET_STOCKMOVEMENT_ERROR, payload: AxiosErrorHelper(error) })
+        })
+}
+
+export const AddStockmovements = (data, historypusher) => async (dispatch, getState) => {
+    dispatch({ type: ACTION_TYPES.ADD_STOCKMOVEMENT_INIT })
+    await instanse.post(ROUTES.STOCKMOVEMENT + "/Add", data)
+        .then(response => {
+            {
+                dispatch({ type: ACTION_TYPES.ADD_STOCKMOVEMENT_SUCCESS, payload: response.data })
+                historypusher('/Stockmovements')
+            }
+        })
+        .catch(error => {
+            dispatch({ type: ACTION_TYPES.FILL_STOCKMOVEMENTS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.ADD_STOCKMOVEMENT_ERROR, payload: AxiosErrorHelper(error) })
+        })
+}
+
+export const EditStockmovements = (data, historypusher) => async (dispatch, getState) => {
+    dispatch({ type: ACTION_TYPES.EDIT_STOCKMOVEMENT_INIT })
+    await instanse.post(ROUTES.STOCKMOVEMENT + "/Update", data)
+        .then(response => {
+            {
+                dispatch({ type: ACTION_TYPES.EDIT_STOCKMOVEMENT_SUCCESS, payload: response.data })
+                historypusher.push('/Stockmovements')
+            }
+        })
+        .catch(error => {
+            dispatch({ type: ACTION_TYPES.FILL_STOCKMOVEMENTS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.EDIT_STOCKMOVEMENT_ERROR, payload: AxiosErrorHelper(error) })
+        })
+}
+
+export const DeleteStockmovements = (data) => async (dispatch, getState) => {
+    delete data['edit']
+    delete data['delete']
+    dispatch({ type: ACTION_TYPES.DELETE_STOCKMOVEMENT_INIT })
+    await instanse.post(ROUTES.STOCKMOVEMENT + "/Delete", data)
+        .then(response => {
+            {
+                dispatch({ type: ACTION_TYPES.DELETE_STOCKMOVEMENT_SUCCESS, payload: response.data })
+            }
+        })
+        .catch(error => {
+            dispatch({ type: ACTION_TYPES.FILL_STOCKMOVEMENTS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.DELETE_STOCKMOVEMENT_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 
@@ -50,15 +112,12 @@ export const RemoveSelectedStockmovement = payload => {
 
 export const fillStockmovementnotification = payload => {
     return (dispatch, getState) => {
-        dispatch({ type: ACTION_TYPES.FILL_STOCKMOVEMENT_NOTIFICATION, payload })
+        dispatch({ type: ACTION_TYPES.FILL_STOCKMOVEMENTS_NOTIFICATION, payload })
     }
 }
 
 export const removeStockmovementnotification = () => {
     return (dispatch, getState) => {
-        dispatch({ type: ACTION_TYPES.REMOVE_STOCKMOVEMENT_NOTIFICATION })
+        dispatch({ type: ACTION_TYPES.REMOVE_STOCKMOVEMENTS_NOTIFICATION })
     }
 }
-
-
-

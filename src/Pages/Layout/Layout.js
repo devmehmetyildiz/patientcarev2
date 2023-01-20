@@ -7,8 +7,10 @@ export default class Layout extends Component {
 
   componentDidMount() {
     const { GetActiveUser, GetUserRoles } = this.props
-    GetActiveUser()
-    GetUserRoles()
+    if (window.location.pathname !== "/Login") {
+      GetActiveUser()
+      GetUserRoles()
+    }
   }
 
   render() {

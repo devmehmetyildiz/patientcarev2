@@ -8,7 +8,7 @@ import Popup from '../../Utils/Popup'
 import DeleteModal from "../../Utils/DeleteModal"
 import NoDataScreen from '../../Utils/NoDataScreen'
 
-export class Stations extends Component {
+export default class Patientstocks extends Component {
 
   constructor(props) {
     super(props)
@@ -21,8 +21,8 @@ export class Stations extends Component {
   }
 
   componentDidMount() {
-    const { GetStations } = this.props
-    GetStations()
+    const { GetPatientstocks } = this.props
+    GetPatientstocks()
   }
 
   render() {
@@ -30,14 +30,19 @@ export class Stations extends Component {
     const Columns = [
       { Header: 'Id', accessor: 'id', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Tekil ID', accessor: 'concurrencyStamp', sortable: true, canGroupBy: true, canFilter: true, },
-      { Header: 'İsim', accessor: 'name', sortable: true, canGroupBy: true, canFilter: true },
+      { Header: 'Hasta Bilgisi', accessor: 'Patient.patientdefine.countryID', sortable: true, canGroupBy: true, canFilter: true, },
+      { Header: 'Ürün', accessor: 'stockdefine.name', sortable: true, canGroupBy: true, canFilter: true },
+      { Header: 'Departman', accessor: 'department.name', sortable: true, canGroupBy: true, canFilter: true, },
+      { Header: 'SKT', accessor: 'skt', sortable: true, canGroupBy: true, canFilter: true, },
+      { Header: 'Barkod', accessor: 'barcodeno', sortable: true, canGroupBy: true, canFilter: true, },
+      { Header: 'Miktar', accessor: 'amount', sortable: true, canGroupBy: true, canFilter: true, },
+      { Header: 'Açıklama', accessor: 'info', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Oluşturan Kullanıcı', accessor: 'createdUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Güncelleyen Kullanıcı', accessor: 'updatedUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Oluşturma Zamanı', accessor: 'createTime', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Güncelleme Zamanı', accessor: 'updateTime', sortable: true, canGroupBy: true, canFilter: true, },
-      { accessor: 'edit', Header: "Güncelle", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' },
-      { accessor: 'delete', Header: "Sil", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
-      const initialConfig = { hiddenColumns: ['concurrencyStamp','createdUser','updatedUser','createTime','updateTime'] };
+      { accessor: 'actions', Header: "Eylemler", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
+    const initialConfig = { hiddenColumns: ['concurrencyStamp', 'createdUser', 'updatedUser', 'createTime', 'updateTime'] };
 
     const { Stations, DeleteStations, removeStationnotification } = this.props
     const { notifications, list, isLoading, isDispatching } = Stations
@@ -122,4 +127,3 @@ export class Stations extends Component {
   }
 
 }
-export default Stations

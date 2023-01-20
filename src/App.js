@@ -3,7 +3,7 @@ import Sidebar from './Common/Sidebar';
 import Navbar from './Common/Navbar';
 import AppRoutes from './AppRoutes';
 import Layout from './Containers/Layout/Layout';
-import WithRouter from "./Utils/WithRouter"
+import { withRouter } from 'react-router-dom';
 class App extends Component {
 
   constructor(props) {
@@ -77,4 +77,4 @@ class App extends Component {
 
 }
 
-export default WithRouter(App);
+export default withRouter(App);

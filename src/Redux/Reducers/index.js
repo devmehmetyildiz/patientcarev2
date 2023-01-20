@@ -15,6 +15,11 @@ import PatienttypeReducer from "./PatienttypeReducer"
 import CostumertypeReducer from "./CostumertypeReducer"
 import PatientdefineReducer from "./PatientdefineReducer"
 import PatientReducer from "./PatientReducer";
+import PatientstockmovementReducer from "./PatientstockmovementReducer";
+import PatientstockReducer from "./PatientstockReducer"
+import PurchaseorderstockmovementReducer from "./PurchaseorderstockmovementReducer"
+import PurhcaseorderstockReducer from "./PurchaseorderstockReducer"
+import WarehouseReducer from "./WarehouseReducer"
 
 const reducers = combineReducers({
     Units: UnitReducer,
@@ -32,7 +37,12 @@ const reducers = combineReducers({
     Costumertypes: CostumertypeReducer,
     Patienttypes: PatienttypeReducer,
     Patientdefines: PatientdefineReducer,
-    Patients:PatientReducer
+    Patients: PatientReducer,
+    Patientstockmovements: PatientstockmovementReducer,
+    Patientstocks: PatientstockReducer,
+    Purchaseorderstockmovements: PurchaseorderstockmovementReducer,
+    Purhcaseorderstocks: PurhcaseorderstockReducer,
+    Warehouses: WarehouseReducer
 });
 
 export default reducers;
