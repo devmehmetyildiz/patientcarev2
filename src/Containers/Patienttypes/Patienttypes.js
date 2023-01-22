@@ -4,7 +4,8 @@ import { GetPatienttypes, removePatienttypenotification, fillPatienttypenotifica
 
 
 const mapStateToProps = (state) => ({
-  Patienttypes: state.Patienttypes
+  Patienttypes: state.Patienttypes,
+  Profile: state.Profile
 })
 
 const mapDispatchToProps = { GetPatienttypes, removePatienttypenotification, fillPatienttypenotification, DeletePatienttypes }

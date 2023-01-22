@@ -6,6 +6,7 @@ import DataTable from '../../Utils/DataTable'
 import LoadingPage from '../../Utils/LoadingPage'
 import Popup from '../../Utils/Popup'
 import NoDataScreen from '../../Utils/NoDataScreen'
+import ColumnChooser from '../../Containers/Utils/ColumnChooser'
 
 export default class Stockdefines extends Component {
 
@@ -39,15 +40,25 @@ export default class Stockdefines extends Component {
       { Header: 'Güncelleme Zamanı', accessor: 'updateTime', sortable: true, canGroupBy: true, canFilter: true, },
       { accessor: 'edit', Header: "Güncelle", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' },
       { accessor: 'delete', Header: "Sil", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
-    const initialConfig = { hiddenColumns: ['concurrencyStamp', 'createdUser', 'updatedUser', 'createTime', 'updateTime'] };
 
-    const { Stockdefines, DeleteStockdefines, removeStockdefinenotification } = this.props
+    const { Stockdefines, DeleteStockdefines, removeStockdefinenotification,Profile } = this.props
     const { notifications, list, isLoading, isDispatching } = Stockdefines
     if (notifications && notifications.length > 0) {
       let msg = notifications[0]
       Popup(msg.type, msg.code, msg.description)
       removeStockdefinenotification()
     }
+
+    const metaKey = "Stockdefines"
+    let tableMeta = (Profile.tablemeta || []).find(u => u.meta === metaKey)
+    const initialConfig = {
+      hiddenColumns: tableMeta ? JSON.parse(tableMeta.config).filter(u => u.isVisible === false).map(item => {
+        return item.key
+      }) : [],
+      columnOrder: tableMeta ? JSON.parse(tableMeta.config).sort((a, b) => a.order - b.order).map(item => {
+        return item.key
+      }) : []
+    };
 
     (list || []).map(item => {
       item.edit = <Link to={`/Stockdefines/${item.concurrencyStamp}/edit`} ><Icon size='large' className='row-edit' name='edit' /></Link>
@@ -74,6 +85,7 @@ export default class Stockdefines extends Component {
                         Oluştur
                       </Button>
                     </Link>
+                    <ColumnChooser meta={Profile.tablemeta} columns={Columns} metaKey={metaKey} />
                   </GridColumn>
                 </Grid>
               </Header>

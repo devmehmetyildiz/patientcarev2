@@ -6,10 +6,11 @@ import { Sidebar } from '../../Common/Sidebar'
 export default class Layout extends Component {
 
   componentDidMount() {
-    const { GetActiveUser, GetUserRoles } = this.props
+    const { GetActiveUser, GetUserRoles, GetTableMeta } = this.props
     if (window.location.pathname !== "/Login") {
       GetActiveUser()
       GetUserRoles()
+      GetTableMeta()
     }
   }
 

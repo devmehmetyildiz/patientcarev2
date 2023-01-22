@@ -5,7 +5,7 @@ import Popup from '../../Utils/Popup'
 import formToObject from 'form-to-object'
 import LoadingPage from '../../Utils/LoadingPage'
 
-export class DepartmentsEdit extends Component {
+export default class DepartmentsEdit extends Component {
   constructor(props) {
     super(props)
     const selectedstations = []
@@ -78,17 +78,8 @@ export class DepartmentsEdit extends Component {
                 <Form.Input label="Departman Adı" placeholder="Departman Adı" name="name" fluid defaultValue={Departments.selected_record.name} />
               </Form.Field>
               <Form.Field>
-                <label className='text-[#000000de]'>İstasyonlar</label>
-                <Dropdown
-                  placeholder='İstasyonlar'
-                  clearable
-                  search
-                  fluid
-                  multiple
-                  selection
-                  value={this.state.selectedstations}
-                  options={Stationoptions}
-                  onChange={this.handleChange} />
+                <label className='text-[#000000de]'>Tanımlı İstasyonlar</label>
+                <Dropdown placeholder='İstasyonlar' clearable search fluid multiple selection value={this.state.selectedstations} options={Stationoptions} onChange={this.handleChange} />
               </Form.Field>
               <div className='flex flex-row w-full justify-between py-4  items-center'>
                 <Link to="/Departments">
@@ -108,7 +99,6 @@ export class DepartmentsEdit extends Component {
 
     const { EditDepartments, history, fillDepartmentnotification, Stations, Departments } = this.props
     const { list } = Stations
-    const pushData = { ...Departments.selected_record }
     const data = formToObject(e.target)
     data.stations = this.state.selectedstations.map(station => {
       return list.find(u => u.concurrencyStamp === station)
@@ -126,9 +116,7 @@ export class DepartmentsEdit extends Component {
         fillDepartmentnotification(error)
       })
     } else {
-      pushData.name = data.name
-      pushData.stations = data.stations
-      EditDepartments(pushData, history)
+      EditDepartments({ ...Departments.selected_record, ...data }, history)
     }
   }
 
@@ -136,4 +124,3 @@ export class DepartmentsEdit extends Component {
     this.setState({ selectedstations: value })
   }
 }
-export default DepartmentsEdit

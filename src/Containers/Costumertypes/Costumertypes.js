@@ -4,7 +4,8 @@ import { GetCostumertypes, DeleteCostumertypes, removeCostumertypenotification, 
 
 
 const mapStateToProps = (state) => ({
-  Costumertypes:state.Costumertypes
+  Costumertypes:state.Costumertypes,
+  Profile: state.Profile
 })
 
 const mapDispatchToProps = {GetCostumertypes, DeleteCostumertypes, removeCostumertypenotification, fillCostumertypenotification}

@@ -5,6 +5,7 @@ import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
 import Popup from '../../Utils/Popup'
 import LoadingPage from '../../Utils/LoadingPage'
+import Notification from '../../Utils/Notification'
 
 export class DepartmentsCreate extends Component {
 
@@ -25,16 +26,9 @@ export class DepartmentsCreate extends Component {
 
   render() {
     const { Departments, Stations, removeDepartmentnotification, removeStationnotification } = this.props
-    if (Departments.notifications && Departments.notifications.length > 0) {
-      let msg = Departments.notifications[0]
-      Popup(msg.type, msg.code, msg.description)
-      removeDepartmentnotification()
-    }
-    if (Stations.notifications && Stations.notifications.length > 0) {
-      let msg = Stations.notifications[0]
-      Popup(msg.type, msg.code, msg.description)
-      removeStationnotification()
-    }
+
+    Notification(Departments.notification, removeDepartmentnotification)
+    Notification(Stations.notification, removeStationnotification)
 
     const Stationoptions = Stations.list.map(station => {
       return { key: station.concurrencyStamp, text: station.name, value: station.concurrencyStamp }
@@ -61,7 +55,7 @@ export class DepartmentsCreate extends Component {
                 <Form.Input label="Departman Adı" placeholder="Departman Adı" name="name" fluid />
               </Form.Field>
               <Form.Field>
-                <label className='text-[#000000de]'>Tanımlı Hastalar</label>
+                <label className='text-[#000000de]'>Tanımlı İstasyonlar</label>
                 <Dropdown label="İstasyonlar" placeholder='İstasyonlar' clearable search fluid multiple selection options={Stationoptions} onChange={this.handleChange} />
               </Form.Field>
               <div className='flex flex-row w-full justify-between py-4  items-center'>

@@ -30,6 +30,14 @@ export const ACTION_TYPES = {
 
   FILL_USER_NOTIFICATION: 'FILL_USER_NOTIFICATION',
   REMOVE_USER_NOTIFICATION: 'REMOVE_USER_NOTIFICATION',
+
+  GET_TABLEMETA_INIT: 'GET_TABLEMETA_INIT',
+  GET_TABLEMETA_SUCCESS: 'GET_TABLEMETA_SUCCESS',
+  GET_TABLEMETA_ERROR: 'GET_TABLEMETA_ERROR',
+
+  SAVE_TABLEMETA_INIT: 'SAVE_TABLEMETA_INIT',
+  SAVE_TABLEMETA_SUCCESS: 'SAVE_TABLEMETA_SUCCESS',
+  SAVE_TABLEMETA_ERROR: 'SAVE_TABLEMETA_ERROR',
 }
 
 export const logIn = (data, historyPusher, redirecturl) => {
@@ -79,6 +87,31 @@ export const GetUserRoles = () => async (dispatch, getState) => {
     .catch(error => {
       dispatch({ type: ACTION_TYPES.FILL_USER_NOTIFICATION, payload: AxiosErrorHelper(error) })
       dispatch({ type: ACTION_TYPES.GET_USERSROLES_ERROR, payload: AxiosErrorHelper(error) })
+    })
+}
+
+export const GetTableMeta = () => async (dispatch, getState) => {
+  dispatch({ type: ACTION_TYPES.GET_TABLEMETA_INIT })
+  await instanse.get("Auth/GetTableMeta")
+    .then(response => {
+      dispatch({ type: ACTION_TYPES.GET_TABLEMETA_SUCCESS, payload: response.data })
+    })
+    .catch(error => {
+      dispatch({ type: ACTION_TYPES.FILL_USER_NOTIFICATION, payload: AxiosErrorHelper(error) })
+      dispatch({ type: ACTION_TYPES.GET_TABLEMETA_ERROR, payload: AxiosErrorHelper(error) })
+    })
+}
+
+export const SaveTableMeta = (data) => async (dispatch, getState) => {
+  console.log('data: ', data);
+  dispatch({ type: ACTION_TYPES.SAVE_TABLEMETA_INIT })
+  await instanse.post("Auth/SaveTableMeta", data)
+    .then(response => {
+      { dispatch({ type: ACTION_TYPES.SAVE_TABLEMETA_SUCCESS, payload: response.data }) }
+    })
+    .catch(error => {
+      dispatch({ type: ACTION_TYPES.FILL_USER_NOTIFICATION, payload: AxiosErrorHelper(error) })
+      dispatch({ type: ACTION_TYPES.SAVE_TABLEMETA_ERROR, payload: AxiosErrorHelper(error) })
     })
 }
 

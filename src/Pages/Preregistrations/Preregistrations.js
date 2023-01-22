@@ -8,6 +8,7 @@ import DeleteModal from "../../Utils/DeleteModal"
 import NoDataScreen from '../../Utils/NoDataScreen'
 import { ROUTES } from '../../Utils/Constants'
 import Popuputils from '../../Utils/Popup'
+import ColumnChooser from '../../Containers/Utils/ColumnChooser'
 
 export default class Preregistrations extends Component {
 
@@ -109,9 +110,9 @@ export default class Preregistrations extends Component {
       { Header: 'Güncelleme Zamanı', accessor: 'updateTime', sortable: true, canGroupBy: true, canFilter: true, },
       { accessor: 'actions', Header: "Eylemler", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }
     ]
-    const initialConfig = { hiddenColumns: ['concurrencyStamp', 'createdUser', 'updatedUser', 'createTime', 'updateTime'] };
 
-    const { Patients, DeletePatients, removePatientnotification } = this.props
+
+    const { Patients, DeletePatients, removePatientnotification, Profile } = this.props
     const { notifications, list, isLoading, isDispatching } = Patients
     if (notifications && notifications.length > 0) {
       let msg = notifications[0]
@@ -119,6 +120,17 @@ export default class Preregistrations extends Component {
       removePatientnotification()
     }
 
+
+    const metaKey = "Preregistrations"
+    let tableMeta = (Profile.tablemeta || []).find(u => u.meta === metaKey)
+    const initialConfig = {
+      hiddenColumns: tableMeta ? JSON.parse(tableMeta.config).filter(u => u.isVisible === false).map(item => {
+        return item.key
+      }) : [],
+      columnOrder: tableMeta ? JSON.parse(tableMeta.config).sort((a, b) => a.order - b.order).map(item => {
+        return item.key
+      }) : []
+    };
 
     (list || []).map(item => {
       var filestext = item.files.map((file) => {
@@ -165,6 +177,7 @@ export default class Preregistrations extends Component {
                         Oluştur
                       </Button>
                     </Link>
+                    <ColumnChooser meta={Profile.tablemeta} columns={Columns} metaKey={metaKey} />
                   </GridColumn>
                 </Grid>
               </Header>

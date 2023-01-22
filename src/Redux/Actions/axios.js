@@ -22,7 +22,7 @@ function getRequest(url) {
 function postRequest(url, data) {
     return new Promise((resolve, reject) => {
         acInstanse.post(url, data)
-            .then(response => resolve(response.data))
+            .then(response => resolve(response))
             .catch(error => reject(error))
     })
 }

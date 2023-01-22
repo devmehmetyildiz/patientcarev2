@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useMemo } from 'react'
-import { useExpanded, useFilters, useGroupBy, usePagination, useRowSelect, useSortBy, useTable } from "react-table"
+import { useColumnOrder, useExpanded, useFilters, useGroupBy, usePagination, useRowSelect, useSortBy, useTable } from "react-table"
 import { Icon, Pagination, Select, Popup, } from 'semantic-ui-react'
 import "../Common/Table.css"
 
@@ -31,8 +31,8 @@ function DefaultColumnFilter({
     )
 }
 
-export const DataTable = ({ Columns, Data, Config,renderRowSubComponent}) => {
-    const columns = useMemo(() => Columns, [])
+export const DataTable = ({ Columns, Data, Config, renderRowSubComponent }) => {
+    const columns = useMemo(() => Columns, [Columns])
     const data = useMemo(() => Data, [Data])
 
     const pageSizes = [
@@ -72,6 +72,7 @@ export const DataTable = ({ Columns, Data, Config,renderRowSubComponent}) => {
         toggleRowSelected,
         toggleAllRowsExpanded,
         toggleRowExpanded,
+        setColumnOrder,
         state: {
             pageIndex,
             pageSize,
@@ -79,7 +80,9 @@ export const DataTable = ({ Columns, Data, Config,renderRowSubComponent}) => {
             groupBy,
             expanded,
             filters,
-            selectedRowIds
+            selectedRowIds,
+            hiddenColumns: tableHiddenColumns,
+            columnOrder: tableOrderColumns,
         },
     } = useTable(
         {
@@ -89,6 +92,7 @@ export const DataTable = ({ Columns, Data, Config,renderRowSubComponent}) => {
             defaultColumn,
         },
         useFilters,
+        useColumnOrder,
         useGroupBy,
         useSortBy,
         useExpanded,
@@ -97,6 +101,37 @@ export const DataTable = ({ Columns, Data, Config,renderRowSubComponent}) => {
     )
 
 
+    useEffect(() => {
+        if (Config?.hiddenColumns) {
+            let isEqual = true
+            if (tableHiddenColumns?.length > 0 && Config?.hiddenColumns?.length > 0) {
+                for (let index = 0; index < tableHiddenColumns.length - 1; index++) {
+                    if (tableHiddenColumns[index] !== Config.hiddenColumns[index]) {
+                        isEqual = false
+                    }
+                }
+                if (!isEqual) {
+                    setHiddenColumns(Config.hiddenColumns)
+                }
+            }
+        }
+    }, [Config?.hiddenColumns])
+
+    useEffect(() => {
+        if (Config?.columnOrder) {
+            let isEqual = true
+            if (tableOrderColumns?.length > 0 && Config?.columnOrder?.length > 0) {
+                for (let index = 0; index < tableOrderColumns.length - 1; index++) {
+                    if (tableOrderColumns[index] !== Config.columnOrder[index]) {
+                        isEqual = false
+                    }
+                }
+                if (!isEqual) {
+                    setColumnOrder(Config.columnOrder)
+                }
+            }
+        }
+    }, [Config?.columnOrder])
 
     return (
         <div className='react-table-container'>
@@ -141,8 +176,8 @@ export const DataTable = ({ Columns, Data, Config,renderRowSubComponent}) => {
                         <thead>
                             {headerGroups.map(headerGroup => (
                                 <tr {...headerGroup.getHeaderGroupProps()}>
-                                    {headerGroup.headers.map(column => (
-                                        <th {...column.getHeaderProps()}>
+                                    {headerGroup.headers.map(column => {
+                                        return <th {...column.getHeaderProps()} style={column.newWidht && { width:column.newWidht }}>
                                             <div className='react-table-header-column'>
                                                 {
                                                     column.sortable ?
@@ -161,10 +196,11 @@ export const DataTable = ({ Columns, Data, Config,renderRowSubComponent}) => {
                                                         {column.isGrouped ? <Icon name='thumbtack' className='active' /> : <Icon name='thumbtack' />}
                                                     </span>
                                                 </div> : null}
-                                                {column.canFilter ? <div className='react-table-header-filter'>{column.render('Filter')}</div> : null}
+                                                {!column.filterDisable ? (column.canFilter) ? <div className='react-table-header-filter'>{column.render('Filter')}</div> : null : null}
                                             </div>
                                         </th>
-                                    ))}
+                                    }
+                                    )}
                                 </tr>
                             ))}
                         </thead>
@@ -219,33 +255,35 @@ export const DataTable = ({ Columns, Data, Config,renderRowSubComponent}) => {
                     </table>
                 </div>
             </div>
-            {pageOptions.length > 1 ?
-                <div className='flex flex-row justify-between items-center w-full p-2'>
-                    <Select className='ml-2' placeholder='Set Page Size' value={pageSize} onChange={(e, data) => { setPageSize(data.value) }} options={pageSizes} />
-                    <div className="pagination">
-                        <Pagination
-                            className='row-pagination'
-                            activePage={pageIndex + 1}
-                            boundaryRange={2}
-                            onPageChange={(e, { activePage }) => { gotoPage(activePage - 1) }}
-                            siblingRange={2}
-                            totalPages={pageCount}
-                            ellipsisItem={{ content: <Icon name='ellipsis horizontal' />, icon: true }}
-                            firstItem={canPreviousPage ? { content: <Icon name='angle double left' />, icon: true } : null}
-                            lastItem={canNextPage ? { content: <Icon name='angle double right' />, icon: true } : null}
-                            prevItem={canPreviousPage ? { content: <Icon name='angle left' />, icon: true } : null}
-                            nextItem={canNextPage ? { content: <Icon name='angle right' />, icon: true } : null}
-                            size='small'
-                            pointing
-                            secondary
-                        />
+            {
+                pageOptions.length > 1 ?
+                    <div className='flex flex-row justify-between items-center w-full p-2'>
+                        <Select className='ml-2' placeholder='Set Page Size' value={pageSize} onChange={(e, data) => { setPageSize(data.value) }} options={pageSizes} />
+                        <div className="pagination">
+                            <Pagination
+                                className='row-pagination'
+                                activePage={pageIndex + 1}
+                                boundaryRange={2}
+                                onPageChange={(e, { activePage }) => { gotoPage(activePage - 1) }}
+                                siblingRange={2}
+                                totalPages={pageCount}
+                                ellipsisItem={{ content: <Icon name='ellipsis horizontal' />, icon: true }}
+                                firstItem={canPreviousPage ? { content: <Icon name='angle double left' />, icon: true } : null}
+                                lastItem={canNextPage ? { content: <Icon name='angle double right' />, icon: true } : null}
+                                prevItem={canPreviousPage ? { content: <Icon name='angle left' />, icon: true } : null}
+                                nextItem={canNextPage ? { content: <Icon name='angle right' />, icon: true } : null}
+                                size='small'
+                                pointing
+                                secondary
+                            />
+                        </div>
+                        <div className='mr-2'>
+                            <p>Page {pageIndex + 1} of {pageOptions.length}</p>
+                        </div>
                     </div>
-                    <div className='mr-2'>
-                        <p>Page {pageIndex + 1} of {pageOptions.length}</p>
-                    </div>
-                </div>
-                : null}
-        </div>
+                    : null
+            }
+        </div >
     )
 }
 export default DataTable

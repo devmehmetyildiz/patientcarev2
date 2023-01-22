@@ -4,6 +4,7 @@ import { GetStockdefines, removeStockdefinenotification, fillStockdefinenotifica
 
 const mapStateToProps = (state) => ({
     Stockdefines: state.Stockdefines,
+    Profile: state.Profile
 })
 
 const mapDispatchToProps = { GetStockdefines, removeStockdefinenotification, fillStockdefinenotification, DeleteStockdefines }

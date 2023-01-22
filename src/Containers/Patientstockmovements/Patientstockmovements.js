@@ -5,7 +5,8 @@ import { GetPatientstockmovement, removePatientstockmovementnotification, fillPa
 
 
 const mapStateToProps = (state) => ({
-    Patietstockmovements: state.Patientstockmovements
+    Patietstockmovements: state.Patientstockmovements,
+    Profile: state.Profile
 })
 
 const mapDispatchToProps = {

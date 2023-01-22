@@ -3,7 +3,8 @@ import Stocks from '../../Pages/Stocks/Stocks'
 import { GetStocks, DeleteStocks, DeactivateStocks, removeStocknotification, fillStocknotification } from "../../Redux/Actions/StockAction"
 
 const mapStateToProps = (state) => ({
-  Stocks: state.Stocks
+  Stocks: state.Stocks,
+  Profile: state.Profile
 })
 
 const mapDispatchToProps = {

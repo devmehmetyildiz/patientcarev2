@@ -7,6 +7,7 @@ import LoadingPage from '../../Utils/LoadingPage'
 import Popup from '../../Utils/Popup'
 import DeleteModal from "../../Utils/DeleteModal"
 import NoDataScreen from '../../Utils/NoDataScreen'
+import ColumnChooser from '../../Containers/Utils/ColumnChooser'
 
 export class Stations extends Component {
 
@@ -37,15 +38,26 @@ export class Stations extends Component {
       { Header: 'Güncelleme Zamanı', accessor: 'updateTime', sortable: true, canGroupBy: true, canFilter: true, },
       { accessor: 'edit', Header: "Güncelle", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' },
       { accessor: 'delete', Header: "Sil", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
-      const initialConfig = { hiddenColumns: ['concurrencyStamp','createdUser','updatedUser','createTime','updateTime'] };
+     
 
-    const { Stations, DeleteStations, removeStationnotification } = this.props
+    const { Stations, DeleteStations, removeStationnotification,Profile } = this.props
     const { notifications, list, isLoading, isDispatching } = Stations
     if (notifications && notifications.length > 0) {
       let msg = notifications[0]
       Popup(msg.type, msg.code, msg.description)
       removeStationnotification()
     }
+
+    const metaKey = "Stations"
+    let tableMeta = (Profile.tablemeta || []).find(u => u.meta === metaKey)
+    const initialConfig = {
+      hiddenColumns: tableMeta ? JSON.parse(tableMeta.config).filter(u => u.isVisible === false).map(item => {
+        return item.key
+      }) : [],
+      columnOrder: tableMeta ? JSON.parse(tableMeta.config).sort((a, b) => a.order - b.order).map(item => {
+        return item.key
+      }) : []
+    };
 
     (list || []).map(item => {
       item.edit = <Link to={`/Stations/${item.concurrencyStamp}/edit`} ><Icon size='large' className='row-edit' name='edit' /></Link>
@@ -72,6 +84,7 @@ export class Stations extends Component {
                         Oluştur
                       </Button>
                     </Link>
+                    <ColumnChooser meta={Profile.tablemeta} columns={Columns} metaKey={metaKey} />
                   </GridColumn>
                 </Grid>
               </Header>

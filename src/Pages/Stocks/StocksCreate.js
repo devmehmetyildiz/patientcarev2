@@ -9,27 +9,33 @@ import LoadingPage from '../../Utils/LoadingPage'
 export default class StocksCreate extends Component {
   constructor(props) {
     super(props)
-    const selecteddepartments = {}
-    const selectedstockdefine = {}
     this.state = {
-      selecteddepartments,
-      selectedstockdefine,
+      selecteddepartments: "",
+      selectedstockdefine: "",
+      selectedwarehouse: "",
+      open:false
     }
   }
 
 
   componentDidMount() {
-    const { GetDepartments, GetStockdefines } = this.props
+    const { GetDepartments, GetStockdefines, GetWarehouses } = this.props
     GetDepartments()
     GetStockdefines()
+    GetWarehouses()
   }
 
   render() {
-    const { Stocks, Departments, Stockdefines, removeStockdefinenotification, removeStocknotification, removeDepartmentnotification } = this.props
+    const { Stocks, Warehouses, removeWarehousenotification, removeStocknotification, Departments, Stockdefines, removeStockdefinenotification, removeDepartmentnotification } = this.props
     if (Stocks.notifications && Stocks.notifications.length > 0) {
       let msg = Stocks.notifications[0]
       Popuputil(msg.type, msg.code, msg.description)
       removeStocknotification()
+    }
+    if (Warehouses.notifications && Warehouses.notifications.length > 0) {
+      let msg = Warehouses.notifications[0]
+      Popuputil(msg.type, msg.code, msg.description)
+      removeWarehousenotification()
     }
     if (Departments.notifications && Departments.notifications.length > 0) {
       let msg = Departments.notifications[0]
@@ -47,6 +53,9 @@ export default class StocksCreate extends Component {
     })
     const Stockdefineoptions = Stockdefines.list.map(define => {
       return { key: define.concurrencyStamp, text: define.name, value: define.concurrencyStamp }
+    })
+    const Warehouseoptions = Warehouses.list.map(warehouse => {
+      return { key: warehouse.concurrencyStamp, text: warehouse.name, value: warehouse.concurrencyStamp }
     })
 
 
@@ -70,6 +79,10 @@ export default class StocksCreate extends Component {
           <div className='w-full bg-white p-4 rounded-lg shadow-md outline outline-[1px] outline-gray-200 '>
             <Form className='' onSubmit={this.handleSubmit}>
               <Form.Group widths='equal'>
+              <Form.Field>
+                  <label className='text-[#000000de]'>Ambar</label>
+                  <Dropdown placeholder='Ambar' fluid selection options={Warehouseoptions} onChange={this.handleChangeWarehouse} value={this.state.selectedwarehouse} />
+                </Form.Field>
                 <Form.Field>
                   <label className='text-[#000000de]'>Ürün</label>
                   <Dropdown placeholder='Ürün' fluid selection options={Stockdefineoptions} onChange={this.handleChangeStockdefine} />
@@ -106,10 +119,11 @@ export default class StocksCreate extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    const { AddStocks, history, fillStocknotification, Departments, Stockdefines } = this.props
+    const { AddStocks, history, fillStocknotification } = this.props
     const data = formToObject(e.target)
-    data.department = Departments.list.find(u => u.concurrencyStamp === this.state.selecteddepartments)
-    data.stockdefine = Stockdefines.list.find(u => u.concurrencyStamp === this.state.selectedstockdefine)
+    data.departmentid = this.state.selecteddepartments
+    data.stockdefineID = this.state.selectedstockdefine
+    data.warehouseID = this.state.selectedwarehouse
     data.id = 0
     data.concurrencyStamp = null
     data.createdUser = null
@@ -123,13 +137,16 @@ export default class StocksCreate extends Component {
     data.source = "Single Request"
 
     let errors = []
-    if (!Departments.list.find(u => u.concurrencyStamp === this.state.selecteddepartments)) {
+    if (!data.departmentid || data.departmentid == '') {
       errors.push({ type: 'Error', code: 'Ürünler', description: 'Departman Seçili Değil' })
     }
-    if (!Stockdefines.list.find(u => u.concurrencyStamp === this.state.selectedstockdefine)) {
+    if (!data.warehouseID || data.warehouseID == '') {
+      errors.push({ type: 'Error', code: 'Ürünler', description: 'Ambar Seçili Değil' })
+    }
+    if (!data.stockdefineID || data.stockdefineID == '') {
       errors.push({ type: 'Error', code: 'Ürünler', description: 'Ürün Seçili Değil' })
     }
-    if (data.amount === '') {
+    if (!data.amount || data.amount == '' || data.amount == 0) {
       errors.push({ type: 'Error', code: 'Ürünler', description: 'Miktar girilmedi' })
     }
     if (errors.length > 0) {
@@ -147,6 +164,9 @@ export default class StocksCreate extends Component {
 
   handleChangeStockdefine = (e, { value }) => {
     this.setState({ selectedstockdefine: value })
+  }
+  handleChangeWarehouse = (e, { value }) => {
+    this.setState({ selectedwarehouse: value })
   }
 
 

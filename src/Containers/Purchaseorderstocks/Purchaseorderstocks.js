@@ -1,15 +1,16 @@
 import { connect } from 'react-redux'
 import Purchaseorderstocks from '../../Pages/Purchaseorderstocks/Purchaseorderstocks'
-import { GetPurchaseorders, removePurchaseordernotification, fillPurchaseordernotification, DeletePurchaseorders } from '../../Redux/Actions/PurchaseorderstockAction'
+import { GetPurchaseorderstocks, removePurchaseorderstocknotification, fillPurchaseorderstocknotification, DeletePurchaseorderstocks } from '../../Redux/Actions/PurchaseorderstockAction'
 
 
 
 const mapStateToProps = (state) => ({
-    Purchaseorderstocks: state.Purchaseorderstocks
+    Purchaseorderstocks: state.Purchaseorderstocks,
+    Profile: state.Profile
 })
 
 const mapDispatchToProps = {
-    GetPurchaseorders, removePurchaseordernotification, fillPurchaseordernotification, DeletePurchaseorders
+    GetPurchaseorderstocks, removePurchaseorderstocknotification, fillPurchaseorderstocknotification, DeletePurchaseorderstocks
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Purchaseorderstocks)

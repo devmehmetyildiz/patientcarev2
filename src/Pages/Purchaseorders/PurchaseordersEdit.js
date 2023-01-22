@@ -14,17 +14,19 @@ export default class PurchaseordersEdit extends Component {
       selectedStocks: [],
       selectedCase: '',
       isDatafetched: false,
+      selectedWarehouse: '',
     }
   }
 
   componentDidMount() {
-    const { GetPurchaseorder, match, history, GetStockdefines, GetCases, GetUnits, GetDepartments } = this.props
+    const { GetPurchaseorder, match, history, GetStockdefines, GetCases, GetUnits, GetDepartments, GetWarehouses } = this.props
     if (match.params.PurchaseorderID) {
       GetPurchaseorder(match.params.PurchaseorderID)
       GetStockdefines()
       GetCases()
       GetUnits()
       GetDepartments()
+      GetWarehouses()
     } else {
       history.push("/Purchaseorders")
     }
@@ -32,12 +34,13 @@ export default class PurchaseordersEdit extends Component {
   }
 
   componentDidUpdate() {
-    const { Stockdefines, Purchaseorders, Cases, Units, Departments } = this.props
+    const { Stockdefines, Purchaseorders, Cases, Units, Departments, Warehouses } = this.props
     const { selected_record, isLoading } = Purchaseorders
     if (selected_record && Object.keys(selected_record).length > 0 &&
       selected_record.id != 0 && Stockdefines.list.length > 0 && !Stockdefines.isLoading
       && Cases.list.length > 0 && !Cases.isLoading
       && Units.list.length > 0 && !Units.isLoading
+      && Warehouses.list.length > 0 && !Warehouses.isLoading
       && Departments.list.length > 0 && !Departments.isLoading
       && !isLoading && !this.state.isDatafetched) {
       this.setState({
@@ -49,7 +52,7 @@ export default class PurchaseordersEdit extends Component {
   render() {
 
     const { removePurchaseordernotification, removeDepartmentnotification, removeUnitnotification,
-      removeCasenotification, removeStockdefinenotification, Cases, Units, Departments, Stockdefines,
+      removeCasenotification, removeStockdefinenotification, Cases, Units, Departments, Stockdefines, Warehouses, removeWarehousenotification,
       Purchaseorders } = this.props
     const { notifications, isLoading, isDispatching, selected_record } = Purchaseorders
 
@@ -63,6 +66,12 @@ export default class PurchaseordersEdit extends Component {
       let msg = Cases.notifications[0]
       Popuputils(msg.type, msg.code, msg.description)
       removeCasenotification()
+    }
+
+    if (Warehouses.notifications && Warehouses.notifications.length > 0) {
+      let msg = Warehouses.notifications[0]
+      Popuputils(msg.type, msg.code, msg.description)
+      removeWarehousenotification()
     }
 
     if (Units.notifications && Units.notifications.length > 0) {
@@ -99,6 +108,10 @@ export default class PurchaseordersEdit extends Component {
       return { key: cases.concurrencyStamp, text: cases.name, value: cases.concurrencyStamp }
     })
 
+    const Warehousesoption = Warehouses.list.map(warehouse => {
+      return { key: warehouse.concurrencyStamp, text: warehouse.name, value: warehouse.concurrencyStamp }
+    })
+
     return (
       isLoading || isDispatching ? <LoadingPage /> :
         <div className='w-full h-[calc(100vh-59px-2rem)] mx-auto flex flex-col  justify-start items-center pb-[2rem] px-[2rem]'>
@@ -116,6 +129,12 @@ export default class PurchaseordersEdit extends Component {
           <Divider className='w-full  h-[1px]' />
           <div className='w-full  bg-white p-4 rounded-lg shadow-md outline outline-[1px] outline-gray-200 '>
             <Form onSubmit={this.handleSubmit}>
+              <Form.Group widths={'equal'}>
+                <Form.Field>
+                  <label className='text-[#000000de]'>Hedef Ambar</label>
+                  <Dropdown value={this.state.selectedWarehouse} placeholder='Hedef Ambar' clearable search fluid selection options={Warehousesoption} onChange={(e, data) => { this.setState({ selectedWarehouse: data.value }) }} />
+                </Form.Field>
+              </Form.Group>
               <Form.Group widths={'equal'}>
                 <Form.Input defaultValue={selected_record.company} placeholder="Firma Adı" name="company" fluid label="Firma Adı" />
                 <Form.Input defaultValue={selected_record.purchaseprice} placeholder="Alış Fiyatı" name="purchaseprice" fluid label="Alış Fiyatı" type='number' />
@@ -168,7 +187,7 @@ export default class PurchaseordersEdit extends Component {
                         </Table.Cell>
                         <Table.Cell>
                           <Form.Field>
-                            <Dropdown disabled={stock.concurrencyStamp} value={stock.stockid} placeholder='Ürün Tanımı' name="stockid" clearable search fluid selection options={Stockdefinesoption} onChange={(e, data) => { this.selectedProductChangeHandler(stock.key, 'stockid', data.value) }} />
+                            <Dropdown disabled={stock.concurrencyStamp} value={stock.stockdefineID} placeholder='Ürün Tanımı' name="stockdefineID" clearable search fluid selection options={Stockdefinesoption} onChange={(e, data) => { this.selectedProductChangeHandler(stock.key, 'stockdefineID', data.value) }} />
                           </Form.Field>
                         </Table.Cell>
                         <Table.Cell>
@@ -241,12 +260,13 @@ export default class PurchaseordersEdit extends Component {
       personelname: formData.personelname,
       purchasedate: formData.purchasedate,
       caseID: this.state.selectedCase,
+      warehouseID: this.state.selectedWarehouse,
       stocks: stocks
     }
 
     let errors = []
     responseData.stocks.forEach(data => {
-      if (!data.stockid || data.stockid == '') {
+      if (!data.stockdefineID || data.stockdefineID == '') {
         errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Ürün Tanımı Bulunamadı' })
       }
       if (!data.departmentid || data.departmentid == '') {
@@ -281,6 +301,9 @@ export default class PurchaseordersEdit extends Component {
     if (!responseData.personelname || responseData.personelname == '') {
       errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Teslim Alan Kişi belirtilmedi' })
     }
+    if (!responseData.warehouseID || responseData.warehouseID == '') {
+      errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Ambar girilmedi' })
+    }
     if (!responseData.caseID || responseData.caseID == '') {
       errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Sipariş durumu girilmedi' })
     }
@@ -301,7 +324,7 @@ export default class PurchaseordersEdit extends Component {
       selectedStocks: [...this.state.selectedStocks,
       {
         id: 0,
-        stockid: '',
+        stockdefineID: '',
         stockdefine: {},
         departmentid: '',
         department: {},

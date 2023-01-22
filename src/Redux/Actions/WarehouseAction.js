@@ -64,7 +64,7 @@ export const AddWarehouses = (data, historypusher) => async (dispatch, getState)
         .then(response => {
             {
                 dispatch({ type: ACTION_TYPES.ADD_WAREHOUSE_SUCCESS, payload: response.data })
-                historypusher('/Warehouses')
+                historypusher.push('/Warehouses')
             }
         })
         .catch(error => {

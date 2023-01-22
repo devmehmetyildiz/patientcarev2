@@ -118,7 +118,7 @@ export default class PreregistrationsEditstock extends Component {
                       </Table.Cell>
                       <Table.Cell>
                         <Form.Field>
-                          <Dropdown disabled={stock.concurrencyStamp} value={stock.stockid} placeholder='Ürün Tanımı' name="stockid" clearable search fluid selection options={Stockdefinesoption} onChange={(e, data) => { this.selectedProductChangeHandler(stock.key, 'stockid', data.value) }} />
+                          <Dropdown disabled={stock.concurrencyStamp} value={stock.patientdefineID} placeholder='Ürün Tanımı' name="stockdefineID" clearable search fluid selection options={Stockdefinesoption} onChange={(e, data) => { this.selectedProductChangeHandler(stock.key, 'stockdefineID', data.value) }} />
                         </Form.Field>
                       </Table.Cell>
                       <Table.Cell>
@@ -187,7 +187,7 @@ export default class PreregistrationsEditstock extends Component {
 
     let errors = []
     stocks.forEach(data => {
-      if (!data.stockid || data.stockid == '') {
+      if (!data.stockdefineID || data.stockdefineID == '') {
         errors.push({ type: 'Error', code: 'Patients', description: 'Ürün Tanımı Bulunamadı' })
       }
       if (!data.departmentid || data.departmentid == '') {
@@ -221,7 +221,7 @@ export default class PreregistrationsEditstock extends Component {
       selectedStocks: [...this.state.selectedStocks,
       {
         id: 0,
-        stockid: '',
+        stockdefineID: '',
         stockdefine: {},
         departmentid: '',
         department: {},

@@ -64,7 +64,7 @@ export const AddPurchaseorderstockmovements = (data, historypusher) => async (di
         .then(response => {
             {
                 dispatch({ type: ACTION_TYPES.ADD_PURCHASEORDERSTOCKMOVEMENT_SUCCESS, payload: response.data })
-                historypusher('/Purchaseorderstockmovements')
+                historypusher.push('/Purchaseorderstockmovements')
             }
         })
         .catch(error => {
@@ -89,10 +89,9 @@ export const EditPurchaseorderstockmovements = (data, historypusher) => async (d
 }
 
 export const DeletePurchaseorderstockmovements = (data) => async (dispatch, getState) => {
-    delete data['edit']
-    delete data['delete']
+    
     dispatch({ type: ACTION_TYPES.DELETE_PURCHASEORDERSTOCKMOVEMENT_INIT })
-    await instanse.post(ROUTES.PURCHASEORDERSTOCKMOVEMENT + "/Delete", data)
+    await instanse.post(ROUTES.PURCHASEORDERSTOCKMOVEMENT + "/Delete?guid=" + data)
         .then(response => {
             {
                 dispatch({ type: ACTION_TYPES.DELETE_PURCHASEORDERSTOCKMOVEMENT_SUCCESS, payload: response.data })

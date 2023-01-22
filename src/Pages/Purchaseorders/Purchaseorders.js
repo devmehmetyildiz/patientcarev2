@@ -7,6 +7,8 @@ import LoadingPage from '../../Utils/LoadingPage'
 import Popup from '../../Utils/Popup'
 import NoDataScreen from '../../Utils/NoDataScreen'
 import PurchaseordersList from './PurchaseordersList'
+import Notification from '../../Utils/Notification'
+import ColumnChooser from '../../Containers/Utils/ColumnChooser'
 
 export default class Purchaseorders extends Component {
 
@@ -14,15 +16,16 @@ export default class Purchaseorders extends Component {
     super(props)
     this.state = {
       open: false,
+      openComplete: false,
       selectedrecord: {},
       expandedRow: []
     }
   }
 
   componentDidMount() {
-    const { GetPurchaseorders, GetStocks } = this.props
+    const { GetPurchaseorders, GetPurchaseorderstocks } = this.props
     GetPurchaseorders()
-    GetStocks()
+    GetPurchaseorderstocks()
   }
 
   render() {
@@ -30,14 +33,16 @@ export default class Purchaseorders extends Component {
     const Columns = [
       {
         Header: () => null,
-        id: 'expander',
+        id: 'expander', accessor: 'expander', sortable: false, canGroupBy: false, canFilter: false, filterDisable: true,
         Cell: ({ row }) => (
           <span {...row.getToggleRowExpandedProps()}>
             {row.isExpanded ? <Icon name='triangle down' /> : <Icon name='triangle right' />}
           </span>
         ),
+
       },
       { Header: 'Id', accessor: 'id', sortable: true, canGroupBy: true, canFilter: true, },
+      { Header: 'Tekil ID', accessor: 'concurrencyStamp', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Firma', accessor: 'company', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Satın alma numarası', accessor: 'purchasenumber', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Teslim Alan', accessor: 'personelname', sortable: true, canGroupBy: true, canFilter: true },
@@ -45,31 +50,36 @@ export default class Purchaseorders extends Component {
       { Header: 'Siparişi açan', accessor: 'username', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Satın alma tarihi', accessor: 'purchasedate', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Durum', accessor: 'case.name', sortable: true, canGroupBy: true, canFilter: true, },
+      { Header: 'Oluşturan Kullanıcı', accessor: 'createdUser', sortable: true, canGroupBy: true, canFilter: true, },
+      { Header: 'Güncelleyen Kullanıcı', accessor: 'updatedUser', sortable: true, canGroupBy: true, canFilter: true, },
+      { Header: 'Oluşturma Zamanı', accessor: 'createTime', sortable: true, canGroupBy: true, canFilter: true, },
+      { Header: 'Güncelleme Zamanı', accessor: 'updateTime', sortable: true, canGroupBy: true, canFilter: true, },
+      { accessor: 'complete', Header: "Tamamla", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' },
       { accessor: 'edit', Header: "Güncelle", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' },
       { accessor: 'delete', Header: "Sil", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
-    const initialConfig = { hiddenColumns: ['concurrencyStamp'] };
 
-    const { Purchaseorders, DeletePurchaseorders, removePurchaseordernotification, Stocks, removeStocknotification } = this.props
-    const { notifications, list, isLoading, isDispatching } = Purchaseorders
-    if (notifications && notifications.length > 0) {
-      let msg = notifications[0]
-      Popup(msg.type, msg.code, msg.description)
-      removePurchaseordernotification()
-    }
-    if (Stocks.notifications && Stocks.notifications.length > 0) {
-      let msg = notifications[0]
-      Popup(msg.type, msg.code, msg.description)
-      removeStocknotification()
-    }
+    const { Purchaseorders, DeletePurchaseorders, removePurchaseordernotification, Purchaseorderstocks, removePurchaseorderstocknotification, Profile,CompletePurchaseorders } = this.props
+    const { list, isLoading, isDispatching } = Purchaseorders
+
+    Notification(Purchaseorders.notifications, removePurchaseordernotification)
+    Notification(Purchaseorderstocks.notifications, removePurchaseorderstocknotification)
+
+    const metaKey = "Purchaseorders"
+    let tableMeta = (Profile.tablemeta || []).find(u => u.meta === metaKey)
+    const initialConfig = {
+      hiddenColumns: tableMeta ? JSON.parse(tableMeta.config).filter(u => u.isVisible === false).map(item => {
+        return item.key
+      }) : [],
+      columnOrder: tableMeta ? JSON.parse(tableMeta.config).sort((a, b) => a.order - b.order).map(item => {
+        return item.key
+      }) : []
+    };
 
     (list || []).map(item => {
+      item.complete = <Icon link size='large' color='red' name='check square' onClick={() => { this.setState({ selectedrecord: item, openComplete: true }) }} />
       item.edit = <Link to={`/Purchaseorders/${item.concurrencyStamp}/edit`} ><Icon size='large' className='row-edit' name='edit' /></Link>
       item.delete = <Icon link size='large' color='red' name='alternate trash' onClick={() => { this.setState({ selectedrecord: item, open: true }) }} />
     })
-
-
-
-
 
     return (
       isLoading || isDispatching ? <LoadingPage /> :
@@ -91,6 +101,7 @@ export default class Purchaseorders extends Component {
                         Oluştur
                       </Button>
                     </Link>
+                    <ColumnChooser meta={Profile.tablemeta} columns={Columns} metaKey={metaKey} />
                   </GridColumn>
                 </Grid>
               </Header>
@@ -115,7 +126,7 @@ export default class Purchaseorders extends Component {
             <Modal.Content image>
               <Modal.Description>
                 <p>
-                  <span className='font-bold'>{Object.keys(this.state.selectedrecord).length > 0 ? `${this.state.selectedrecord.name} ` : null} </span>
+                  <span className='font-bold'>{Object.keys(this.state.selectedrecord).length > 0 ? `${this.state.selectedrecord.purchasenumber} ` : null} </span>
                   siparişini silmek istediğinize emin misiniz?
                 </p>
               </Modal.Description>
@@ -130,6 +141,36 @@ export default class Purchaseorders extends Component {
                 icon='checkmark'
                 onClick={() => {
                   DeletePurchaseorders(this.state.selectedrecord)
+                  this.setState({ open: false, selectedrecord: {} })
+                }}
+                positive
+              />
+            </Modal.Actions>
+          </Modal>
+          <Modal
+            onClose={() => this.setState({ openComplete: false })}
+            onOpen={() => this.setState({ openComplete: true })}
+            open={this.state.openComplete}
+          >
+            <Modal.Header>Satın Alma Siparişi Tamamlama</Modal.Header>
+            <Modal.Content image>
+              <Modal.Description>
+                <p>
+                  <span className='font-bold'>{Object.keys(this.state.selectedrecord).length > 0 ? `${this.state.selectedrecord.purchasenumber} ` : null} </span>
+                  siparişini tamamlamak istediğinize emin misiniz?
+                </p>
+              </Modal.Description>
+            </Modal.Content>
+            <Modal.Actions>
+              <Button color='black' onClick={() => this.setState({ open: false, selectedrecord: {} })}>
+                Vazgeç
+              </Button>
+              <Button
+                content="Tamamla"
+                labelPosition='right'
+                icon='checkmark'
+                onClick={() => {
+                  CompletePurchaseorders(this.state.selectedrecord)
                   this.setState({ open: false, selectedrecord: {} })
                 }}
                 positive

@@ -4,7 +4,8 @@ import Preregistrations from "../../Pages/Preregistrations/Preregistrations"
 import { Getpreregistrations, removePatientnotification,DeletePatients } from "../../Redux/Actions/PatientAction"
 
 const mapStateToProps = (state) => ({
-  Patients: state.Patients
+  Patients: state.Patients,
+  Profile: state.Profile
 })
 
 const mapDispatchToProps = { Getpreregistrations, removePatientnotification,DeletePatients }

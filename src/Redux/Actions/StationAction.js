@@ -64,7 +64,7 @@ export const AddStations = (data, historypusher) => async (dispatch, getState) =
         .then(response => {
             {
                 dispatch({ type: ACTION_TYPES.ADD_STATION_SUCCESS, payload: response.data })
-                historypusher('/Stations')
+                historypusher.push('/Stations')
             }
         })
         .catch(error => {

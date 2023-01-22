@@ -1,14 +1,15 @@
 import { connect } from 'react-redux'
 import Patientstocks from '../../Pages/Patientstocks/Patientstocks'
-import { GetPatientstock, removePatientstocknotification, fillPatientstocknotification, DeletePatientstocks } from '../../Redux/Actions/PatientstockAction'
+import { GetPatientstocks, removePatientstocknotification, fillPatientstocknotification, DeletePatientstocks } from '../../Redux/Actions/PatientstockAction'
 
 
 const mapStateToProps = (state) => ({
-    Patietstocks: state.Patientstocks
+    Patientstocks: state.Patientstocks,
+    Profile: state.Profile
 })
 
 const mapDispatchToProps = {
-    GetPatientstock, removePatientstocknotification, fillPatientstocknotification, DeletePatientstocks
+    GetPatientstocks, removePatientstocknotification, fillPatientstocknotification, DeletePatientstocks
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Patientstocks)

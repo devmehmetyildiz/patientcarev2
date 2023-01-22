@@ -2,9 +2,11 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { Divider, Icon, Modal } from 'semantic-ui-react'
 import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
+import ColumnChooser from '../../Containers/Utils/ColumnChooser'
 import DataTable from '../../Utils/DataTable'
 import LoadingPage from '../../Utils/LoadingPage'
 import NoDataScreen from '../../Utils/NoDataScreen'
+import Notification from '../../Utils/Notification'
 import Popup from '../../Utils/Popup'
 
 export class Departments extends Component {
@@ -23,11 +25,13 @@ export class Departments extends Component {
 
 
   componentDidMount() {
-    const { GetDepartments } = this.props
+    const { GetDepartments, } = this.props
     GetDepartments()
   }
 
   render() {
+
+    
 
     const Columns = [
       { Header: 'Id', accessor: 'id', sortable: true, canGroupBy: true, canFilter: true, },
@@ -59,15 +63,25 @@ export class Departments extends Component {
       { accessor: 'edit', Header: "Güncelle", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' },
       { accessor: 'delete', Header: "Sil", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
 
-      const initialConfig = { hiddenColumns: ['concurrencyStamp','createdUser','updatedUser','createTime','updateTime'] };
 
-    const { Departments, removeDepartmentnotification, DeleteDepartments } = this.props
+    const { Departments, removeDepartmentnotification, DeleteDepartments, Profile } = this.props
     const { notifications, list, isLoading, isDispatching } = Departments
+
     if (notifications && notifications.length > 0) {
       let msg = notifications[0]
       Popup(msg.type, msg.code, msg.description)
       removeDepartmentnotification()
     }
+    const metaKey = "Departments"
+    let tableMeta = (Profile.tablemeta || []).find(u => u.meta === metaKey)
+    const initialConfig = {
+      hiddenColumns: tableMeta ? JSON.parse(tableMeta.config).filter(u => u.isVisible === false).map(item => {
+        return item.key
+      }) : [],
+      columnOrder: tableMeta ? JSON.parse(tableMeta.config).sort((a, b) => a.order - b.order).map(item => {
+        return item.key
+      }) : []
+    };
 
     (list || []).map(item => {
       var text = item.stations.map((station) => {
@@ -98,6 +112,7 @@ export class Departments extends Component {
                         Oluştur
                       </Button>
                     </Link>
+                    <ColumnChooser meta={Profile.tablemeta} columns={Columns} metaKey={metaKey} />
                   </GridColumn>
                 </Grid>
               </Header>
@@ -106,7 +121,7 @@ export class Departments extends Component {
             {list.length > 0 ?
               <div className='w-full mx-auto '>
                 <DataTable Columns={Columns} Data={list} Config={initialConfig} />
-              </div> : <NoDataScreen message="Tanımlı Durum Yok" />
+              </div> : <NoDataScreen message="Tanımlı Departman Yok" />
             }
           </div>
           <Modal

@@ -34,7 +34,7 @@ export function Sidebar(props) {
             isOpened: false,
             icon: <TbAccessPoint className='text-orange-300' />,
             items: [
-                { id: 1, subtitle: "Açık Siparişler", url: "/Purchaseorders" },
+                { id: 1, subtitle: "Siparişler", url: "/Purchaseorders" },
                 { id: 2, subtitle: "Sipariş Stokları", url: "/Purchaseorderstocks" },
                 { id: 3, subtitle: "Sipariş Stok Hareketleri", url: "/Purchaseorderstockmovements" },
             ]

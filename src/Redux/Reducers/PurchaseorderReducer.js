@@ -37,9 +37,19 @@ const PurchaseordersReducer = (state = defaultState, { type, payload }) => {
         case ACTION_TYPES.ADD_PURCHASEORDER_SUCCESS:
             return {
                 ...state, isDispatching: false, list: payload,
-                notifications: [{ type: 'Success', code: 'Ürün Tanımları', description: 'Ürün Tanımı Başarı ile Eklendi' }].concat(state.notifications || [])
+                notifications: [{ type: 'Success', code: 'Siparişler', description: 'Sipariş ile Eklendi' }].concat(state.notifications || [])
             }
         case ACTION_TYPES.ADD_PURCHASEORDER_ERROR:
+            return { ...state, isDispatching: false, errmsg: payload }
+
+        case ACTION_TYPES.COMPLETE_PURCHASEORDER_INIT:
+            return { ...state, isDispatching: true }
+        case ACTION_TYPES.COMPLETE_PURCHASEORDER_SUCCESS:
+            return {
+                ...state, isDispatching: false, list: payload,
+                notifications: [{ type: 'Success', code: 'Siparişler', description: 'Sipariş Başarı ile Tamamlandı' }].concat(state.notifications || [])
+            }
+        case ACTION_TYPES.COMPLETE_PURCHASEORDER_ERROR:
             return { ...state, isDispatching: false, errmsg: payload }
 
         case ACTION_TYPES.EDIT_PURCHASEORDER_INIT:
@@ -47,7 +57,7 @@ const PurchaseordersReducer = (state = defaultState, { type, payload }) => {
         case ACTION_TYPES.EDIT_PURCHASEORDER_SUCCESS:
             return {
                 ...state, isDispatching: false, list: payload,
-                notifications: [{ type: 'Success', code: 'Ürün Tanımları', description: 'Ürün Tanımı Başarı ile Güncellendi' }].concat(state.notifications || [])
+                notifications: [{ type: 'Success', code: 'Siparişler', description: 'Sipariş Başarı ile Güncellendi' }].concat(state.notifications || [])
             }
         case ACTION_TYPES.EDIT_PURCHASEORDER_ERROR:
             return { ...state, isDispatching: false, errmsg: payload }
@@ -57,7 +67,7 @@ const PurchaseordersReducer = (state = defaultState, { type, payload }) => {
         case ACTION_TYPES.DELETE_PURCHASEORDER_SUCCESS:
             return {
                 ...state, isDispatching: false, list: payload,
-                notifications: [{ type: 'Success', code: 'Ürün Tanımları', description: 'Ürün Tanımı Başarı ile Silindi' }].concat(state.notifications || [])
+                notifications: [{ type: 'Success', code: 'Siparişler', description: 'Sipariş Başarı ile Silindi' }].concat(state.notifications || [])
             }
         case ACTION_TYPES.DELETE_PURCHASEORDER_ERROR:
             return { ...state, isDispatching: false, errmsg: payload }

@@ -97,7 +97,7 @@ export const EditPatients = (data, historypusher,url) => async (dispatch, getSta
 
 export const EditPatientstocks = (data, historypusher,url) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.EDIT_PATIENT_INIT })
-    await instanse.post(ROUTES.PATIENT + "/Updatestocks", data)
+    await instanse.post(ROUTES.PATIENT + "/Preparestocks", data)
         .then(response => {
             {
                 dispatch({ type: ACTION_TYPES.EDIT_PATIENT_SUCCESS, payload: response.data })

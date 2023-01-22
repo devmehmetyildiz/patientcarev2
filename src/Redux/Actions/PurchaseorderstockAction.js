@@ -63,7 +63,7 @@ export const AddPurchaseorderstocks = (data, historypusher) => async (dispatch, 
         .then(response => {
             {
                 dispatch({ type: ACTION_TYPES.ADD_PURCHASEORDERSTOCK_SUCCESS, payload: response.data })
-                historypusher('/Purchaseorderstocks')
+                historypusher.push('/Purchaseorderstocks')
             }
         })
         .catch(error => {

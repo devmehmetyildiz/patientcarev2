@@ -3,7 +3,8 @@ import Patientdefines from '../../Pages/Patientdefines/Patientdefines'
 import { GetPatientdefines, removePatientdefinenotification, fillPatientdefinenotification, DeletePatientdefines } from '../../Redux/Actions/PatientdefineAction'
 
 const mapStateToProps = (state) => ({
-    Patientdefines: state.Patientdefines
+    Patientdefines: state.Patientdefines,
+    Profile: state.Profile
 })
 
 const mapDispatchToProps = {

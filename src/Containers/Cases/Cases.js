@@ -3,7 +3,8 @@ import Cases from "../../Pages/Cases/Cases"
 import { GetCases, DeleteCases, removeCasenotification, fillCasenotification } from "../../Redux/Actions/CaseAction"
  
 const mapStateToProps = (state) => ({
-  Cases: state.Cases
+  Cases: state.Cases,
+  Profile: state.Profile
 })
 
 const mapDispatchToProps = { GetCases, DeleteCases, removeCasenotification, fillCasenotification }

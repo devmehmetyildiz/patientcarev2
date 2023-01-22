@@ -19,6 +19,10 @@ export const ACTION_TYPES = {
     ADD_PURCHASEORDER_SUCCESS: 'ADD_PURCHASEORDER_SUCCESS',
     ADD_PURCHASEORDER_ERROR: 'ADD_PURCHASEORDER_ERROR',
 
+    COMPLETE_PURCHASEORDER_INIT: 'COMPLETE_PURCHASEORDER_INIT',
+    COMPLETE_PURCHASEORDER_SUCCESS: 'COMPLETE_PURCHASEORDER_SUCCESS',
+    COMPLETE_PURCHASEORDER_ERROR: 'COMPLETE_PURCHASEORDER_ERROR',
+
     EDIT_PURCHASEORDER_INIT: 'EDIT_PURCHASEORDER_INIT',
     EDIT_PURCHASEORDER_SUCCESS: 'EDIT_PURCHASEORDER_SUCCESS',
     EDIT_PURCHASEORDER_ERROR: 'EDIT_PURCHASEORDER_ERROR',
@@ -69,6 +73,22 @@ export const AddPurchaseorders = (data, historypusher) => async (dispatch, getSt
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_PURCHASEORDERS_NOTIFICATION, payload: AxiosErrorHelper(error) })
             dispatch({ type: ACTION_TYPES.ADD_PURCHASEORDER_ERROR, payload: AxiosErrorHelper(error) })
+        })
+}
+export const CompletePurchaseorders = (data) => async (dispatch, getState) => {
+    delete data['complete']
+    delete data['edit']
+    delete data['delete']
+    dispatch({ type: ACTION_TYPES.COMPLETE_PURCHASEORDER_INIT })
+    await instanse.post(ROUTES.PURCHASEORDER + "/Complete", data)
+        .then(response => {
+            {
+                dispatch({ type: ACTION_TYPES.COMPLETE_PURCHASEORDER_SUCCESS, payload: response.data })
+            }
+        })
+        .catch(error => {
+            dispatch({ type: ACTION_TYPES.FILL_PURCHASEORDERS_NOTIFICATION, payload: AxiosErrorHelper(error) })
+            dispatch({ type: ACTION_TYPES.COMPLETE_PURCHASEORDER_ERROR, payload: AxiosErrorHelper(error) })
         })
 }
 

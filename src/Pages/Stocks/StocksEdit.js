@@ -6,51 +6,58 @@ import formToObject from 'form-to-object'
 import Popuputil from '../../Utils/Popup'
 import LoadingPage from '../../Utils/LoadingPage'
 
-export default class Stocksedit extends Component {
+export default class StocksEdit extends Component {
   constructor(props) {
     super(props)
-    const selecteddepartments = ""
-    const selectedstockdefine = ""
     this.state = {
-      selecteddepartments,
-      selectedstockdefine,
+      selecteddepartments: "",
+      selectedstockdefine: "",
+      selectedwarehouse: "",
+      open: false
     }
   }
 
 
   componentDidMount() {
-    const { GetStock, match, history, GetDepartments, GetStockdefines } = this.props
+    const { GetStock, GetWarehouses, match, history, GetDepartments, GetStockdefines } = this.props
     if (match.params.StockID) {
       GetStock(match.params.StockID)
       GetDepartments()
       GetStockdefines()
+      GetWarehouses()
     } else {
       history.push("/Stocks")
     }
   }
 
   componentDidUpdate() {
-    const { Departments, Stockdefines, Stocks } = this.props
+    const { Departments, Stockdefines, Stocks, Warehouses } = this.props
     const { selected_record, isLoading } = Stocks
     if (selected_record && Object.keys(selected_record).length > 0 && selected_record.id != 0
       && Departments.list.length > 0 && !Departments.isLoading
-      && Stocks.list.length > 0 && !Stocks.isLoading
+      && Warehouses.list.length > 0 && !Warehouses.isLoading
       && Stockdefines.list.length > 0 && !Stockdefines.isLoading && !isLoading && !this.state.isDatafetched) {
       this.setState({
-        selecteddepartments: selected_record.department.concurrencyStamp,
-        selectedstockdefine: selected_record.stockdefine.concurrencyStamp,
+        selecteddepartments: selected_record.departmentid,
+        selectedstockdefine: selected_record.stockdefineID,
+        selectedwarehouse: selected_record.warehouseID,
         isDatafetched: true
       })
     }
   }
 
   render() {
-    const { Stocks, Departments, Stockdefines, removeStockdefinenotification, removeStocknotification, removeDepartmentnotification } = this.props
+    const { Stocks, Warehouses, removeWarehousenotification, removeStocknotification, Departments, Stockdefines, removeStockdefinenotification, removeDepartmentnotification } = this.props
     const { selected_record } = Stocks
     if (Stocks.notifications && Stocks.notifications.length > 0) {
       let msg = Stocks.notifications[0]
       Popuputil(msg.type, msg.code, msg.description)
       removeStocknotification()
+    }
+    if (Warehouses.notifications && Warehouses.notifications.length > 0) {
+      let msg = Warehouses.notifications[0]
+      Popuputil(msg.type, msg.code, msg.description)
+      removeWarehousenotification()
     }
     if (Departments.notifications && Departments.notifications.length > 0) {
       let msg = Departments.notifications[0]
@@ -68,6 +75,9 @@ export default class Stocksedit extends Component {
     })
     const Stockdefineoptions = Stockdefines.list.map(define => {
       return { key: define.concurrencyStamp, text: define.name, value: define.concurrencyStamp }
+    })
+    const Warehouseoptions = Warehouses.list.map(warehouse => {
+      return { key: warehouse.concurrencyStamp, text: warehouse.name, value: warehouse.concurrencyStamp }
     })
 
 
@@ -92,6 +102,10 @@ export default class Stocksedit extends Component {
             <Form className='' onSubmit={this.handleSubmit}>
               <Form.Group widths='equal'>
                 <Form.Field>
+                  <label className='text-[#000000de]'>Ambar</label>
+                  <Dropdown placeholder='Ambar' fluid selection options={Warehouseoptions} onChange={this.handleChangeWarehouse} value={this.state.selectedwarehouse} />
+                </Form.Field>
+                <Form.Field>
                   <label className='text-[#000000de]'>Ürün</label>
                   <Dropdown placeholder='Ürün' fluid selection options={Stockdefineoptions} onChange={this.handleChangeStockdefine} value={this.state.selectedstockdefine} />
                 </Form.Field>
@@ -100,7 +114,6 @@ export default class Stocksedit extends Component {
               </Form.Group>
               <Form.Group widths='equal'>
                 <Form.Input label="Barkod No" placeholder="Barkod No" name="barcodeno" fluid defaultValue={selected_record.barcodeno} />
-                <Form.Input label="Miktar" placeholder="Miktar" name="amount" fluid step="0.01" type='number' defaultValue={selected_record.amount} />
               </Form.Group>
               <Form.Group widths='equal'>
                 <Form.Field>
@@ -127,22 +140,21 @@ export default class Stocksedit extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    const { EditStocks, history, fillStocknotification, Stocks, Departments, Stockdefines } = this.props
+    const { EditStocks, history, fillStocknotification, Stocks } = this.props
     const data = formToObject(e.target)
-    data.department = Departments.list.find(u => u.concurrencyStamp === this.state.selecteddepartments)
-    data.stockdefine = Stockdefines.list.find(u => u.concurrencyStamp === this.state.selectedstockdefine)
-    data.maxamount = data.amount
+    data.departmentid = this.state.selecteddepartments
+    data.stockdefineID = this.state.selectedstockdefine
+    data.warehouseID = this.state.selectedwarehouse
 
     let errors = []
-    console.log('this.state.selecteddepartments: ', this.state.selecteddepartments);
-    if (!Departments.list.find(u => u.concurrencyStamp === this.state.selecteddepartments)) {
+    if (!data.departmentid || data.departmentid == '') {
       errors.push({ type: 'Error', code: 'Ürünler', description: 'Departman Seçili Değil' })
     }
-    if (!Stockdefines.list.find(u => u.concurrencyStamp === this.state.selectedstockdefine)) {
-      errors.push({ type: 'Error', code: 'Ürünler', description: 'Ürün Seçili Değil' })
+    if (!data.warehouseID || data.warehouseID == '') {
+      errors.push({ type: 'Error', code: 'Ürünler', description: 'Ambar Seçili Değil' })
     }
-    if (data.amount === '') {
-      errors.push({ type: 'Error', code: 'Ürünler', description: 'Miktar girilmedi' })
+    if (!data.stockdefineID || data.stockdefineID == '') {
+      errors.push({ type: 'Error', code: 'Ürünler', description: 'Ürün Seçili Değil' })
     }
     if (errors.length > 0) {
       errors.forEach(error => {
@@ -161,7 +173,9 @@ export default class Stocksedit extends Component {
   handleChangeStockdefine = (e, { value }) => {
     this.setState({ selectedstockdefine: value })
   }
-
+  handleChangeWarehouse = (e, { value }) => {
+    this.setState({ selectedwarehouse: value })
+  }
 
   getLocalDate = (inputdate) => {
     if (inputdate) {

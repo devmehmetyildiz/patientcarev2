@@ -10,7 +10,8 @@ const defaultState = {
   meta: {},
   username: "",
   roles: [],
-  auth: false
+  auth: false,
+  tablemeta: []
 }
 const ProfileReducer = (state = defaultState, { type, payload }) => {
   switch (type) {
@@ -51,6 +52,21 @@ const ProfileReducer = (state = defaultState, { type, payload }) => {
       const messages1 = [...state.notifications]
       messages1.splice(0, 1)
       return { ...state, notifications: messages1 }
+
+    case ACTION_TYPES.GET_TABLEMETA_INIT:
+      return { ...state, isLogging: true }
+    case ACTION_TYPES.GET_TABLEMETA_SUCCESS:
+      return { ...state, isLogging: false, tablemeta: payload }
+    case ACTION_TYPES.GET_TABLEMETA_ERROR:
+      return { ...state, isLogging: false, error: payload }
+
+    case ACTION_TYPES.SAVE_TABLEMETA_INIT:
+      return { ...state, isLogging: true }
+    case ACTION_TYPES.SAVE_TABLEMETA_SUCCESS:
+      return { ...state, isLogging: false, tablemeta: payload }
+    case ACTION_TYPES.SAVE_TABLEMETA_ERROR:
+      return { ...state, isLogging: false, error: payload }
+
     default:
       return state
   }

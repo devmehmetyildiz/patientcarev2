@@ -8,6 +8,7 @@ import {
 
 const mapStateToProps = (state) => ({
     Purchaseorderstockmovements: state.Purchaseorderstockmovements,
+    Profile: state.Profile
 })
 
 const mapDispatchToProps = {

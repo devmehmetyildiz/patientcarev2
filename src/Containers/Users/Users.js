@@ -4,6 +4,7 @@ import { GetUsers, DeleteUsers, fillUsernotification, removeUsernotification } f
 
 const mapStateToProps = (state) => ({
     Users: state.Users,
+    Profile: state.Profile
 })
 
 const mapDispatchToProps = {

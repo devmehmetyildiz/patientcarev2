@@ -85,7 +85,11 @@ const PreregistrationsEditstock = lazy(() => import('./Containers/Preregistratio
 const Stocks = lazy(() => import('./Containers/Stocks/Stocks'));
 const StocksCreate = lazy(() => import('./Containers/Stocks/StocksCreate'));
 const StocksEdit = lazy(() => import('./Containers/Stocks/StocksEdit'));
-const Stocksmovements = lazy(() => import('./Containers/Stocks/Stockmovements'));
+
+const Stockmovements = lazy(() => import('./Containers/Stockmovements/Stockmovements'));
+const StockmovementsCreate = lazy(() => import('./Containers/Stockmovements/StockmovementsCreate'));
+const StockmovementsEdit = lazy(() => import('./Containers/Stockmovements/StockmovementsEdit'));
+
 const Stockmovementsdetail = lazy(() => import('./Containers/Stocks/Stockmovementsdetail'));
 
 const PasswordChange = lazy(() => import('./Pages/Home'));
@@ -120,7 +124,9 @@ class AppRoutes extends Component {
       { exact: true, path: "/Stocks", auth: true, component: Stocks },
       { exact: true, path: "/Stocks/Create", auth: true, component: StocksCreate },
       { exact: true, path: "/Stocks/:StockID/Edit", auth: true, component: StocksEdit },
-      { exact: true, path: "/Stockmovements", auth: true, component: Stocksmovements },
+      { exact: true, path: "/Stockmovements", auth: true, component: Stockmovements },
+      { exact: true, path: "/Stockmovements/Create", auth: true, component: StockmovementsCreate },
+      { exact: true, path: "/Stockmovements/:StockmovementID/Edit", auth: true, component: StockmovementsEdit },
       { exact: true, path: "/Stockmovement/:StockmovementID", auth: true, component: Stockmovementsdetail },
       { exact: true, path: "/Stockmovement", auth: true, component: Stockmovementsdetail },
       { exact: true, path: "/Users", auth: true, component: Users },

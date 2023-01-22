@@ -4,6 +4,7 @@ import { GetDepartments, DeleteDepartments, removeDepartmentnotification, fillDe
 
 const mapStateToProps = (state) => ({
     Departments: state.Departments,
+    Profile: state.Profile
 })
 
 const mapDispatchToProps = { GetDepartments, DeleteDepartments, removeDepartmentnotification, fillDepartmentnotification }

@@ -1,18 +1,18 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Divider, Icon, Loader, Modal } from 'semantic-ui-react'
+import { Divider, Icon, Modal } from 'semantic-ui-react'
 import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
+import ColumnChooser from '../../Containers/Utils/ColumnChooser'
 import DataTable from '../../Utils/DataTable'
 import LoadingPage from '../../Utils/LoadingPage'
-import Popup from '../../Utils/Popup'
-import DeleteModal from "../../Utils/DeleteModal"
 import NoDataScreen from '../../Utils/NoDataScreen'
+import Popup from '../../Utils/Popup'
 
 export default class Patientstocks extends Component {
-
   constructor(props) {
     super(props)
     const open = false
+    const openDeactivate = false
     const selectedrecord = {}
     this.state = {
       open,
@@ -30,30 +30,45 @@ export default class Patientstocks extends Component {
     const Columns = [
       { Header: 'Id', accessor: 'id', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Tekil ID', accessor: 'concurrencyStamp', sortable: true, canGroupBy: true, canFilter: true, },
-      { Header: 'Hasta Bilgisi', accessor: 'Patient.patientdefine.countryID', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Ürün', accessor: 'stockdefine.name', sortable: true, canGroupBy: true, canFilter: true },
-      { Header: 'Departman', accessor: 'department.name', sortable: true, canGroupBy: true, canFilter: true, },
-      { Header: 'SKT', accessor: 'skt', sortable: true, canGroupBy: true, canFilter: true, },
-      { Header: 'Barkod', accessor: 'barcodeno', sortable: true, canGroupBy: true, canFilter: true, },
-      { Header: 'Miktar', accessor: 'amount', sortable: true, canGroupBy: true, canFilter: true, },
-      { Header: 'Açıklama', accessor: 'info', sortable: true, canGroupBy: true, canFilter: true, },
+      { Header: 'Departman', accessor: 'department.name', sortable: true, canGroupBy: true, canFilter: true },
+      { Header: 'Skt', accessor: 'skt', sortable: true, canGroupBy: true, canFilter: true },
+      { Header: 'Barkod No', accessor: 'barcodeno', sortable: true, canGroupBy: true, canFilter: true },
+      { Header: 'Toplam Miktar', accessor: 'maxamount', sortable: true, canGroupBy: true, canFilter: true },
+      { Header: 'Aktüel Miktar', accessor: 'amount', sortable: true, canGroupBy: true, canFilter: true },
+      { Header: 'Kullanılan Miktar', accessor: 'usageamount', sortable: true, canGroupBy: true, canFilter: true },
+      { Header: 'Açıklama', accessor: 'info', sortable: true, canGroupBy: true, canFilter: true },
+      { Header: 'Kaynak', accessor: 'source', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Oluşturan Kullanıcı', accessor: 'createdUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Güncelleyen Kullanıcı', accessor: 'updatedUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Oluşturma Zamanı', accessor: 'createTime', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Güncelleme Zamanı', accessor: 'updateTime', sortable: true, canGroupBy: true, canFilter: true, },
-      { accessor: 'actions', Header: "Eylemler", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
-    const initialConfig = { hiddenColumns: ['concurrencyStamp', 'createdUser', 'updatedUser', 'createTime', 'updateTime'] };
+      { accessor: 'watch', Header: "Hareket İzle", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' },
+      { accessor: 'edit', Header: "Güncelle", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' },
+      { accessor: 'delete', Header: "Sil", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
 
-    const { Stations, DeleteStations, removeStationnotification } = this.props
-    const { notifications, list, isLoading, isDispatching } = Stations
+    const { Patientstocks, DeletePatientstocks, removePatientstocknotification,Profile } = this.props
+    const { notifications, list, isLoading, isDispatching } = Patientstocks
     if (notifications && notifications.length > 0) {
       let msg = notifications[0]
       Popup(msg.type, msg.code, msg.description)
-      removeStationnotification()
+      removePatientstocknotification()
     }
 
+    const metaKey = "Patientstocks"
+    let tableMeta = (Profile.tablemeta || []).find(u => u.meta === metaKey)
+    const initialConfig = {
+      hiddenColumns: tableMeta ? JSON.parse(tableMeta.config).filter(u => u.isVisible === false).map(item => {
+        return item.key
+      }) : [],
+      columnOrder: tableMeta ? JSON.parse(tableMeta.config).sort((a, b) => a.order - b.order).map(item => {
+        return item.key
+      }) : []
+    };
+
     (list || []).map(item => {
-      item.edit = <Link to={`/Stations/${item.concurrencyStamp}/edit`} ><Icon size='large' className='row-edit' name='edit' /></Link>
+      item.watch = <Link to={`/Patientstockmovements/${item.concurrencyStamp}`} ><Icon link size='large' className='text-[#7ec5bf] hover:text-[#5bbdb5]' name='sitemap' /></Link>
+      item.edit = <Link to={`/Patientstocks/${item.concurrencyStamp}/edit`} ><Icon size='large' className='row-edit' name='edit' /></Link>
       item.delete = <Icon link size='large' color='red' name='alternate trash' onClick={() => { this.setState({ selectedrecord: item, open: true }) }} />
     })
 
@@ -66,17 +81,18 @@ export default class Patientstocks extends Component {
                 <Grid columns='2' >
                   <GridColumn width={8} className="">
                     <Breadcrumb size='big'>
-                      <Link to={"/Stations"}>
-                        <Breadcrumb.Section>İstasyonlar</Breadcrumb.Section>
+                      <Link to={"/Patientstocks"}>
+                        <Breadcrumb.Section>Ürünler</Breadcrumb.Section>
                       </Link>
                     </Breadcrumb>
                   </GridColumn>
                   <GridColumn width={8} >
-                    <Link to={"/Stations/Create"}>
+                    <Link to={"/Patientstocks/Create"}>
                       <Button color='blue' floated='right' className='list-right-green-button'>
                         Oluştur
                       </Button>
                     </Link>
+                    <ColumnChooser meta={Profile.tablemeta} columns={Columns} metaKey={metaKey} />
                   </GridColumn>
                 </Grid>
               </Header>
@@ -85,7 +101,7 @@ export default class Patientstocks extends Component {
             {list.length > 0 ?
               <div className='w-full mx-auto '>
                 <DataTable Columns={Columns} Data={list} Config={initialConfig} />
-              </div> : <NoDataScreen message="Tanımlı İstasyon Yok" />
+              </div> : <NoDataScreen message="Tanımlı Ürün Yok" />
             }
           </div>
           <Modal
@@ -93,12 +109,12 @@ export default class Patientstocks extends Component {
             onOpen={() => this.setState({ open: true })}
             open={this.state.open}
           >
-            <Modal.Header>İsyasyon Silme</Modal.Header>
+            <Modal.Header>Ürün Silme</Modal.Header>
             <Modal.Content image>
               <Modal.Description>
                 <p>
-                  <span className='font-bold'>{Object.keys(this.state.selectedrecord).length > 0 ? `${this.state.selectedrecord.name} ` : null} </span>
-                  istasyonunu silmek istediğinize emin misiniz?
+                  <span className='font-bold'>{Object.keys(this.state.selectedrecord).length > 0 ? `${this.state.selectedrecord.stockdefine.name} ` : null} </span>
+                  ürününü silmek istediğinize emin misiniz?
                 </p>
               </Modal.Description>
             </Modal.Content>
@@ -111,7 +127,7 @@ export default class Patientstocks extends Component {
                 labelPosition='right'
                 icon='checkmark'
                 onClick={() => {
-                  DeleteStations(this.state.selectedrecord)
+                  DeletePatientstocks(this.state.selectedrecord)
                   this.setState({ open: false, selectedrecord: {} })
                 }}
                 positive

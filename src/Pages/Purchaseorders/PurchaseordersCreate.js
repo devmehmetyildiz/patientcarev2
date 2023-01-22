@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Checkbox, Container, Divider, Dropdown, Form, Icon, Popup, Table } from 'semantic-ui-react'
+import { Checkbox, Container, Divider, Dropdown, Form, Icon, Modal, Popup, Table } from 'semantic-ui-react'
 import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
 import Popuputils from '../../Utils/Popup'
 import LoadingPage from '../../Utils/LoadingPage'
 import formToObject from 'form-to-object'
+import StockdefinesCreate from '../../Containers/Stockdefines/StockdefinesCreate'
 
 export default class PurchaseordersCreate extends Component {
 
@@ -12,21 +13,24 @@ export default class PurchaseordersCreate extends Component {
     super(props)
     this.state = {
       selectedStocks: [],
-      selectedCase: ''
+      selectedCase: '',
+      selectedWarehouse: '',
+      open: false
     }
   }
 
   componentDidMount() {
-    const { GetStockdefines, GetCases, GetUnits, GetDepartments } = this.props
+    const { GetStockdefines, GetCases, GetUnits, GetDepartments,GetWarehouses } = this.props
     GetStockdefines()
     GetCases()
     GetUnits()
     GetDepartments()
+    GetWarehouses()
   }
 
   render() {
 
-    const { removePurchaseordernotification, removeDepartmentnotification, removeUnitnotification,
+    const { removePurchaseordernotification, removeDepartmentnotification, removeUnitnotification, Warehouses, removeWarehousenotification,
       removeCasenotification, removeStockdefinenotification, Cases, Units, Departments, Stockdefines,
       Purchaseorders } = this.props
     const { notifications, isLoading, isDispatching } = Purchaseorders
@@ -41,6 +45,11 @@ export default class PurchaseordersCreate extends Component {
       let msg = Cases.notifications[0]
       Popuputils(msg.type, msg.code, msg.description)
       removeCasenotification()
+    }
+    if (Warehouses.notifications && Warehouses.notifications.length > 0) {
+      let msg = Warehouses.notifications[0]
+      Popuputils(msg.type, msg.code, msg.description)
+      removeWarehousenotification()
     }
 
     if (Units.notifications && Units.notifications.length > 0) {
@@ -76,6 +85,9 @@ export default class PurchaseordersCreate extends Component {
     const Casesoption = Cases.list.map(cases => {
       return { key: cases.concurrencyStamp, text: cases.name, value: cases.concurrencyStamp }
     })
+    const Warehousesoption = Warehouses.list.map(warehouse => {
+      return { key: warehouse.concurrencyStamp, text: warehouse.name, value: warehouse.concurrencyStamp }
+    })
 
 
 
@@ -97,6 +109,12 @@ export default class PurchaseordersCreate extends Component {
           <Divider className='w-full  h-[1px]' />
           <div className='w-full  bg-white p-4 rounded-lg shadow-md outline outline-[1px] outline-gray-200 '>
             <Form onSubmit={this.handleSubmit}>
+              <Form.Group widths={'equal'}>
+                <Form.Field>
+                  <label className='text-[#000000de]'>Hedef Ambar</label>
+                  <Dropdown placeholder='Hedef Ambar' clearable search fluid selection options={Warehousesoption} onChange={(e, data) => { this.setState({ selectedWarehouse: data.value }) }} />
+                </Form.Field>
+              </Form.Group>
               <Form.Group widths={'equal'}>
                 <Form.Input placeholder="Firma Adı" name="company" fluid label="Firma Adı" />
                 <Form.Input placeholder="Alış Fiyatı" name="purchaseprice" fluid label="Alış Fiyatı" type='number' />
@@ -123,11 +141,13 @@ export default class PurchaseordersCreate extends Component {
                     <Table.Row>
                       <Table.HeaderCell width={1}>Sıra</Table.HeaderCell>
                       <Table.HeaderCell width={2}>Ürün Tanımı <span>
-                        <Popup
+                        <Modal
+                          onClose={() => this.setState({ open: false })}
+                          onOpen={() => this.setState({ open: true })}
                           trigger={<Icon link name='plus' />}
-                          content='Yeni Ürün Tanımı Ekle'
-                          position='top left'
-                        />
+                          content={<StockdefinesCreate />}
+                        >
+                        </Modal>
                       </span></Table.HeaderCell>
                       <Table.HeaderCell width={2}>Departman</Table.HeaderCell>
                       <Table.HeaderCell width={2}>Barkodno</Table.HeaderCell>
@@ -149,7 +169,7 @@ export default class PurchaseordersCreate extends Component {
                         </Table.Cell>
                         <Table.Cell>
                           <Form.Field>
-                            <Dropdown placeholder='Ürün Tanımı' name="stockid" clearable search fluid selection options={Stockdefinesoption} onChange={(e, data) => { this.selectedProductChangeHandler(stock.key, 'stockid', data.value) }} />
+                            <Dropdown placeholder='Ürün Tanımı' name="stockdefineID" clearable search fluid selection options={Stockdefinesoption} onChange={(e, data) => { this.selectedProductChangeHandler(stock.key, 'stockdefineID', data.value) }} />
                           </Form.Field>
                         </Table.Cell>
                         <Table.Cell>
@@ -224,6 +244,7 @@ export default class PurchaseordersCreate extends Component {
       personelname: formData.personelname,
       purchasedate: formData.purchasedate,
       caseID: this.state.selectedCase,
+      warehouseID: this.state.selectedWarehouse,
       case: {},
       concurrencyStamp: '',
       createdUser: '',
@@ -238,7 +259,7 @@ export default class PurchaseordersCreate extends Component {
 
     let errors = []
     responseData.stocks.forEach(data => {
-      if (!data.stockid || data.stockid == '') {
+      if (!data.stockdefineID || data.stockdefineID == '') {
         errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Ürün Tanımı Bulunamadı' })
       }
       if (!data.departmentid || data.departmentid == '') {
@@ -276,6 +297,9 @@ export default class PurchaseordersCreate extends Component {
     if (!responseData.caseID || responseData.caseID == '') {
       errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Sipariş durumu girilmedi' })
     }
+    if (!responseData.warehouseID || responseData.warehouseID == '') {
+      errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Ambar girilmedi' })
+    }
     if (!responseData.purchasedate || responseData.purchasedate == '') {
       errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Satın alma tarihi girilmemiş' })
     }
@@ -284,7 +308,6 @@ export default class PurchaseordersCreate extends Component {
         fillPurchaseordernotification(error)
       })
     } else {
-      console.log('responseData: ', responseData);
       AddPurchaseorders(responseData, history)
     }
   }
@@ -294,7 +317,7 @@ export default class PurchaseordersCreate extends Component {
       selectedStocks: [...this.state.selectedStocks,
       {
         id: 0,
-        stockid: '',
+        stockdefineID: '',
         stockdefine: {},
         departmentid: '',
         department: {},

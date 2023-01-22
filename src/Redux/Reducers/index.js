@@ -18,7 +18,7 @@ import PatientReducer from "./PatientReducer";
 import PatientstockmovementReducer from "./PatientstockmovementReducer";
 import PatientstockReducer from "./PatientstockReducer"
 import PurchaseorderstockmovementReducer from "./PurchaseorderstockmovementReducer"
-import PurhcaseorderstockReducer from "./PurchaseorderstockReducer"
+import PurchaseorderstockReducer from "./PurchaseorderstockReducer"
 import WarehouseReducer from "./WarehouseReducer"
 
 const reducers = combineReducers({
@@ -41,7 +41,7 @@ const reducers = combineReducers({
     Patientstockmovements: PatientstockmovementReducer,
     Patientstocks: PatientstockReducer,
     Purchaseorderstockmovements: PurchaseorderstockmovementReducer,
-    Purhcaseorderstocks: PurhcaseorderstockReducer,
+    Purchaseorderstocks: PurchaseorderstockReducer,
     Warehouses: WarehouseReducer
 });
 
