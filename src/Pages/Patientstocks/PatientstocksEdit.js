@@ -107,7 +107,7 @@ export default class PatientstocksEdit extends Component {
                 <Form.Field>
                   <label className='text-[#000000de]'>{this.state.isInprepatients ? "Ön Kayıtlı Hastalar" : "Kurumdaki Hastalar"}
                     <Button onClick={(e) => { this.handleChangePatienttype(e) }} className='cursor-pointer ' circular size='mini' icon="redo"></Button></label>
-                  <Dropdown value={this.state.selectedpatient} loading={Patients.isLoading} placeholder='Hastalar' fluid selection options={Patientoptions} onChange={this.handleChangePatient} />
+                  <Dropdown value={this.state.selectedpatient} loading={Patients.isLoading}  fluid selection options={Patientoptions} onChange={this.handleChangePatient} />
                 </Form.Field>
                 <Form.Field>
                   <label className='text-[#000000de]'>Ürün

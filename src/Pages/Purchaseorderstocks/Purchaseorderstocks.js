@@ -30,16 +30,14 @@ export default class Purchaseorderstocks extends Component {
 
     const Columns = [
       { Header: 'Id', accessor: 'id', sortable: true, canGroupBy: true, canFilter: true, },
+      { Header: 'Sipariş Numarası', accessor: 'purchaseorder.purchasenumber', sortable: true, canGroupBy: true, canFilter: true,},
       { Header: 'Tekil ID', accessor: 'concurrencyStamp', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Ürün', accessor: 'stockdefine.name', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Departman', accessor: 'department.name', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Skt', accessor: 'skt', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Barkod No', accessor: 'barcodeno', sortable: true, canGroupBy: true, canFilter: true },
-      { Header: 'Toplam Miktar', accessor: 'maxamount', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Aktüel Miktar', accessor: 'amount', sortable: true, canGroupBy: true, canFilter: true },
-      { Header: 'Kullanılan Miktar', accessor: 'usageamount', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Açıklama', accessor: 'info', sortable: true, canGroupBy: true, canFilter: true },
-      { Header: 'Kaynak', accessor: 'source', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Oluşturan Kullanıcı', accessor: 'createdUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Güncelleyen Kullanıcı', accessor: 'updatedUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Oluşturma Zamanı', accessor: 'createTime', sortable: true, canGroupBy: true, canFilter: true, },

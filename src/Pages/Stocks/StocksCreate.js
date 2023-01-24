@@ -124,6 +124,7 @@ export default class StocksCreate extends Component {
     data.departmentid = this.state.selecteddepartments
     data.stockdefineID = this.state.selectedstockdefine
     data.warehouseID = this.state.selectedwarehouse
+    data.status = 0
     data.id = 0
     data.concurrencyStamp = null
     data.createdUser = null

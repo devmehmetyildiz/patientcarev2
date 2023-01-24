@@ -29,6 +29,7 @@ export default class Patientstocks extends Component {
 
     const Columns = [
       { Header: 'Id', accessor: 'id', sortable: true, canGroupBy: true, canFilter: true, },
+      { Header: 'Hasta Bilgisi', accessor: 'patient.patientdefine.firstname', sortable: true, canGroupBy: true, canFilter: true,},
       { Header: 'Tekil ID', accessor: 'concurrencyStamp', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Ürün', accessor: 'stockdefine.name', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Departman', accessor: 'department.name', sortable: true, canGroupBy: true, canFilter: true },

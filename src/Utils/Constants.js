@@ -33,11 +33,7 @@ export const ROUTES = {
 
 
 export const MOVEMENTTYPES = [
-    { Name: "Oluşturma", value: 0, color: 'gray' },
-    { Name: "Ekleme", value: 1, color: 'green' },
-    { Name: "Azalma", value: 2, color: 'orange' },
-    { Name: "Güncelleme", value: 3, color: 'blue' },
-    { Name: "Transfer", value: 4, color: 'yellow' },
-    { Name: "Öldürme", value: 5, color: 'red' },
-    { Name: "Silme", value: 6, color: 'black' },
+    { Name: "Stokdan düşme", value: -1, color: 'gray' },
+    { Name: "Transfer", value: 0, color: 'green' },
+    { Name: "Stok Ekleme", value: 1, color: 'orange' },
 ]

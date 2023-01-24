@@ -3,19 +3,17 @@ import PreregistrationsEditstock from '../../Pages/Preregistrations/Preregistrat
 import { GetPatient, EditPatientstocks, removePatientnotification, fillPatientnotification } from "../../Redux/Actions/PatientAction"
 import { GetStockdefines, AddStockdefines, removeStockdefinenotification, fillStockdefinenotification } from "../../Redux/Actions/StockdefineAction"
 import { GetDepartments, removeDepartmentnotification } from "../../Redux/Actions/DepartmentAction"
-import { GetUnits, removeUnitnotification } from "../../Redux/Actions/UnitActions"
 
 const mapStateToProps = (state) => ({
     Departments: state.Departments,
     Patients: state.Patients,
     Stockdefines: state.Stockdefines,
-    Units: state.Units,
 })
 
 const mapDispatchToProps = {
     GetPatient, EditPatientstocks, removePatientnotification, fillPatientnotification,
     GetStockdefines, AddStockdefines, removeStockdefinenotification, fillStockdefinenotification,
-    GetDepartments, removeDepartmentnotification, GetUnits, removeUnitnotification
+    GetDepartments, removeDepartmentnotification
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PreregistrationsEditstock)

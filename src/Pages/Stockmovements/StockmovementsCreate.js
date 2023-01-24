@@ -102,6 +102,7 @@ export default class PurchaseorderstockmovementsCreate extends Component {
     data.movementtype = this.state.selectedmovement
     data.stockID = this.state.selectedstock
     data.movementtypename = ""
+    data.status = 0
     data.stock = null
     data.id = 0
     data.concurrencyStamp = null

@@ -22,8 +22,8 @@ export default class Patientstockmovements extends Component {
   }
 
   componentDidMount() {
-    const { GetPurchaseorderstockmovements } = this.props
-    GetPurchaseorderstockmovements()
+    const { GetPatientstockmovements } = this.props
+    GetPatientstockmovements()
   }
 
   render() {
@@ -67,15 +67,15 @@ export default class Patientstockmovements extends Component {
       { accessor: 'edit', Header: "Güncelle", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' },
       { accessor: 'delete', Header: "Sil", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
 
-    const { Purchaseorderstockmovements, DeletePurchaseorderstockmovements, removePurchaseorderstockmovementnotification, Profile } = this.props
-    const { notifications, list, isLoading, isDispatching } = Purchaseorderstockmovements
+    const { Patientstockmovements, DeletePatientstockmovements, removePatientstockmovementnotification, Profile } = this.props
+    const { notifications, list, isLoading, isDispatching } = Patientstockmovements
     if (notifications && notifications.length > 0) {
       let msg = notifications[0]
       Popup(msg.type, msg.code, msg.description)
-      removePurchaseorderstockmovementnotification()
+      removePatientstockmovementnotification()
     }
 
-    const metaKey = "Purchaseorderstockmovements"
+    const metaKey = "Patientstockmovements"
     let tableMeta = (Profile.tablemeta || []).find(u => u.meta === metaKey)
     const initialConfig = {
       hiddenColumns: tableMeta ? JSON.parse(tableMeta.config).filter(u => u.isVisible === false).map(item => {
@@ -87,8 +87,8 @@ export default class Patientstockmovements extends Component {
     };
 
     (list || []).map(item => {
-      item.watch = <Link to={`/Purchaseorderstockmovements/${item.concurrencyStamp}`} ><Icon link size='large' className='text-[#7ec5bf] hover:text-[#5bbdb5]' name='sitemap' /></Link>
-      item.edit = <Link to={`/Purchaseorderstockmovements/${item.concurrencyStamp}/edit`} ><Icon size='large' className='row-edit' name='edit' /></Link>
+      item.watch = <Link to={`/Patientstockmovements/${item.concurrencyStamp}`} ><Icon link size='large' className='text-[#7ec5bf] hover:text-[#5bbdb5]' name='sitemap' /></Link>
+      item.edit = <Link to={`/Patientstockmovements/${item.concurrencyStamp}/edit`} ><Icon size='large' className='row-edit' name='edit' /></Link>
       item.delete = <Icon link size='large' color='red' name='alternate trash' onClick={() => { this.setState({ selectedrecord: item, open: true }) }} />
     })
 
@@ -101,13 +101,13 @@ export default class Patientstockmovements extends Component {
                 <Grid columns='2' >
                   <GridColumn width={8} className="">
                     <Breadcrumb size='big'>
-                      <Link to={"/Purchaseorderstockmovements"}>
+                      <Link to={"/Patientstockmovements"}>
                         <Breadcrumb.Section>Ürün Hareketi</Breadcrumb.Section>
                       </Link>
                     </Breadcrumb>
                   </GridColumn>
                   <GridColumn width={8} >
-                    <Link to={"/Purchaseorderstockmovements/Create"}>
+                    <Link to={"/Patientstockmovements/Create"}>
                       <Button color='blue' floated='right' className='list-right-green-button'>
                         Oluştur
                       </Button>
@@ -147,7 +147,7 @@ export default class Patientstockmovements extends Component {
                 labelPosition='right'
                 icon='checkmark'
                 onClick={() => {
-                  DeletePurchaseorderstockmovements(this.state.selectedrecord.concurrencyStamp)
+                  DeletePatientstockmovements(this.state.selectedrecord.concurrencyStamp)
                   this.setState({ open: false, selectedrecord: {} })
                 }}
                 positive

@@ -18,22 +18,21 @@ export default class PreregistrationsEditstock extends Component {
   }
 
   componentDidMount() {
-    const { GetPatient, match, history, GetStockdefines, GetDepartments, GetUnits } = this.props
+    const { GetPatient, match, history, GetStockdefines, GetDepartments } = this.props
     if (match.params.PatientID) {
       GetPatient(match.params.PatientID)
       GetStockdefines()
       GetDepartments()
-      GetUnits()
     } else {
       history.push("/Preregistrations")
     }
   }
 
   componentDidUpdate() {
-    const { Patients, Departments, Stockdefines, Units } = this.props
+    const { Patients, Departments, Stockdefines } = this.props
     const { selected_record, isLoading } = Patients
     if (selected_record && Object.keys(selected_record).length > 0 &&
-      selected_record.id != 0 && !isLoading && !Departments.isLoading && !Stockdefines.isLoading && !Units.isLoading && !this.state.isDatafetched) {
+      selected_record.id != 0 && !isLoading && !Departments.isLoading && !Stockdefines.isLoading && !this.state.isDatafetched) {
       this.setState({
         selectedStocks: (selected_record.stocks || []), isDatafetched: true
       })
@@ -41,12 +40,11 @@ export default class PreregistrationsEditstock extends Component {
   }
 
   render() {
-    const { Patients, Stockdefines, Units, Departments, removePatientnotification, removeStockdefinenotification, removeUnitnotification,
+    const { Patients, Stockdefines, Departments, removePatientnotification, removeStockdefinenotification, removeUnitnotification,
       removeDepartmentnotification } = this.props
     const { selected_record, isLoading, isDispatching } = Patients
     Notification(Patients.notifications, removePatientnotification)
     Notification(Stockdefines.notifications, removeStockdefinenotification)
-    Notification(Units.notifications, removeUnitnotification)
     Notification(Departments.notifications, removeDepartmentnotification)
 
     const Stockdefinesoption = Stockdefines.list.map(stockdefine => {
@@ -56,11 +54,6 @@ export default class PreregistrationsEditstock extends Component {
     const Departmentsoption = Departments.list.map(department => {
       return { key: department.concurrencyStamp, text: department.name, value: department.concurrencyStamp }
     })
-
-    const Unitsoption = Units.list.map(unit => {
-      return { key: unit.concurrencyStamp, text: unit.name, value: unit.concurrencyStamp }
-    })
-
 
     return (
 
@@ -102,7 +95,6 @@ export default class PreregistrationsEditstock extends Component {
                     <Table.HeaderCell width={2}>Barkodno</Table.HeaderCell>
                     <Table.HeaderCell width={2}>SKT</Table.HeaderCell>
                     <Table.HeaderCell width={2}>Miktar</Table.HeaderCell>
-                    <Table.HeaderCell width={2}>Birim</Table.HeaderCell>
                     <Table.HeaderCell width={6}>Açıklama</Table.HeaderCell>
                     <Table.HeaderCell width={1}>Sil</Table.HeaderCell>
                   </Table.Row>
@@ -118,12 +110,12 @@ export default class PreregistrationsEditstock extends Component {
                       </Table.Cell>
                       <Table.Cell>
                         <Form.Field>
-                          <Dropdown disabled={stock.concurrencyStamp} value={stock.patientdefineID} placeholder='Ürün Tanımı' name="stockdefineID" clearable search fluid selection options={Stockdefinesoption} onChange={(e, data) => { this.selectedProductChangeHandler(stock.key, 'stockdefineID', data.value) }} />
+                          <Dropdown  value={stock.stockdefineID} placeholder='Ürün Tanımı' name="stockdefineID" clearable search fluid selection options={Stockdefinesoption} onChange={(e, data) => { this.selectedProductChangeHandler(stock.key, 'stockdefineID', data.value) }} />
                         </Form.Field>
                       </Table.Cell>
                       <Table.Cell>
                         <Form.Field>
-                          <Dropdown disabled={stock.concurrencyStamp} value={stock.departmentid} placeholder='Departman' name="departmentid" clearable search fluid selection options={Departmentsoption} onChange={(e, data) => { this.selectedProductChangeHandler(stock.key, 'departmentid', data.value) }} />
+                          <Dropdown  value={stock.departmentid} placeholder='Departman' name="departmentid" clearable search fluid selection options={Departmentsoption} onChange={(e, data) => { this.selectedProductChangeHandler(stock.key, 'departmentid', data.value) }} />
                         </Form.Field>
                       </Table.Cell>
                       <Table.Cell>
@@ -134,11 +126,6 @@ export default class PreregistrationsEditstock extends Component {
                       </Table.Cell>
                       <Table.Cell>
                         <Form.Input disabled={stock.concurrencyStamp} value={stock.amount} placeholder="Miktar" name="amount" type="number" fluid onChange={(e) => { this.selectedProductChangeHandler(stock.key, 'amount', e.target.value) }} />
-                      </Table.Cell>
-                      <Table.Cell>
-                        <Form.Field>
-                          <Dropdown disabled={stock.concurrencyStamp} value={stock.unitID} placeholder='Birim' name="unitID" clearable search fluid selection options={Unitsoption} onChange={(e, data) => { this.selectedProductChangeHandler(stock.key, 'unitID', data.value) }} />
-                        </Form.Field>
                       </Table.Cell>
                       <Table.Cell>
                         <Form.Input value={stock.info} placeholder="Açıklama" name="info" fluid onChange={(e) => { this.selectedProductChangeHandler(stock.key, 'info', e.target.value) }} />
@@ -152,7 +139,7 @@ export default class PreregistrationsEditstock extends Component {
                 </Table.Body>
                 <Table.Footer>
                   <Table.Row>
-                    <Table.HeaderCell colSpan='9'>
+                    <Table.HeaderCell colSpan='8'>
                       <Button type="button" color='green' className='addMoreButton' size='mini' onClick={() => { this.AddNewProduct() }}>Ürün Ekle</Button>
                     </Table.HeaderCell>
                   </Table.Row>
@@ -202,9 +189,6 @@ export default class PreregistrationsEditstock extends Component {
       if (!data.amount || data.amount == '' || data.amount == 0) {
         errors.push({ type: 'Error', code: 'Patients', description: 'Miktar Girilmemiş' })
       }
-      if (!data.unitID || data.unitID == '') {
-        errors.push({ type: 'Error', code: 'Patients', description: 'Birim Girilmemiş' })
-      }
     });
 
     if (errors.length > 0) {
@@ -212,7 +196,7 @@ export default class PreregistrationsEditstock extends Component {
         fillPatientnotification(error)
       })
     } else {
-      EditPatientstocks({ ...Patients.selected_record, stocks: stocks }, history,"/Preregistrations")
+      EditPatientstocks({ ...Patients.selected_record, stocks: stocks }, history, "/Preregistrations")
     }
   }
 
@@ -221,23 +205,17 @@ export default class PreregistrationsEditstock extends Component {
       selectedStocks: [...this.state.selectedStocks,
       {
         id: 0,
+        patient: {},
+        patientID: '',
         stockdefineID: '',
         stockdefine: {},
         departmentid: '',
         department: {},
         skt: null,
         barcodeno: '',
-        usageamount: 0,
         amount: 0,
-        maxamount: 0,
-        isonusage: false,
-        isdeactive: false,
-        deactivetime: null,
         info: '',
-        source: '',
-        unitID: '',
-        unit: {},
-        key: Math.random(),
+        status: 0,
         concurrencyStamp: '',
         createdUser: '',
         updatedUser: '',
@@ -246,6 +224,7 @@ export default class PreregistrationsEditstock extends Component {
         updateTime: null,
         deleteTime: null,
         isActive: true,
+        key: Math.random(),
         order: this.state.selectedStocks.length,
       }]
     })

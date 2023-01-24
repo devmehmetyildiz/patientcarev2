@@ -80,7 +80,7 @@ export default class PatientstocksCreate extends Component {
                 <Form.Field>
                   <label className='text-[#000000de]'>{this.state.isInprepatients ? "Ön Kayıtlı Hastalar" : "Kurumdaki Hastalar"}
                     <Button onClick={(e) => { this.handleChangePatienttype(e) }} className='cursor-pointer ' circular size='mini' icon="redo"></Button></label>
-                  <Dropdown loading={Patients.isLoading} placeholder='Hastalar' fluid selection options={Patientoptions} onChange={this.handleChangePatient} />
+                  <Dropdown loading={Patients.isLoading} fluid selection options={Patientoptions} onChange={this.handleChangePatient} />
                 </Form.Field>
                 <Form.Field>
                   <label className='text-[#000000de]'>Ürün
@@ -124,6 +124,7 @@ export default class PatientstocksCreate extends Component {
     data.departmentid = this.state.selecteddepartments
     data.stockdefineID = this.state.selectedstockdefine
     data.patientID = this.state.selectedpatient
+    data.status = 0
     data.id = 0
     data.concurrencyStamp = null
     data.createdUser = null

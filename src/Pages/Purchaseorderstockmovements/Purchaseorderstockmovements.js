@@ -33,8 +33,18 @@ export default class Purchaseorderstockmovements extends Component {
       { Header: 'Tekil ID', accessor: 'concurrencyStamp', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Ürün', accessor: 'stock.stockdefine.name', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Departman', accessor: 'stock.department.name', sortable: true, canGroupBy: true, canFilter: true, },
-      { Header: 'Kullanıcı', accessor: 'username', sortable: true, canGroupBy: true, canFilter: true },
-      { Header: 'Hareket Zamanı', accessor: 'movementdate', sortable: true, canGroupBy: true, canFilter: true },
+      {
+        Header: 'Hareket Tarihi', accessor: 'movementdate', sortable: true, canGroupBy: true, canFilter: true,
+        Cell: col => {
+          return col.value.split('T').length > 0 ? col.value.split('T')[0] : col.value
+        },
+      },
+      {
+        Header: 'Hareket Saati', accessor: 'movementhour', sortable: true, canGroupBy: true, canFilter: true,
+        Cell: col => {
+          return col.cell?.row?.original?.movementdate?.split('T').length > 0 ? col.cell?.row?.original?.movementdate?.split('T')[1] : col.value
+        },
+      },
       {
         Header: 'Hareket Türü', accessor: 'movementtype', sortable: true, canGroupBy: true, canFilter: true,
         Cell: col => {

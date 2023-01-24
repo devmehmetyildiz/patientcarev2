@@ -129,6 +129,7 @@ export default class PurchaseorderstocksCreate extends Component {
     data.departmentid = this.state.selecteddepartments
     data.stockdefineID = this.state.selectedstockdefine
     data.purchaseorderID = this.state.selectedpurchaseorder
+    data.status = 0
     data.id = 0
     data.concurrencyStamp = null
     data.createdUser = null

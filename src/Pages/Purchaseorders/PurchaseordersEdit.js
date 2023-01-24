@@ -19,12 +19,11 @@ export default class PurchaseordersEdit extends Component {
   }
 
   componentDidMount() {
-    const { GetPurchaseorder, match, history, GetStockdefines, GetCases, GetUnits, GetDepartments, GetWarehouses } = this.props
+    const { GetPurchaseorder, match, history, GetStockdefines, GetCases,  GetDepartments, GetWarehouses } = this.props
     if (match.params.PurchaseorderID) {
       GetPurchaseorder(match.params.PurchaseorderID)
       GetStockdefines()
       GetCases()
-      GetUnits()
       GetDepartments()
       GetWarehouses()
     } else {
@@ -34,12 +33,11 @@ export default class PurchaseordersEdit extends Component {
   }
 
   componentDidUpdate() {
-    const { Stockdefines, Purchaseorders, Cases, Units, Departments, Warehouses } = this.props
+    const { Stockdefines, Purchaseorders, Cases,  Departments, Warehouses } = this.props
     const { selected_record, isLoading } = Purchaseorders
     if (selected_record && Object.keys(selected_record).length > 0 &&
       selected_record.id != 0 && Stockdefines.list.length > 0 && !Stockdefines.isLoading
       && Cases.list.length > 0 && !Cases.isLoading
-      && Units.list.length > 0 && !Units.isLoading
       && Warehouses.list.length > 0 && !Warehouses.isLoading
       && Departments.list.length > 0 && !Departments.isLoading
       && !isLoading && !this.state.isDatafetched) {
@@ -51,8 +49,8 @@ export default class PurchaseordersEdit extends Component {
 
   render() {
 
-    const { removePurchaseordernotification, removeDepartmentnotification, removeUnitnotification,
-      removeCasenotification, removeStockdefinenotification, Cases, Units, Departments, Stockdefines, Warehouses, removeWarehousenotification,
+    const { removePurchaseordernotification, removeDepartmentnotification, 
+      removeCasenotification, removeStockdefinenotification, Cases,  Departments, Stockdefines, Warehouses, removeWarehousenotification,
       Purchaseorders } = this.props
     const { notifications, isLoading, isDispatching, selected_record } = Purchaseorders
 
@@ -74,11 +72,6 @@ export default class PurchaseordersEdit extends Component {
       removeWarehousenotification()
     }
 
-    if (Units.notifications && Units.notifications.length > 0) {
-      let msg = Units.notifications[0]
-      Popuputils(msg.type, msg.code, msg.description)
-      removeUnitnotification()
-    }
 
     if (Departments.notifications && Departments.notifications.length > 0) {
       let msg = Departments.notifications[0]
@@ -98,10 +91,6 @@ export default class PurchaseordersEdit extends Component {
 
     const Departmentsoption = Departments.list.map(department => {
       return { key: department.concurrencyStamp, text: department.name, value: department.concurrencyStamp }
-    })
-
-    const Unitsoption = Units.list.map(unit => {
-      return { key: unit.concurrencyStamp, text: unit.name, value: unit.concurrencyStamp }
     })
 
     const Casesoption = Cases.list.map(cases => {
@@ -171,7 +160,6 @@ export default class PurchaseordersEdit extends Component {
                       <Table.HeaderCell width={2}>Barkodno</Table.HeaderCell>
                       <Table.HeaderCell width={2}>SKT</Table.HeaderCell>
                       <Table.HeaderCell width={2}>Miktar</Table.HeaderCell>
-                      <Table.HeaderCell width={2}>Birim</Table.HeaderCell>
                       <Table.HeaderCell width={6}>Açıklama</Table.HeaderCell>
                       <Table.HeaderCell width={1}>Sil</Table.HeaderCell>
                     </Table.Row>
@@ -187,12 +175,12 @@ export default class PurchaseordersEdit extends Component {
                         </Table.Cell>
                         <Table.Cell>
                           <Form.Field>
-                            <Dropdown disabled={stock.concurrencyStamp} value={stock.stockdefineID} placeholder='Ürün Tanımı' name="stockdefineID" clearable search fluid selection options={Stockdefinesoption} onChange={(e, data) => { this.selectedProductChangeHandler(stock.key, 'stockdefineID', data.value) }} />
+                            <Dropdown  value={stock.stockdefineID} placeholder='Ürün Tanımı' name="stockdefineID" clearable search fluid selection options={Stockdefinesoption} onChange={(e, data) => { this.selectedProductChangeHandler(stock.key, 'stockdefineID', data.value) }} />
                           </Form.Field>
                         </Table.Cell>
                         <Table.Cell>
                           <Form.Field>
-                            <Dropdown disabled={stock.concurrencyStamp} value={stock.departmentid} placeholder='Departman' name="departmentid" clearable search fluid selection options={Departmentsoption} onChange={(e, data) => { this.selectedProductChangeHandler(stock.key, 'departmentid', data.value) }} />
+                            <Dropdown  value={stock.departmentid} placeholder='Departman' name="departmentid" clearable search fluid selection options={Departmentsoption} onChange={(e, data) => { this.selectedProductChangeHandler(stock.key, 'departmentid', data.value) }} />
                           </Form.Field>
                         </Table.Cell>
                         <Table.Cell>
@@ -203,11 +191,6 @@ export default class PurchaseordersEdit extends Component {
                         </Table.Cell>
                         <Table.Cell>
                           <Form.Input disabled={stock.concurrencyStamp} value={stock.amount} placeholder="Miktar" name="amount" type="number" fluid onChange={(e) => { this.selectedProductChangeHandler(stock.key, 'amount', e.target.value) }} />
-                        </Table.Cell>
-                        <Table.Cell>
-                          <Form.Field>
-                            <Dropdown disabled={stock.concurrencyStamp} value={stock.unitID} placeholder='Birim' name="unitID" clearable search fluid selection options={Unitsoption} onChange={(e, data) => { this.selectedProductChangeHandler(stock.key, 'unitID', data.value) }} />
-                          </Form.Field>
                         </Table.Cell>
                         <Table.Cell>
                           <Form.Input value={stock.info} placeholder="Açıklama" name="info" fluid onChange={(e) => { this.selectedProductChangeHandler(stock.key, 'info', e.target.value) }} />
@@ -221,7 +204,7 @@ export default class PurchaseordersEdit extends Component {
                   </Table.Body>
                   <Table.Footer>
                     <Table.Row>
-                      <Table.HeaderCell colSpan='9'>
+                      <Table.HeaderCell colSpan='8'>
                         <Button type="button" color='green' className='addMoreButton' size='mini' onClick={() => { this.AddNewProduct() }}>Ürün Ekle</Button>
                       </Table.HeaderCell>
                     </Table.Row>

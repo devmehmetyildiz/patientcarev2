@@ -20,10 +20,9 @@ export default class PurchaseordersCreate extends Component {
   }
 
   componentDidMount() {
-    const { GetStockdefines, GetCases, GetUnits, GetDepartments,GetWarehouses } = this.props
+    const { GetStockdefines, GetCases,  GetDepartments,GetWarehouses } = this.props
     GetStockdefines()
     GetCases()
-    GetUnits()
     GetDepartments()
     GetWarehouses()
   }
@@ -50,12 +49,6 @@ export default class PurchaseordersCreate extends Component {
       let msg = Warehouses.notifications[0]
       Popuputils(msg.type, msg.code, msg.description)
       removeWarehousenotification()
-    }
-
-    if (Units.notifications && Units.notifications.length > 0) {
-      let msg = Units.notifications[0]
-      Popuputils(msg.type, msg.code, msg.description)
-      removeUnitnotification()
     }
 
     if (Departments.notifications && Departments.notifications.length > 0) {
@@ -153,7 +146,6 @@ export default class PurchaseordersCreate extends Component {
                       <Table.HeaderCell width={2}>Barkodno</Table.HeaderCell>
                       <Table.HeaderCell width={2}>SKT</Table.HeaderCell>
                       <Table.HeaderCell width={2}>Miktar</Table.HeaderCell>
-                      <Table.HeaderCell width={2}>Birim</Table.HeaderCell>
                       <Table.HeaderCell width={6}>Açıklama</Table.HeaderCell>
                       <Table.HeaderCell width={1}>Sil</Table.HeaderCell>
                     </Table.Row>
@@ -187,11 +179,6 @@ export default class PurchaseordersCreate extends Component {
                           <Form.Input placeholder="Miktar" name="amount" type="number" fluid onChange={(e) => { this.selectedProductChangeHandler(stock.key, 'amount', e.target.value) }} />
                         </Table.Cell>
                         <Table.Cell>
-                          <Form.Field>
-                            <Dropdown placeholder='Birim' name="unitID" clearable search fluid selection options={Unitsoption} onChange={(e, data) => { this.selectedProductChangeHandler(stock.key, 'unitID', data.value) }} />
-                          </Form.Field>
-                        </Table.Cell>
-                        <Table.Cell>
                           <Form.Input placeholder="Açıklama" name="info" fluid onChange={(e) => { this.selectedProductChangeHandler(stock.key, 'info', e.target.value) }} />
                         </Table.Cell>
                         <Table.Cell className='table-last-section'>
@@ -203,7 +190,7 @@ export default class PurchaseordersCreate extends Component {
                   </Table.Body>
                   <Table.Footer>
                     <Table.Row>
-                      <Table.HeaderCell colSpan='9'>
+                      <Table.HeaderCell colSpan='8'>
                         <Button type="button" color='green' className='addMoreButton' size='mini' onClick={() => { this.AddNewProduct() }}>Ürün Ekle</Button>
                       </Table.HeaderCell>
                     </Table.Row>
@@ -274,9 +261,6 @@ export default class PurchaseordersCreate extends Component {
       if (!data.amount || data.amount == '' || data.amount == 0) {
         errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Miktar Girilmemiş' })
       }
-      if (!data.unitID || data.unitID == '') {
-        errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Birim Girilmemiş' })
-      }
     });
 
     if (!responseData.company || responseData.company == '') {
@@ -317,23 +301,18 @@ export default class PurchaseordersCreate extends Component {
       selectedStocks: [...this.state.selectedStocks,
       {
         id: 0,
+        purchaseorderID: '',
+        purchaseorder: {},
         stockdefineID: '',
         stockdefine: {},
         departmentid: '',
         department: {},
         skt: null,
         barcodeno: '',
-        usageamount: 0,
         amount: 0,
-        maxamount: 0,
-        isonusage: false,
-        isdeactive: false,
-        deactivetime: null,
+        status:0,
         info: '',
-        source: '',
-        unitID: '',
-        unit: {},
-        key: Math.random(),
+        willdelete:false,
         concurrencyStamp: '',
         createdUser: '',
         updatedUser: '',
@@ -342,6 +321,7 @@ export default class PurchaseordersCreate extends Component {
         updateTime: null,
         deleteTime: null,
         isActive: true,
+        key: Math.random(),
         order: this.state.selectedStocks.length,
       }]
     })

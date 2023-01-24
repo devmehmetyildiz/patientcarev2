@@ -72,22 +72,38 @@ export default class PreregistrationsCreate extends Component {
           </div>
           <Divider className='w-full  h-[1px]' />
           <div className='relative w-full bg-white p-4 rounded-lg shadow-md outline outline-[1px] outline-gray-200 '>
-            <div className='absolute top-0 right-0' onClick={() => { this.setState({ newRegister: !this.state.newRegister }) }}>
-              <Popup
-                trigger={!this.state.newRegister ? <Icon link name='plus' /> : <Icon link name='minus' />}
-                content={`${!this.state.newRegister ? 'Kayıtlı Olmayan' : 'Kayıtlı'} Hasta Girişi İçin Tıklanıyız`}
-                position='top left'
-              />
-            </div>
+
             <Form onSubmit={this.handleSubmit}>
               {!this.state.newRegister ?
                 <Form.Field>
-                  <label className='text-[#000000de]'>Hasta Tanımı</label>
+                  <label className='text-[#000000de]'>Hasta Tanımı
+                    <Popup
+                      trigger={<Button onClick={(e) => {
+                        e.preventDefault()
+                        this.setState({ newRegister: !this.state.newRegister })
+                      }} className='cursor-pointer ' circular size='mini' icon="redo"></Button>}
+                      content={`${!this.state.newRegister ? 'Kayıtlı Olmayan' : 'Kayıtlı'} Hasta Girişi İçin Tıklanıyız`}
+                      position='top left'
+                    />
+                  </label>
                   <Dropdown label="Kayıtlı Hastalar" placeholder='Kayıtlı Hastalar' clearable search fluid selection options={Patientdefineoptions} onChange={(e, { value }) => { this.setState({ selectedPatientdefine: value }) }} />
                 </Form.Field> :
                 <React.Fragment>
                   <Form.Group widths={'equal'}>
-                    <Form.Input label="Hasta Adı" placeholder="Hasta Adı" name="firstname" fluid />
+                    <FormField className='relative'>
+                      <label className='text-[#000000de]'>Hasta Adı
+                        <Popup
+                          trigger={<Button onClick={(e) => {
+                            e.preventDefault()
+                            this.setState({ newRegister: !this.state.newRegister })
+                          }} className='cursor-pointer absolute -top-2 left-20'  circular size='mini' icon="redo"></Button>}
+                          content={`${!this.state.newRegister ? 'Kayıtlı Olmayan' : 'Kayıtlı'} Hasta Girişi İçin Tıklanıyız`}
+                          position='top left'
+                         
+                        />
+                      </label>
+                      <Form.Input  placeholder="Hasta Adı" name="firstname" fluid />
+                    </FormField>
                     <Form.Input label="Hasta Soyadı" placeholder="Hasta Soyadı" name="lastname" fluid />
                     <Form.Input label="Baba Adı" placeholder="Baba Adı" name="fathername" fluid />
                     <Form.Input label="Anne Adı" placeholder="Anne Adı" name="mothername" fluid />
@@ -226,9 +242,14 @@ export default class PreregistrationsCreate extends Component {
         fillPatientnotification(error)
       })
     } else {
-      AddPatients(response, history,"/Preregistrations")
+      AddPatients(response, history, "/Preregistrations")
     }
   }
 
+  handleChangePatienttype = (e, { value }) => {
+    alert("hello")
+    e.preventDefault()
+
+  }
 
 }
