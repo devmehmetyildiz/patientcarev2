@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { FaUserAlt } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
-import { Button, Dropdown, Header, Icon, Modal, Segment, TransitionablePortal } from 'semantic-ui-react'
+import { Button, Dropdown, Header, Icon, Modal } from 'semantic-ui-react'
 
 export class Navbar extends Component {
   state = { open: false }
@@ -11,7 +11,7 @@ export class Navbar extends Component {
   handleClose = () => this.setState({ open: false })
 
   render() {
-    const { iconOnly, seticonOnly, history, Profile } = this.props
+    const { iconOnly, seticonOnly, Profile } = this.props
 
     const trigger = (
       <div className='flex flex-row justify-center items-center select-none'>

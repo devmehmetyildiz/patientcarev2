@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Checkbox, Container, Divider, Dropdown, Form, Icon, Popup, Table } from 'semantic-ui-react'
-import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
+import {  Divider, Dropdown, Form, Icon, Popup, Table } from 'semantic-ui-react'
+import { Breadcrumb, Button, Header } from 'semantic-ui-react'
 import Popuputils from '../../Utils/Popup'
 import LoadingPage from '../../Utils/LoadingPage'
 import formToObject from 'form-to-object'
@@ -36,7 +36,7 @@ export default class PurchaseordersEdit extends Component {
     const { Stockdefines, Purchaseorders, Cases,  Departments, Warehouses } = this.props
     const { selected_record, isLoading } = Purchaseorders
     if (selected_record && Object.keys(selected_record).length > 0 &&
-      selected_record.id != 0 && Stockdefines.list.length > 0 && !Stockdefines.isLoading
+      selected_record.id !== 0 && Stockdefines.list.length > 0 && !Stockdefines.isLoading
       && Cases.list.length > 0 && !Cases.isLoading
       && Warehouses.list.length > 0 && !Warehouses.isLoading
       && Departments.list.length > 0 && !Departments.isLoading
@@ -249,48 +249,48 @@ export default class PurchaseordersEdit extends Component {
 
     let errors = []
     responseData.stocks.forEach(data => {
-      if (!data.stockdefineID || data.stockdefineID == '') {
+      if (!data.stockdefineID || data.stockdefineID === '') {
         errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Ürün Tanımı Bulunamadı' })
       }
-      if (!data.departmentid || data.departmentid == '') {
+      if (!data.departmentid || data.departmentid === '') {
         errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Departman Bulunamadı' })
       }
-      if (!data.skt || data.skt == '') {
+      if (!data.skt || data.skt === '') {
         errors.push({ type: 'Error', code: 'Puchaseorders', description: 'SKT Girilmemiş' })
       }
-      if (!data.barcodeno || data.barcodeno == '') {
+      if (!data.barcodeno || data.barcodeno === '') {
         errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Barkod Girilmemiş' })
       }
-      if (!data.amount || data.amount == '' || data.amount == 0) {
+      if (!data.amount || data.amount === '' || data.amount === 0) {
         errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Miktar Girilmemiş' })
       }
-      if (!data.unitID || data.unitID == '') {
+      if (!data.unitID || data.unitID === '') {
         errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Birim Girilmemiş' })
       }
     });
 
-    if (!responseData.company || responseData.company == '') {
+    if (!responseData.company || responseData.company === '') {
       errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Firma Bilgisi Bulunamadı' })
     }
-    if (!responseData.purchaseprice || responseData.purchaseprice == '') {
+    if (!responseData.purchaseprice || responseData.purchaseprice === '') {
       errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Alış Fiyatı bulunamadı' })
     }
-    if (!responseData.companypersonelname || responseData.companypersonelname == '') {
+    if (!responseData.companypersonelname || responseData.companypersonelname === '') {
       errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Teslimatcı Adı bulunamadı' })
     }
-    if (!responseData.purchasenumber || responseData.purchasenumber == '') {
+    if (!responseData.purchasenumber || responseData.purchasenumber === '') {
       errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Sipariş Numarası bulunamadı' })
     }
-    if (!responseData.personelname || responseData.personelname == '') {
+    if (!responseData.personelname || responseData.personelname === '') {
       errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Teslim Alan Kişi belirtilmedi' })
     }
-    if (!responseData.warehouseID || responseData.warehouseID == '') {
+    if (!responseData.warehouseID || responseData.warehouseID === '') {
       errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Ambar girilmedi' })
     }
-    if (!responseData.caseID || responseData.caseID == '') {
+    if (!responseData.caseID || responseData.caseID === '') {
       errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Sipariş durumu girilmedi' })
     }
-    if (!responseData.purchasedate || responseData.purchasedate == '') {
+    if (!responseData.purchasedate || responseData.purchasedate === '') {
       errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Satın alma tarihi girilmemiş' })
     }
     if (errors.length > 0) {

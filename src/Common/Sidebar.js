@@ -23,9 +23,10 @@ export function Sidebar(props) {
             items: [
                 { id: 1, subtitle: "Ön Kayıtlar", url: "/Preregistrations" },
                 { id: 2, subtitle: "Kurumdaki Hastalar", url: "/Patients" },
-                { id: 3, subtitle: "Hasta Tanımları", url: "/Patientdefines" },
-                { id: 4, subtitle: "Hasta Stokları", url: "/Patientstocks" },
-                { id: 5, subtitle: "Hasta Stok Hareketleri", url: "/Patientstockmovements" },
+                { id: 3, subtitle: "Hasta Hareketleri", url: "/Patientmovements" },
+                { id: 4, subtitle: "Hasta Tanımları", url: "/Patientdefines" },
+                { id: 5, subtitle: "Hasta Stokları", url: "/Patientstocks" },
+                { id: 6, subtitle: "Hasta Stok Hareketleri", url: "/Patientstockmovements" },
             ]
         },
         {
@@ -68,6 +69,10 @@ export function Sidebar(props) {
                 { id: 9, subtitle: "Dosyalar", url: "/Files" },
                 { id: 10, subtitle: "Hasta Türleri", url: "/Patienttypes" },
                 { id: 11, subtitle: "Müşteri Türleri", url: "/Costumertypes" },
+                { id: 12, subtitle: "Yapılacaklar Tanımları", url: "/Tododefines" },
+                { id: 13, subtitle: "Yapılacaklar Grup Tanımları", url: "/Todogroupdefines" },
+                { id: 14, subtitle: "Kontrol Grupları", url: "/Checkperiods" },
+                { id: 15, subtitle: "Kontrol Periyodları", url: "/Periods" },
             ]
         },
     ])

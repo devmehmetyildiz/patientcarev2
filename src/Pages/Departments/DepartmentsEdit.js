@@ -1,19 +1,16 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Breadcrumb, Button, Checkbox, Divider, Dropdown, Form, Header } from 'semantic-ui-react'
-import Popup from '../../Utils/Popup'
+import { Breadcrumb, Button, Divider, Dropdown, Form, Header } from 'semantic-ui-react'
+import Notification from '../../Utils/Notification'
 import formToObject from 'form-to-object'
 import LoadingPage from '../../Utils/LoadingPage'
 
 export default class DepartmentsEdit extends Component {
   constructor(props) {
     super(props)
-    const selectedstations = []
-    const record = {}
-    const isDatafetched = false
     this.state = {
-      selectedstations,
-      isDatafetched
+      selectedstations: [],
+      isDatafetched: false
     }
   }
 
@@ -28,30 +25,22 @@ export default class DepartmentsEdit extends Component {
   }
 
   componentDidUpdate() {
-    const { Departments, Stations } = this.props
+    const { Departments, Stations, removeDepartmentnotification, removeStationnotification } = this.props
     const { selected_record, isLoading } = Departments
-    if (selected_record && Object.keys(selected_record).length > 0 && selected_record.id != 0 && Stations.list.length > 0 && !Stations.isLoading && !isLoading && !this.state.isDatafetched) {
+    if (selected_record && Object.keys(selected_record).length > 0 && selected_record.id !== 0 && Stations.list.length > 0 && !Stations.isLoading && !isLoading && !this.state.isDatafetched) {
       this.setState({
         selectedstations: selected_record.stations.map(station => {
           return station.concurrencyStamp
         }), isDatafetched: true
       })
     }
+    Notification(Departments.notifications, removeDepartmentnotification)
+    Notification(Stations.notifications, removeStationnotification)
   }
 
   render() {
 
-    const { Departments, Stations, removeDepartmentnotification, removeStationnotification } = this.props
-    if (Departments.notifications && Departments.notifications.length > 0) {
-      let msg = Departments.notifications[0]
-      Popup(msg.type, msg.code, msg.description)
-      removeDepartmentnotification()
-    }
-    if (Stations.notifications && Stations.notifications.length > 0) {
-      let msg = Stations.notifications[0]
-      Popup(msg.type, msg.code, msg.description)
-      removeStationnotification()
-    }
+    const { Departments, Stations } = this.props
 
     const Stationoptions = Stations.list.map(station => {
       return { key: station.concurrencyStamp, text: station.name, value: station.concurrencyStamp }
@@ -105,7 +94,7 @@ export default class DepartmentsEdit extends Component {
     })
 
     let errors = []
-    if (!data.name || data.name == '') {
+    if (!data.name || data.name === '') {
       errors.push({ type: 'Error', code: 'Departmanlar', description: 'İsim Boş Olamaz' })
     }
     if (!data.stations || data.stations.length <= 0) {

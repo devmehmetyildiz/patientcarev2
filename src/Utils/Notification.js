@@ -1,5 +1,4 @@
-import cogoToast from 'cogo-toast';
-
+import cogoToast from "@successtar/cogo-toast";
 
 function notification(notifications,removeNotification) {
     if (notifications && notifications.length > 0) {

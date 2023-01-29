@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Divider, Icon, Loader, Modal } from 'semantic-ui-react'
+import { Divider, Icon, Modal } from 'semantic-ui-react'
 import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
 import DataTable from '../../Utils/DataTable'
 import LoadingPage from '../../Utils/LoadingPage'
-import Popup from '../../Utils/Popup'
-import DeleteModal from "../../Utils/DeleteModal"
+import Notification from '../../Utils/Notification'
 import NoDataScreen from '../../Utils/NoDataScreen'
 import ColumnChooser from '../../Containers/Utils/ColumnChooser'
 
@@ -13,17 +12,20 @@ export class Files extends Component {
 
   constructor(props) {
     super(props)
-    const open = false
-    const selectedrecord = {}
     this.state = {
-      open,
-      selectedrecord
+      open: false,
+      selectedrecord: {}
     }
   }
 
   componentDidMount() {
     const { GetFiles } = this.props
     GetFiles()
+  }
+
+  componentDidUpdate() {
+    const { Files, removeFilenotification } = this.props
+    Notification(Files.notifications, removeFilenotification)
   }
 
   render() {
@@ -45,13 +47,8 @@ export class Files extends Component {
       { accessor: 'edit', Header: "Güncelle", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' },
       { accessor: 'delete', Header: "Sil", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
 
-    const { Files, DeleteFiles, removeFilenotification,Profile } = this.props
-    const { notifications, list, isLoading, isDispatching } = Files
-    if (notifications && notifications.length > 0) {
-      let msg = notifications[0]
-      Popup(msg.type, msg.code, msg.description)
-      removeFilenotification()
-    }
+    const { Files, DeleteFiles, Profile } = this.props
+    const { list, isLoading, isDispatching } = Files
 
     const metaKey = "Files"
     let tableMeta = (Profile.tablemeta || []).find(u => u.meta === metaKey)
@@ -64,8 +61,7 @@ export class Files extends Component {
       }) : []
     };
 
-
-    (list || []).map(item => {
+    (list || []).forEach(item => {
       item.edit = <Link to={`/Files/${item.concurrencyStamp}/edit`} ><Icon size='large' className='row-edit' name='edit' /></Link>
       item.delete = <Icon link size='large' color='red' name='alternate trash' onClick={() => { this.setState({ selectedrecord: item, open: true }) }} />
     })

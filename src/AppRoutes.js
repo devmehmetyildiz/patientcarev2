@@ -90,9 +90,28 @@ const Stockmovements = lazy(() => import('./Containers/Stockmovements/Stockmovem
 const StockmovementsCreate = lazy(() => import('./Containers/Stockmovements/StockmovementsCreate'));
 const StockmovementsEdit = lazy(() => import('./Containers/Stockmovements/StockmovementsEdit'));
 
+const Tododefines = lazy(() => import('./Containers/Tododefines/Tododefines'));
+const TododefinesCreate = lazy(() => import('./Containers/Tododefines/TododefinesCreate'));
+const TododefinesEdit = lazy(() => import('./Containers/Tododefines/TododefinesEdit'));
+
+const Todogroupdefines = lazy(() => import('./Containers/Todogroupdefines/Todogroupdefines'));
+const TodogroupdefinesCreate = lazy(() => import('./Containers/Todogroupdefines/TodogroupdefinesCreate'));
+const TodogroupdefinesEdit = lazy(() => import('./Containers/Todogroupdefines/TodogroupdefinesEdit'));
+
+const Periods = lazy(() => import('./Containers/Periods/Periods'));
+const PeriodsCreate = lazy(() => import('./Containers/Periods/PeriodsCreate'));
+const PeriodsEdit = lazy(() => import('./Containers/Periods/PeriodsEdit'));
+
+const Checkperiods = lazy(() => import('./Containers/Checkperiods/Checkperiods'));
+const CheckperiodsCreate = lazy(() => import('./Containers/Checkperiods/CheckperiodsCreate'));
+const CheckperiodsEdit = lazy(() => import('./Containers/Checkperiods/CheckperiodsEdit'));
+
+const Patientmovements = lazy(() => import('./Containers/Patientmovements/Patientmovements'));
+const PatientmovementsCreate = lazy(() => import('./Containers/Patientmovements/PatientmovementsCreate'));
+const PatientmovementsEdit = lazy(() => import('./Containers/Patientmovements/PatientmovementsEdit'));
+
 const Stockmovementsdetail = lazy(() => import('./Containers/Stocks/Stockmovementsdetail'));
 
-const PasswordChange = lazy(() => import('./Pages/Home'));
 const ProfileEdit = lazy(() => import('./Containers/Auth/ProfileEdit'));
 const Home = lazy(() => import('./Pages/Home'));
 
@@ -153,6 +172,12 @@ class AppRoutes extends Component {
       { exact: true, path: "/Warehouses", auth: true, component: Warehouses },
       { exact: true, path: "/Warehouses/Create", auth: true, component: WarehousesCreate },
       { exact: true, path: "/Warehouses/:WarehouseID/Edit", auth: true, component: WarehousesEdit },
+      { exact: true, path: "/Tododefines", auth: true, component: Tododefines },
+      { exact: true, path: "/Tododefines/Create", auth: true, component: TododefinesCreate },
+      { exact: true, path: "/Tododefines/:TododefineID/Edit", auth: true, component: TododefinesEdit },
+      { exact: true, path: "/Todogroupdefines", auth: true, component: Todogroupdefines },
+      { exact: true, path: "/Todogroupdefines/Create", auth: true, component: TodogroupdefinesCreate },
+      { exact: true, path: "/Todogroupdefines/:TodogroupdefineID/Edit", auth: true, component: TodogroupdefinesEdit },
       { exact: true, path: "/Patientstocks", auth: true, component: Patientstocks },
       { exact: true, path: "/Patientstocks/Create", auth: true, component: PatientstocksCreate },
       { exact: true, path: "/Patientstocks/:PatientstockID/Edit", auth: true, component: PatientstocksEdit },
@@ -165,6 +190,19 @@ class AppRoutes extends Component {
       { exact: true, path: "/Purchaseorderstockmovements", auth: true, component: Purchaseorderstockmovements },
       { exact: true, path: "/Purchaseorderstockmovements/Create", auth: true, component: PurchaseorderstockmovementsCreate },
       { exact: true, path: "/Purchaseorderstockmovements/:PurchaseorderstockmovementID/Edit", auth: true, component: PurchaseorderstockmovementsEdit },
+
+      { exact: true, path: "/Patientmovements", auth: true, component: Patientmovements },
+      { exact: true, path: "/Patientmovements/Create", auth: true, component: PatientmovementsCreate },
+      { exact: true, path: "/Patientmovements/:PatientmovementID/Edit", auth: true, component: PatientmovementsEdit },
+
+      { exact: true, path: "/Checkperiods", auth: true, component: Checkperiods },
+      { exact: true, path: "/Checkperiods/Create", auth: true, component: CheckperiodsCreate },
+      { exact: true, path: "/Checkperiods/:CheckperiodID/Edit", auth: true, component: CheckperiodsEdit },
+
+      { exact: true, path: "/Periods", auth: true, component: Periods },
+      { exact: true, path: "/Periods/Create", auth: true, component: PeriodsCreate },
+      { exact: true, path: "/Periods/:PeriodID/Edit", auth: true, component: PeriodsEdit },
+
       { exact: true, path: "/Preregistrations", auth: true, component: Preregistrations },
       { exact: true, path: "/Preregistrations/Create", auth: true, component: PreregistrationsCreate },
       { exact: true, path: "/Preregistrations/:PatientID/Edit", auth: true, component: PreregistrationsEdit },

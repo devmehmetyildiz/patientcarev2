@@ -1,6 +1,5 @@
 import { ROUTES } from "../../Utils/Constants";
 import AxiosErrorHelper from "../../Utils/AxiosErrorHelper";
-import Popup from "../../Utils/Popup";
 import instanse from "./axios"
 
 export const ACTION_TYPES = {
@@ -38,7 +37,7 @@ export const GetWarehouses = () => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.GET_WAREHOUSES_INIT })
     await instanse.get(ROUTES.WAREHOUSE + "/GetAll")
         .then(response => {
-            { dispatch({ type: ACTION_TYPES.GET_WAREHOUSES_SUCCESS, payload: response.data }) }
+            dispatch({ type: ACTION_TYPES.GET_WAREHOUSES_SUCCESS, payload: response.data })
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_WAREHOUSES_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -50,7 +49,7 @@ export const GetWarehouse = (guid) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.GET_WAREHOUSE_INIT })
     await instanse.get(ROUTES.WAREHOUSE + `/Getselected?guid=${guid}`)
         .then(response => {
-            { dispatch({ type: ACTION_TYPES.GET_WAREHOUSE_SUCCESS, payload: response.data }) }
+            dispatch({ type: ACTION_TYPES.GET_WAREHOUSE_SUCCESS, payload: response.data }) 
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_WAREHOUSES_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -62,10 +61,8 @@ export const AddWarehouses = (data, historypusher) => async (dispatch, getState)
     dispatch({ type: ACTION_TYPES.ADD_WAREHOUSE_INIT })
     await instanse.post(ROUTES.WAREHOUSE + "/Add", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.ADD_WAREHOUSE_SUCCESS, payload: response.data })
                 historypusher.push('/Warehouses')
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_WAREHOUSES_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -77,10 +74,8 @@ export const EditWarehouses = (data, historypusher) => async (dispatch, getState
     dispatch({ type: ACTION_TYPES.EDIT_WAREHOUSE_INIT })
     await instanse.post(ROUTES.WAREHOUSE + "/Update", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.EDIT_WAREHOUSE_SUCCESS, payload: response.data })
                 historypusher.push('/Warehouses')
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_WAREHOUSES_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -94,9 +89,7 @@ export const DeleteWarehouses = (data) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.DELETE_WAREHOUSE_INIT })
     await instanse.post(ROUTES.WAREHOUSE + "/Delete", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.DELETE_WAREHOUSE_SUCCESS, payload: response.data })
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_WAREHOUSES_NOTIFICATION, payload: AxiosErrorHelper(error) })

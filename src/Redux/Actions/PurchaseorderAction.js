@@ -41,7 +41,7 @@ export const GetPurchaseorders = () => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.GET_PURCHASEORDERS_INIT })
     await instanse.get(ROUTES.PURCHASEORDER + "/GetAll")
         .then(response => {
-            { dispatch({ type: ACTION_TYPES.GET_PURCHASEORDERS_SUCCESS, payload: response.data }) }
+            dispatch({ type: ACTION_TYPES.GET_PURCHASEORDERS_SUCCESS, payload: response.data })
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_PURCHASEORDERS_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -53,7 +53,7 @@ export const GetPurchaseorder = (guid) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.GET_PURCHASEORDER_INIT })
     await instanse.get(ROUTES.PURCHASEORDER + `/Getselected?guid=${guid}`)
         .then(response => {
-            { dispatch({ type: ACTION_TYPES.GET_PURCHASEORDER_SUCCESS, payload: response.data }) }
+            dispatch({ type: ACTION_TYPES.GET_PURCHASEORDER_SUCCESS, payload: response.data })
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_PURCHASEORDERS_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -65,10 +65,8 @@ export const AddPurchaseorders = (data, historypusher) => async (dispatch, getSt
     dispatch({ type: ACTION_TYPES.ADD_PURCHASEORDER_INIT })
     await instanse.post(ROUTES.PURCHASEORDER + "/Add", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.ADD_PURCHASEORDER_SUCCESS, payload: response.data })
                 historypusher.push('/Purchaseorders')
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_PURCHASEORDERS_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -82,9 +80,7 @@ export const CompletePurchaseorders = (data) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.COMPLETE_PURCHASEORDER_INIT })
     await instanse.post(ROUTES.PURCHASEORDER + "/Complete", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.COMPLETE_PURCHASEORDER_SUCCESS, payload: response.data })
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_PURCHASEORDERS_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -96,10 +92,8 @@ export const EditPurchaseorders = (data, historypusher) => async (dispatch, getS
     dispatch({ type: ACTION_TYPES.EDIT_PURCHASEORDER_INIT })
     await instanse.post(ROUTES.PURCHASEORDER + "/Update", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.EDIT_PURCHASEORDER_SUCCESS, payload: response.data })
                 historypusher.push('/Purchaseorders')
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_PURCHASEORDERS_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -113,9 +107,7 @@ export const DeletePurchaseorders = (data) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.DELETE_PURCHASEORDER_INIT })
     await instanse.post(ROUTES.PURCHASEORDER + "/Delete", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.DELETE_PURCHASEORDER_SUCCESS, payload: response.data })
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_PURCHASEORDERS_NOTIFICATION, payload: AxiosErrorHelper(error) })

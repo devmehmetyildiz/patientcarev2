@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Breadcrumb, Button, Divider, Dropdown, Form, Header, Icon, Label, Modal, Popup, Table } from 'semantic-ui-react'
+import { Breadcrumb, Button, Divider, Dropdown, Form, Header, Icon,  Modal, Table } from 'semantic-ui-react'
 import { ROUTES } from '../../Utils/Constants'
 import LoadingPage from '../../Utils/LoadingPage'
 import Notification from '../../Utils/Notification'
@@ -32,15 +32,19 @@ export default class PreregistrationsEditstock extends Component {
     const { Patients, Departments, Stockdefines } = this.props
     const { selected_record, isLoading } = Patients
     if (selected_record && Object.keys(selected_record).length > 0 &&
-      selected_record.id != 0 && !isLoading && !Departments.isLoading && !Stockdefines.isLoading && !this.state.isDatafetched) {
+      selected_record.id !== 0 && !isLoading && !Departments.isLoading && !Stockdefines.isLoading && !this.state.isDatafetched) {
+      var response = (selected_record.stocks || [])
+      response.forEach(element => {
+        element.key=Math.random()
+      });
       this.setState({
-        selectedStocks: (selected_record.stocks || []), isDatafetched: true
+        selectedStocks: response, isDatafetched: true
       })
     }
   }
 
   render() {
-    const { Patients, Stockdefines, Departments, removePatientnotification, removeStockdefinenotification, removeUnitnotification,
+    const { Patients, Stockdefines, Departments, removePatientnotification, removeStockdefinenotification, 
       removeDepartmentnotification } = this.props
     const { selected_record, isLoading, isDispatching } = Patients
     Notification(Patients.notifications, removePatientnotification)
@@ -73,7 +77,7 @@ export default class PreregistrationsEditstock extends Component {
           <Divider className='w-full  h-[1px]' />
           <div className='w-full bg-white p-4 rounded-lg shadow-md outline outline-[1px] outline-gray-200 '>
             <Header as='h2' icon textAlign='center'>
-              {(selected_record.files || []).filter(u => u.name === 'PP').length > 0 ? <img src={`${process.env.REACT_APP_BACKEND_URL}/${ROUTES.FILE}/GetImage?guid=${selected_record.concurrencyStamp}`} className="rounded-full" style={{ width: '100px', height: '100px' }} />
+              {(selected_record.files || []).filter(u => u.name === 'PP').length > 0 ? <img alt='pp' src={`${process.env.REACT_APP_BACKEND_URL}/${ROUTES.FILE}/GetImage?guid=${selected_record.concurrencyStamp}`} className="rounded-full" style={{ width: '100px', height: '100px' }} />
                 : <Icon name='users' circular />}
               <Header.Content>{`${selected_record.patientdefine?.firstname} ${selected_record.patientdefine?.lastname} - ${selected_record.patientdefine?.countryID}`}</Header.Content>
             </Header>
@@ -110,12 +114,12 @@ export default class PreregistrationsEditstock extends Component {
                       </Table.Cell>
                       <Table.Cell>
                         <Form.Field>
-                          <Dropdown  value={stock.stockdefineID} placeholder='Ürün Tanımı' name="stockdefineID" clearable search fluid selection options={Stockdefinesoption} onChange={(e, data) => { this.selectedProductChangeHandler(stock.key, 'stockdefineID', data.value) }} />
+                          <Dropdown value={stock.stockdefineID} placeholder='Ürün Tanımı' name="stockdefineID" clearable search fluid selection options={Stockdefinesoption} onChange={(e, data) => { this.selectedProductChangeHandler(stock.key, 'stockdefineID', data.value) }} />
                         </Form.Field>
                       </Table.Cell>
                       <Table.Cell>
                         <Form.Field>
-                          <Dropdown  value={stock.departmentid} placeholder='Departman' name="departmentid" clearable search fluid selection options={Departmentsoption} onChange={(e, data) => { this.selectedProductChangeHandler(stock.key, 'departmentid', data.value) }} />
+                          <Dropdown value={stock.departmentid} placeholder='Departman' name="departmentid" clearable search fluid selection options={Departmentsoption} onChange={(e, data) => { this.selectedProductChangeHandler(stock.key, 'departmentid', data.value) }} />
                         </Form.Field>
                       </Table.Cell>
                       <Table.Cell>
@@ -174,19 +178,19 @@ export default class PreregistrationsEditstock extends Component {
 
     let errors = []
     stocks.forEach(data => {
-      if (!data.stockdefineID || data.stockdefineID == '') {
+      if (!data.stockdefineID || data.stockdefineID === '') {
         errors.push({ type: 'Error', code: 'Patients', description: 'Ürün Tanımı Bulunamadı' })
       }
-      if (!data.departmentid || data.departmentid == '') {
+      if (!data.departmentid || data.departmentid === '') {
         errors.push({ type: 'Error', code: 'Patients', description: 'Departman Bulunamadı' })
       }
-      if (!data.skt || data.skt == '') {
+      if (!data.skt || data.skt === '') {
         errors.push({ type: 'Error', code: 'Patients', description: 'SKT Girilmemiş' })
       }
-      if (!data.barcodeno || data.barcodeno == '') {
+      if (!data.barcodeno || data.barcodeno === '') {
         errors.push({ type: 'Error', code: 'Patients', description: 'Barkod Girilmemiş' })
       }
-      if (!data.amount || data.amount == '' || data.amount == 0) {
+      if (!data.amount || data.amount === '' || data.amount === 0) {
         errors.push({ type: 'Error', code: 'Patients', description: 'Miktar Girilmemiş' })
       }
     });

@@ -7,23 +7,27 @@ import { MOVEMENTTYPES } from '../../Utils/Constants'
 import DataTable from '../../Utils/DataTable'
 import LoadingPage from '../../Utils/LoadingPage'
 import NoDataScreen from '../../Utils/NoDataScreen'
-import Popup from '../../Utils/Popup'
+import Notification from '../../Utils/Notification'
 
 export default class Patientstockmovements extends Component {
 
   constructor(props) {
     super(props)
-    const open = false
-    const selectedrecord = {}
     this.state = {
-      open,
-      selectedrecord
+      open: false,
+      selectedrecord: {}
     }
   }
 
   componentDidMount() {
     const { GetPatientstockmovements } = this.props
     GetPatientstockmovements()
+  }
+
+
+  componentDidUpdate() {
+    const { Patientstockmovements, removePatientstockmovementnotification } = this.props
+    Notification(Patientstockmovements.notifications, removePatientstockmovementnotification)
   }
 
   render() {
@@ -67,13 +71,8 @@ export default class Patientstockmovements extends Component {
       { accessor: 'edit', Header: "Güncelle", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' },
       { accessor: 'delete', Header: "Sil", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
 
-    const { Patientstockmovements, DeletePatientstockmovements, removePatientstockmovementnotification, Profile } = this.props
-    const { notifications, list, isLoading, isDispatching } = Patientstockmovements
-    if (notifications && notifications.length > 0) {
-      let msg = notifications[0]
-      Popup(msg.type, msg.code, msg.description)
-      removePatientstockmovementnotification()
-    }
+    const { Patientstockmovements, DeletePatientstockmovements, Profile } = this.props
+    const { list, isLoading, isDispatching } = Patientstockmovements
 
     const metaKey = "Patientstockmovements"
     let tableMeta = (Profile.tablemeta || []).find(u => u.meta === metaKey)
@@ -86,7 +85,7 @@ export default class Patientstockmovements extends Component {
       }) : []
     };
 
-    (list || []).map(item => {
+    (list || []).forEach(item => {
       item.watch = <Link to={`/Patientstockmovements/${item.concurrencyStamp}`} ><Icon link size='large' className='text-[#7ec5bf] hover:text-[#5bbdb5]' name='sitemap' /></Link>
       item.edit = <Link to={`/Patientstockmovements/${item.concurrencyStamp}/edit`} ><Icon size='large' className='row-edit' name='edit' /></Link>
       item.delete = <Icon link size='large' color='red' name='alternate trash' onClick={() => { this.setState({ selectedrecord: item, open: true }) }} />

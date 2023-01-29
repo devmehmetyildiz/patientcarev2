@@ -1,6 +1,5 @@
 import { ROUTES } from "../../Utils/Constants";
 import AxiosErrorHelper from "../../Utils/AxiosErrorHelper";
-import Popup from "../../Utils/Popup";
 import instanse from "./axios"
 
 export const ACTION_TYPES = {
@@ -38,7 +37,7 @@ export const GetStations = () => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.GET_STATIONS_INIT })
     await instanse.get(ROUTES.STATION + "/GetAll")
         .then(response => {
-            { dispatch({ type: ACTION_TYPES.GET_STATIONS_SUCCESS, payload: response.data }) }
+            dispatch({ type: ACTION_TYPES.GET_STATIONS_SUCCESS, payload: response.data }) 
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_STATIONS_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -50,7 +49,7 @@ export const GetStation = (guid) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.GET_STATION_INIT })
     await instanse.get(ROUTES.STATION + `/Getselected?guid=${guid}`)
         .then(response => {
-            { dispatch({ type: ACTION_TYPES.GET_STATION_SUCCESS, payload: response.data }) }
+            dispatch({ type: ACTION_TYPES.GET_STATION_SUCCESS, payload: response.data })
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_STATIONS_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -62,10 +61,8 @@ export const AddStations = (data, historypusher) => async (dispatch, getState) =
     dispatch({ type: ACTION_TYPES.ADD_STATION_INIT })
     await instanse.post(ROUTES.STATION + "/Add", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.ADD_STATION_SUCCESS, payload: response.data })
                 historypusher.push('/Stations')
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_STATIONS_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -77,10 +74,8 @@ export const EditStations = (data, historypusher) => async (dispatch, getState) 
     dispatch({ type: ACTION_TYPES.EDIT_STATION_INIT })
     await instanse.post(ROUTES.STATION + "/Update", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.EDIT_STATION_SUCCESS, payload: response.data })
                 historypusher.push('/Stations')
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_STATIONS_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -94,9 +89,7 @@ export const DeleteStations = (data) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.DELETE_STATION_INIT })
     await instanse.post(ROUTES.STATION + "/Delete", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.DELETE_STATION_SUCCESS, payload: response.data })
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_STATIONS_NOTIFICATION, payload: AxiosErrorHelper(error) })

@@ -11,13 +11,10 @@ import Popup from '../../Utils/Popup'
 export default class Stocks extends Component {
   constructor(props) {
     super(props)
-    const open = false
-    const openDeactivate = false
-    const selectedrecord = {}
     this.state = {
-      open,
-      openDeactivate,
-      selectedrecord
+      open:false,
+      openDeactivate:false,
+      selectedrecord:{}
     }
   }
 
@@ -68,7 +65,7 @@ export default class Stocks extends Component {
       }) : []
     };
 
-    (list || []).map(item => {
+    (list || []).forEach(item => {
       item.watch = <Link to={`/Stockmovement/${item.concurrencyStamp}`} ><Icon link size='large' className='text-[#7ec5bf] hover:text-[#5bbdb5]' name='sitemap' /></Link>
       item.kill = <Icon link size='large' className='text-[#c5a47e] hover:text-[#ca975c]' name='bomb' onClick={() => { this.setState({ selectedrecord: item, openDeactivate: true }) }} />
       item.edit = <Link to={`/Stocks/${item.concurrencyStamp}/edit`} ><Icon size='large' className='row-edit' name='edit' /></Link>

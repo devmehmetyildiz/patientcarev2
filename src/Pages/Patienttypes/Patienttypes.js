@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Divider, Icon, Loader, Modal } from 'semantic-ui-react'
+import { Divider, Icon,  Modal } from 'semantic-ui-react'
 import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
 import DataTable from '../../Utils/DataTable'
 import LoadingPage from '../../Utils/LoadingPage'
@@ -12,11 +12,9 @@ export default class Patienttypes extends Component {
 
   constructor(props) {
     super(props)
-    const open = false
-    const selectedrecord = {}
     this.state = {
-      open,
-      selectedrecord
+      open:false,
+      selectedrecord:{}
     }
   }
 
@@ -58,7 +56,7 @@ export default class Patienttypes extends Component {
       }) : []
     };
 
-    (list || []).map(item => {
+    (list || []).forEach(item => {
       item.edit = <Link to={`/Patienttypes/${item.concurrencyStamp}/edit`} ><Icon size='large' className='row-edit' name='edit' /></Link>
       item.delete = <Icon link size='large' color='red' name='alternate trash' onClick={() => { this.setState({ selectedrecord: item, open: true }) }} />
     })

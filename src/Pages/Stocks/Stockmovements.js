@@ -13,11 +13,9 @@ export default class Stockmovements extends Component {
 
   constructor(props) {
     super(props)
-    const open = false
-    const selectedrecord = {}
     this.state = {
-      open,
-      selectedrecord
+      open:false,
+      selectedrecord:{}
     }
   }
 
@@ -86,7 +84,7 @@ export default class Stockmovements extends Component {
       }) : []
     };
 
-    (list || []).map(item => {
+    (list || []).forEach(item => {
       item.watch = <Link to={`/Stockmovements/${item.concurrencyStamp}`} ><Icon link size='large' className='text-[#7ec5bf] hover:text-[#5bbdb5]' name='sitemap' /></Link>
       item.edit = <Link to={`/Stockmovements/${item.concurrencyStamp}/edit`} ><Icon size='large' className='row-edit' name='edit' /></Link>
       item.delete = <Icon link size='large' color='red' name='alternate trash' onClick={() => { this.setState({ selectedrecord: item, open: true }) }} />

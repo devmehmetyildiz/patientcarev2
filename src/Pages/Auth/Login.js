@@ -3,22 +3,19 @@ import React, { Component, useContext } from 'react'
 import img from "../../Assets/img"
 import { Button, Form, Grid, Header, Divider } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
-import Popup from '../../Utils/Popup'
-import { useNavigate, withRouter } from 'react-router-dom'
-import { AuthContext } from '../../Provider/AuthProvider'
+import Notification from '../../Utils/Notification'
+import { withRouter } from 'react-router-dom'
 
 class Login extends Component {
 
+    componentDidUpdate() {
+        const { Profile, removenotification } = this.props
+        Notification(Profile.notifications, removenotification)
+    }
 
 
     render() {
-        const { history, match, LogIn, LogOut, Profile, removenotification, fillnotification } = this.props
-
-        if (Profile.notifications && Profile.notifications.length > 0) {
-            let msg = Profile.notifications[0]
-            Popup(msg.type, msg.code, msg.description)
-            removenotification()
-        }
+        const { Profile } = this.props
 
         return (
             <div style={{ backgroundImage: `url(${img.loginbg})` }} className=' font-Common w-full h-[100vh] justify-center items-center flex ' >
@@ -58,7 +55,7 @@ class Login extends Component {
     }
     LoginHandler = (event) => {
         event.preventDefault()
-        const { location,history, match, logIn, LogOut, Profile, removenotification, fillnotification } = this.props
+        const { history, logIn, Profile, fillnotification } = this.props
 
         let redirectUrl = null
         const paths = history.location.search?.split('=')

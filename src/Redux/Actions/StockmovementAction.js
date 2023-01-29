@@ -1,6 +1,5 @@
 import { ROUTES } from "../../Utils/Constants";
 import AxiosErrorHelper from "../../Utils/AxiosErrorHelper";
-import Popup from "../../Utils/Popup";
 import instanse from "./axios"
 
 export const ACTION_TYPES = {
@@ -38,7 +37,7 @@ export const GetStockmovements = () => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.GET_STOCKMOVEMENTS_INIT })
     await instanse.get(ROUTES.STOCKMOVEMENT + "/GetAll")
         .then(response => {
-            { dispatch({ type: ACTION_TYPES.GET_STOCKMOVEMENTS_SUCCESS, payload: response.data }) }
+            dispatch({ type: ACTION_TYPES.GET_STOCKMOVEMENTS_SUCCESS, payload: response.data })
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_STOCKMOVEMENTS_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -50,7 +49,7 @@ export const GetStockmovement = (guid) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.GET_STOCKMOVEMENT_INIT })
     await instanse.get(ROUTES.STOCKMOVEMENT + `/Getselected?guid=${guid}`)
         .then(response => {
-            { dispatch({ type: ACTION_TYPES.GET_STOCKMOVEMENT_SUCCESS, payload: response.data }) }
+            dispatch({ type: ACTION_TYPES.GET_STOCKMOVEMENT_SUCCESS, payload: response.data }) 
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_STOCKMOVEMENTS_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -62,10 +61,8 @@ export const AddStockmovements = (data, historypusher) => async (dispatch, getSt
     dispatch({ type: ACTION_TYPES.ADD_STOCKMOVEMENT_INIT })
     await instanse.post(ROUTES.STOCKMOVEMENT + "/Add", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.ADD_STOCKMOVEMENT_SUCCESS, payload: response.data })
                 historypusher('/Stockmovements')
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_STOCKMOVEMENTS_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -77,10 +74,8 @@ export const EditStockmovements = (data, historypusher) => async (dispatch, getS
     dispatch({ type: ACTION_TYPES.EDIT_STOCKMOVEMENT_INIT })
     await instanse.post(ROUTES.STOCKMOVEMENT + "/Update", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.EDIT_STOCKMOVEMENT_SUCCESS, payload: response.data })
                 historypusher.push('/Stockmovements')
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_STOCKMOVEMENTS_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -94,9 +89,7 @@ export const DeleteStockmovements = (data) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.DELETE_STOCKMOVEMENT_INIT })
     await instanse.post(ROUTES.STOCKMOVEMENT + "/Delete", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.DELETE_STOCKMOVEMENT_SUCCESS, payload: response.data })
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_STOCKMOVEMENTS_NOTIFICATION, payload: AxiosErrorHelper(error) })

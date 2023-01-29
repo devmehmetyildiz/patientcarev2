@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Checkbox, Container, Divider, Dropdown, Form, Icon } from 'semantic-ui-react'
-import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
+import {  Divider, Dropdown, Form } from 'semantic-ui-react'
+import { Breadcrumb, Button,  Header } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
 import Popuputil from '../../Utils/Popup'
 import LoadingPage from '../../Utils/LoadingPage'
@@ -29,7 +29,7 @@ export default class StockmovementsEdit extends Component {
   componentDidUpdate() {
     const { Stocks, Stockmovements } = this.props
     const { selected_record, isLoading } = Stockmovements
-    if (selected_record && Object.keys(selected_record).length > 0 && selected_record.id != 0
+    if (selected_record && Object.keys(selected_record).length > 0 && selected_record.id !== 0
       && Stocks.list.length > 0 && !Stocks.isLoading
       && !isLoading && !this.state.isDatafetched) {
       this.setState({
@@ -120,10 +120,10 @@ export default class StockmovementsEdit extends Component {
     data.stockID = this.state.selectedstock
 
     let errors = []
-    if (!data.movementtype || data.movementtype == '') {
+    if (!data.movementtype || data.movementtype === '') {
       errors.push({ type: 'Error', code: 'Ürünler', description: 'Hareket Seçili Değil' })
     }
-    if (!data.stockID || data.stockID == '') {
+    if (!data.stockID || data.stockID === '') {
       errors.push({ type: 'Error', code: 'Ürünler', description: 'Ürün Seçili Değil' })
     }
     if (data.amount === '') {

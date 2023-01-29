@@ -1,6 +1,5 @@
 import { ROUTES } from "../../Utils/Constants";
 import AxiosErrorHelper from "../../Utils/AxiosErrorHelper";
-import Popup from "../../Utils/Popup";
 import instanse from "./axios"
 
 export const ACTION_TYPES = {
@@ -38,7 +37,7 @@ export const GetStockdefines = () => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.GET_STOCKDEFINES_INIT })
     await instanse.get(ROUTES.STOCKDEFINE + "/GetAll")
         .then(response => {
-            { dispatch({ type: ACTION_TYPES.GET_STOCKDEFINES_SUCCESS, payload: response.data }) }
+            dispatch({ type: ACTION_TYPES.GET_STOCKDEFINES_SUCCESS, payload: response.data })
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_STOCKDEFINES_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -50,7 +49,7 @@ export const GetStockdefine = (guid) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.GET_STOCKDEFINE_INIT })
     await instanse.get(ROUTES.STOCKDEFINE + `/Getselected?guid=${guid}`)
         .then(response => {
-            { dispatch({ type: ACTION_TYPES.GET_STOCKDEFINE_SUCCESS, payload: response.data }) }
+            dispatch({ type: ACTION_TYPES.GET_STOCKDEFINE_SUCCESS, payload: response.data })
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_STOCKDEFINES_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -62,10 +61,8 @@ export const AddStockdefines = (data, historypusher) => async (dispatch, getStat
     dispatch({ type: ACTION_TYPES.ADD_STOCKDEFINE_INIT })
     await instanse.post(ROUTES.STOCKDEFINE + "/Add", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.ADD_STOCKDEFINE_SUCCESS, payload: response.data })
                 historypusher && historypusher.push('/Stockdefines')
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_STOCKDEFINES_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -77,10 +74,8 @@ export const EditStockdefines = (data, historypusher) => async (dispatch, getSta
     dispatch({ type: ACTION_TYPES.EDIT_STOCKDEFINE_INIT })
     await instanse.post(ROUTES.STOCKDEFINE + "/Update", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.EDIT_STOCKDEFINE_SUCCESS, payload: response.data })
                 historypusher.push('/Stockdefines')
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_STOCKDEFINES_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -94,9 +89,7 @@ export const DeleteStockdefines = (data) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.DELETE_STOCKDEFINE_INIT })
     await instanse.post(ROUTES.STOCKDEFINE + "/Delete", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.DELETE_STOCKDEFINE_SUCCESS, payload: response.data })
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_STOCKDEFINES_NOTIFICATION, payload: AxiosErrorHelper(error) })

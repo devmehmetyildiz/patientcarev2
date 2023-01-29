@@ -6,7 +6,7 @@ import ColumnChooser from '../../Containers/Utils/ColumnChooser'
 import DataTable from '../../Utils/DataTable'
 import LoadingPage from '../../Utils/LoadingPage'
 import NoDataScreen from '../../Utils/NoDataScreen'
-import Popup from '../../Utils/Popup'
+import Notification from '../../Utils/Notification'
 
 export default class Costumertypes extends Component {
 
@@ -28,6 +28,10 @@ export default class Costumertypes extends Component {
     GetCostumertypes()
   }
 
+  componentDidUpdate() {
+    const { Costumertypes, removeCostumertypenotification } = this.props
+    Notification(Costumertypes.notifications, removeCostumertypenotification)
+  }
 
   render() {
 
@@ -62,13 +66,8 @@ export default class Costumertypes extends Component {
       { accessor: 'delete', Header: "Sil", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
 
 
-    const { Costumertypes, removeCostumertypenotification, DeleteCostumertypes,Profile } = this.props
-    const { notifications, list, isLoading, isDispatching } = Costumertypes
-    if (notifications && notifications.length > 0) {
-      let msg = notifications[0]
-      Popup(msg.type, msg.code, msg.description)
-      removeCostumertypenotification()
-    }
+    const { Costumertypes, DeleteCostumertypes, Profile } = this.props
+    const { list, isLoading, isDispatching } = Costumertypes
 
     const metaKey = "Costumertypes"
     let tableMeta = (Profile.tablemeta || []).find(u => u.meta === metaKey)
@@ -82,7 +81,7 @@ export default class Costumertypes extends Component {
     };
 
 
-    (list || []).map(item => {
+    (list || []).forEach(item => {
       var text = item.departments.map((department) => {
         return department.name;
       }).join(", ")

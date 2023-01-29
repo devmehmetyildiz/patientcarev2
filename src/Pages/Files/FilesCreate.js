@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Checkbox, Container, Divider, Form, Icon, Table } from 'semantic-ui-react'
-import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
-import formToObject from 'form-to-object'
-import Popup from '../../Utils/Popup'
+import { Divider, Form, Table } from 'semantic-ui-react'
+import { Breadcrumb, Button, Header } from 'semantic-ui-react'
+import Notification from '../../Utils/Notification'
 import LoadingPage from '../../Utils/LoadingPage'
-import jsonToFormData from 'json-form-data';
 
 export class FilesCreate extends Component {
 
@@ -16,16 +14,14 @@ export class FilesCreate extends Component {
     }
   }
 
+  componentDidUpdate() {
+    const { Files, removeFilenotification } = this.props
+    Notification(Files.notifications, removeFilenotification)
+  }
+
   render() {
 
-    const { removeFilenotification, Files, isLoading, isDispatching } = this.props
-    const { notifications, } = Files
-
-    if (notifications && notifications.length > 0) {
-      let msg = notifications[0]
-      Popup(msg.type, msg.code, msg.description)
-      removeFilenotification()
-    }
+    const { isLoading, isDispatching } = this.props
 
     return (
       isLoading || isDispatching ? <LoadingPage /> :
@@ -110,7 +106,7 @@ export class FilesCreate extends Component {
 
     let errors = []
     this.state.selectedFiles.forEach(data => {
-      if (!data.name || data.name == '') {
+      if (!data.name || data.name === '') {
         errors.push({ type: 'Error', code: 'Files', description: 'İsim Boş Olamaz' })
       }
     });
@@ -142,7 +138,7 @@ export class FilesCreate extends Component {
         createdUser: '',
         updatedUser: '',
         deleteUser: '',
-        willDelete:false,
+        willDelete: false,
         isActive: true,
       }]
     })

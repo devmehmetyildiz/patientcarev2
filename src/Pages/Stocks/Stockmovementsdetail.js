@@ -1,19 +1,16 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Divider, Dropdown, Form, FormField, Icon, Label, Modal } from 'semantic-ui-react'
-import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
+import { Divider, Dropdown, Form,  Label } from 'semantic-ui-react'
+import { Breadcrumb,  Grid, GridColumn, Header } from 'semantic-ui-react'
 import { MOVEMENTTYPES } from '../../Utils/Constants'
-import DataTable from '../../Utils/DataTable'
 import LoadingPage from '../../Utils/LoadingPage'
-import NoDataScreen from '../../Utils/NoDataScreen'
 import Popup from '../../Utils/Popup'
 
 export default class Stockmovementsdetail extends Component {
 
   constructor(props) {
     super(props)
-    const selectedStock = null
-    this.state = { selectedStock }
+    this.state = { selectedStock:null }
   }
 
   componentDidMount() {
@@ -89,8 +86,7 @@ export default class Stockmovementsdetail extends Component {
                 {list.length > 0 ?
                   <div className="timeline rounded-t-full">
                     {list.map((item, index) => {
-                      console.log('item: ', item);
-                      if (index % 2 == 0) {
+                      if (index % 2 === 0) {
                         return <div className='mt-8 w-full relative block'>
                           <div className='p-2 absolute top-[50%] left-[50%] bg-[#810202] rounded-full' style={{ transform: 'translate(-50%,-50%)' }} />
                           <div className='w-[6px] h-[140%]  absolute top-[50%] left-[50%] bg-[#810202] ' style={{ transform: 'translate(-50%,-50%)' }} />

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Breadcrumb, Button, Checkbox, Divider, Form, Header } from 'semantic-ui-react'
+import { Breadcrumb, Button, Divider, Form, Header } from 'semantic-ui-react'
 import Popup from '../../Utils/Popup'
 import formToObject from 'form-to-object'
 import LoadingPage from '../../Utils/LoadingPage'
@@ -8,9 +8,8 @@ import LoadingPage from '../../Utils/LoadingPage'
 export default class PatienttypesEdit extends Component {
   constructor(props) {
     super(props)
-    const isDatafetched = false
     this.state = {
-      isDatafetched
+      isDatafetched:false
     }
   }
 

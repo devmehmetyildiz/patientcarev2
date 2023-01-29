@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Checkbox, Container, Divider, Dropdown, Form, Icon } from 'semantic-ui-react'
-import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
+import { Divider, Dropdown, Form } from 'semantic-ui-react'
+import { Breadcrumb, Button, Header } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
-import Popup from '../../Utils/Popup'
 import LoadingPage from '../../Utils/LoadingPage'
 import Notification from '../../Utils/Notification'
 
@@ -24,11 +23,14 @@ export class DepartmentsCreate extends Component {
     GetStations()
   }
 
-  render() {
+  componentDidUpdate() {
     const { Departments, Stations, removeDepartmentnotification, removeStationnotification } = this.props
+    Notification(Departments.notifications, removeDepartmentnotification)
+    Notification(Stations.notifications, removeStationnotification)
+  }
 
-    Notification(Departments.notification, removeDepartmentnotification)
-    Notification(Stations.notification, removeStationnotification)
+  render() {
+    const { Departments, Stations } = this.props
 
     const Stationoptions = Stations.list.map(station => {
       return { key: station.concurrencyStamp, text: station.name, value: station.concurrencyStamp }

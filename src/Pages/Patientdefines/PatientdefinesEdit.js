@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Checkbox, Container, Divider, Dropdown, Form, FormGroup, Icon, Popup } from 'semantic-ui-react'
-import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
+import { Divider, Dropdown, Form, } from 'semantic-ui-react'
+import { Breadcrumb, Button, Header } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
-import Popuputil from '../../Utils/Popup'
+import Notification from '../../Utils/Notification'
 import LoadingPage from '../../Utils/LoadingPage'
 
 export default class PatientdefinesEdit extends Component {
@@ -33,7 +33,7 @@ export default class PatientdefinesEdit extends Component {
   }
 
   componentDidUpdate() {
-    const { Patientdefines, Costumertypes, Patienttypes } = this.props
+    const { Patientdefines, Costumertypes, removeCostumertypenotification, removePatienttypenotification, Patienttypes, removePatientdefinenotification } = this.props
     const { selected_record, isLoading } = Patientdefines
     if (selected_record && Object.keys(selected_record).length > 0 && selected_record.id != 0 && Costumertypes.list.length > 0 && !Costumertypes.isLoading && Patienttypes.list.length > 0 && !Patienttypes.isLoading && !isLoading && !this.state.isDatafetched) {
       this.setState({
@@ -47,26 +47,14 @@ export default class PatientdefinesEdit extends Component {
         isDatafetched: true
       })
     }
+    Notification(Patientdefines.notifications, removePatientdefinenotification)
+    Notification(Costumertypes.notifications, removeCostumertypenotification)
+    Notification(Patienttypes.notifications, removePatienttypenotification)
   }
 
   render() {
-    const { Costumertypes, Patienttypes, Patientdefines, removeCostumertypenotification, removePatienttypenotification, removePatientdefinenotification } = this.props
+    const { Costumertypes, Patienttypes, Patientdefines } = this.props
     const { selected_record } = Patientdefines
-    if (Costumertypes.notifications && Costumertypes.notifications.length > 0) {
-      let msg = Costumertypes.notifications[0]
-      Popuputil(msg.type, msg.code, msg.description)
-      removeCostumertypenotification()
-    }
-    if (Patienttypes.notifications && Patienttypes.notifications.length > 0) {
-      let msg = Patienttypes.notifications[0]
-      Popuputil(msg.type, msg.code, msg.description)
-      removePatienttypenotification()
-    }
-    if (Patientdefines.notifications && Patientdefines.notifications.length > 0) {
-      let msg = Patientdefines.notifications[0]
-      Popuputil(msg.type, msg.code, msg.description)
-      removePatientdefinenotification()
-    }
 
     const Costumertypeoptions = Costumertypes.list.map(costumertype => {
       return { key: costumertype.concurrencyStamp, text: costumertype.name, value: costumertype.concurrencyStamp }
@@ -194,8 +182,6 @@ export default class PatientdefinesEdit extends Component {
     const { EditPatientdefines, history, fillPatientdefinenotification, Patientdefines } = this.props
     const data = formToObject(e.target)
     data.patienttypeid = this.state.selectedpatienttype
-    console.log('this.state.selectedpatienttype: ', this.state.selectedpatienttype);
-    console.log('data.patienttypeid: ', data.patienttypeid);
     data.costumertypeid = this.state.selectedcostumertype
     data.ismotheralive = this.state.selectedMotherstatus
     data.isfatheralive = this.state.selectedFatherstatus
@@ -205,24 +191,24 @@ export default class PatientdefinesEdit extends Component {
 
 
 
-    if (!data.dateofbirth || data.dateofbirth == '') {
+    if (!data.dateofbirth || data.dateofbirth === '') {
       data.dateofbirth = null
     }
-    if (!data.dateofdeath || data.dateofdeath == '') {
+    if (!data.dateofdeath || data.dateofdeath === '') {
       data.dateofdeath = null
     }
-    if (!data.childnumber || data.childnumber == '') {
+    if (!data.childnumber || data.childnumber === '') {
       data.childnumber = 0
     }
-    if (!data.disabledchildnumber || data.disabledchildnumber == '') {
+    if (!data.disabledchildnumber || data.disabledchildnumber === '') {
       data.disabledchildnumber = 0
     }
 
     let errors = []
-    if (!data.firstname || data.firstname == '') {
+    if (!data.firstname || data.firstname === '') {
       errors.push({ type: 'Error', code: 'Hasta Tanımları', description: 'İsim Boş Olamaz' })
     }
-    if (!data.lastname || data.lastname == '') {
+    if (!data.lastname || data.lastname === '') {
       errors.push({ type: 'Error', code: 'Hasta Tanımları', description: 'Soyisim Boş Olamaz' })
     }
     if (errors.length > 0) {
@@ -230,7 +216,6 @@ export default class PatientdefinesEdit extends Component {
         fillPatientdefinenotification(error)
       })
     } else {
-      console.log('data: ', data);
       EditPatientdefines({ ...Patientdefines.selected_record, ...data }, history)
     }
   }

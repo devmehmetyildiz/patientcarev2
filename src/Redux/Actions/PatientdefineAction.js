@@ -37,7 +37,7 @@ export const GetPatientdefines = () => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.GET_PATIENTDEFINES_INIT })
     await instanse.get(ROUTES.PATIENTDEFINE + "/GetAll")
         .then(response => {
-            { dispatch({ type: ACTION_TYPES.GET_PATIENTDEFINES_SUCCESS, payload: response.data }) }
+            dispatch({ type: ACTION_TYPES.GET_PATIENTDEFINES_SUCCESS, payload: response.data })
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_PATIENTDEFINES_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -49,7 +49,7 @@ export const GetPatientdefine = (guid) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.GET_PATIENTDEFINE_INIT })
     await instanse.get(ROUTES.PATIENTDEFINE + `/Getselected?guid=${guid}`)
         .then(response => {
-            { dispatch({ type: ACTION_TYPES.GET_PATIENTDEFINE_SUCCESS, payload: response.data }) }
+            dispatch({ type: ACTION_TYPES.GET_PATIENTDEFINE_SUCCESS, payload: response.data })
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_PATIENTDEFINES_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -61,10 +61,8 @@ export const AddPatientdefines = (data, historypusher) => async (dispatch, getSt
     dispatch({ type: ACTION_TYPES.ADD_PATIENTDEFINE_INIT })
     await instanse.post(ROUTES.PATIENTDEFINE + "/Add", data)
         .then(response => {
-            {
-                dispatch({ type: ACTION_TYPES.ADD_PATIENTDEFINE_SUCCESS, payload: response.data })
-                historypusher.push('/Patientdefines')
-            }
+            dispatch({ type: ACTION_TYPES.ADD_PATIENTDEFINE_SUCCESS, payload: response.data })
+            historypusher.push('/Patientdefines')
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_PATIENTDEFINES_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -76,10 +74,8 @@ export const EditPatientdefines = (data, historypusher) => async (dispatch, getS
     dispatch({ type: ACTION_TYPES.EDIT_PATIENTDEFINE_INIT })
     await instanse.post(ROUTES.PATIENTDEFINE + "/Update", data)
         .then(response => {
-            {
-                dispatch({ type: ACTION_TYPES.EDIT_PATIENTDEFINE_SUCCESS, payload: response.data })
-                historypusher.push('/Patientdefines')
-            }
+            dispatch({ type: ACTION_TYPES.EDIT_PATIENTDEFINE_SUCCESS, payload: response.data })
+            historypusher.push('/Patientdefines')
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_PATIENTDEFINES_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -93,9 +89,7 @@ export const DeletePatientdefines = (data) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.DELETE_PATIENTDEFINE_INIT })
     await instanse.post(ROUTES.PATIENTDEFINE + "/Delete", data)
         .then(response => {
-            {
-                dispatch({ type: ACTION_TYPES.DELETE_PATIENTDEFINE_SUCCESS, payload: response.data })
-            }
+            dispatch({ type: ACTION_TYPES.DELETE_PATIENTDEFINE_SUCCESS, payload: response.data })
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_PATIENTDEFINES_NOTIFICATION, payload: AxiosErrorHelper(error) })

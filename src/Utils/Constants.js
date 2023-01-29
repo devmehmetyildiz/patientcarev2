@@ -28,7 +28,13 @@ export const ROUTES = {
     STOCKMOVEMENT: 'Stockmovement',
     WAREHOUSE: 'Warehouse',
     PATIENTSTOCK: 'Patientstock',
-    PATIENTSTOCKMOVEMENT: 'Patientstockmovement'
+    PATIENTSTOCKMOVEMENT: 'Patientstockmovement',
+    TODODEFINE: 'Tododefine',
+    TODOGROUPDEFINE: 'Todogroupdefine',
+    PATIENTMOVEMENT: 'Patientmovement',
+    CHECKPERIOD: 'Checkperiod',
+    PERIOD: 'Period',
+
 }
 
 
@@ -36,4 +42,14 @@ export const MOVEMENTTYPES = [
     { Name: "Stokdan düşme", value: -1, color: 'gray' },
     { Name: "Transfer", value: 0, color: 'green' },
     { Name: "Stok Ekleme", value: 1, color: 'orange' },
+]
+
+export const PATIENTMOVEMENTTYPE = [
+    { Name: "Kurumdan Cıkıs", value: 0 },
+    { Name: "Kuruma Giriş", value: 1 },
+    { Name: "İlk Kayıt", value: 2 },
+    { Name: "Hastane Çıkış", value: 3 },
+    { Name: "Hastane Giris", value: 4 },
+    { Name: "Ölüm", value: 5 },
+    { Name: "Kontrol", value: 6 },
 ]

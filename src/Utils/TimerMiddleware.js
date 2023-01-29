@@ -1,4 +1,4 @@
-import { ACTION_TYPES, removenotification } from "../Redux/Actions/ProfileAction"
+import { ACTION_TYPES } from "../Redux/Actions/ProfileAction"
 import Popup from "./Popup"
 
 export default function ({ dispatch, getState }) {

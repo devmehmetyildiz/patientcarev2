@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Divider, Icon, Loader, Modal, Table } from 'semantic-ui-react'
+import { Divider, Icon, Modal } from 'semantic-ui-react'
 import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
-import DataTable from '../../Utils/DataTable'
 import LoadingPage from '../../Utils/LoadingPage'
-import Popup from '../../Utils/Popup'
 import NoDataScreen from '../../Utils/NoDataScreen'
 import PurchaseordersList from './PurchaseordersList'
 import Notification from '../../Utils/Notification'
@@ -75,7 +73,7 @@ export default class Purchaseorders extends Component {
       }) : []
     };
 
-    (list || []).map(item => {
+    (list || []).forEach(item => {
       item.complete = <Icon link size='large' color='red' name='check square' onClick={() => { this.setState({ selectedrecord: item, openComplete: true }) }} />
       item.edit = <Link to={`/Purchaseorders/${item.concurrencyStamp}/edit`} ><Icon size='large' className='row-edit' name='edit' /></Link>
       item.delete = <Icon link size='large' color='red' name='alternate trash' onClick={() => { this.setState({ selectedrecord: item, open: true }) }} />

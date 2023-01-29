@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Divider, Icon, Loader, Modal } from 'semantic-ui-react'
+import { Divider, Icon, Modal } from 'semantic-ui-react'
 import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
 import DataTable from '../../Utils/DataTable'
 import LoadingPage from '../../Utils/LoadingPage'
-import Popup from '../../Utils/Popup'
+import Notification from '../../Utils/Notification'
 import NoDataScreen from '../../Utils/NoDataScreen'
 import ColumnChooser from '../../Containers/Utils/ColumnChooser'
 
@@ -12,17 +12,20 @@ export default class Patientdefines extends Component {
 
   constructor(props) {
     super(props)
-    const open = false
-    const selectedrecord = {}
     this.state = {
-      open,
-      selectedrecord
+      open: false,
+      selectedrecord: {}
     }
   }
 
   componentDidMount() {
     const { GetPatientdefines } = this.props
     GetPatientdefines()
+  }
+
+  componentDidUpdate() {
+    const { Patientdefines, removePatientdefinenotification } = this.props
+    Notification(Patientdefines.notifications, removePatientdefinenotification)
   }
 
   render() {
@@ -70,13 +73,8 @@ export default class Patientdefines extends Component {
       { accessor: 'edit', Header: "Güncelle", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' },
       { accessor: 'delete', Header: "Sil", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
 
-    const { Patientdefines, DeletePatientdefines, removePatientdefinenotification,Profile } = this.props
-    const { notifications, list, isLoading, isDispatching } = Patientdefines
-    if (notifications && notifications.length > 0) {
-      let msg = notifications[0]
-      Popup(msg.type, msg.code, msg.description)
-      removePatientdefinenotification()
-    }
+    const { Patientdefines, DeletePatientdefines, Profile } = this.props
+    const { list, isLoading, isDispatching } = Patientdefines
 
     const metaKey = "Patientdefines"
     let tableMeta = (Profile.tablemeta || []).find(u => u.meta === metaKey)
@@ -90,7 +88,7 @@ export default class Patientdefines extends Component {
     };
 
 
-    (list || []).map(item => {
+    (list || []).forEach(item => {
       item.edit = <Link to={`/Patientdefines/${item.concurrencyStamp}/edit`} ><Icon size='large' className='row-edit' name='edit' /></Link>
       item.delete = <Icon link size='large' color='red' name='alternate trash' onClick={() => { this.setState({ selectedrecord: item, open: true }) }} />
     })
@@ -136,7 +134,7 @@ export default class Patientdefines extends Component {
             <Modal.Content image>
               <Modal.Description>
                 <p>
-                  <span className='font-bold'>{Object.keys(this.state.selectedrecord).length > 0 ? `${this.state.selectedrecord?.firstname +" " +this.state.selectedrecord?.lastname} ` : null} </span>
+                  <span className='font-bold'>{Object.keys(this.state.selectedrecord).length > 0 ? `${this.state.selectedrecord?.firstname + " " + this.state.selectedrecord?.lastname} ` : null} </span>
                   hasta kaydını silmek istediğinize emin misiniz?
                 </p>
               </Modal.Description>

@@ -11,17 +11,12 @@ export default class Users extends Component {
 
   constructor(props) {
     super(props)
-    const open = false
-    const selectedrecord = {}
-    const stationsStatus = []
-    const rolesStatus = []
-    const departmentsStatus = []
     this.state = {
-      open,
-      selectedrecord,
-      stationsStatus,
-      rolesStatus,
-      departmentsStatus,
+      open:false,
+      selectedrecord:{},
+      stationsStatus:[],
+      rolesStatus:[],
+      departmentsStatus:[],
     }
   }
 
@@ -133,19 +128,19 @@ export default class Users extends Component {
       }) : []
     };
 
-    (list || []).map(item => {
-      var text = item.stations.map((station) => {
+    (list || []).forEach(item => {
+      var stationtext = item.stations.map((station) => {
         return station.name;
       }).join(", ")
-      item.stationstxt = text;
-      var text = item.roles.map((role) => {
+      item.stationstxt = stationtext;
+      var rolestext = item.roles.map((role) => {
         return role.name;
       }).join(", ")
-      item.rolestxt = text;
-      var text = item.departments.map((department) => {
+      item.rolestxt = rolestext;
+      var departmentext = item.departments.map((department) => {
         return department.name;
       }).join(", ")
-      item.departmentstxt = text;
+      item.departmentstxt = departmentext;
       item.edit = <Link to={`/Users/${item.concurrencyStamp}/edit`} ><Icon size='large' className='row-edit' name='edit' /></Link>
       item.delete = <Icon link size='large' color='red' name='alternate trash' onClick={() => { this.setState({ selectedrecord: item, open: true }) }} />
     })

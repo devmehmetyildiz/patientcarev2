@@ -1,5 +1,3 @@
-import { useContext } from "react"
-import { Redirect, } from "react-router-dom";
 import Cookies from "universal-cookie";
 
 export default function AxiosErrorHelper(error) {
@@ -10,21 +8,11 @@ export default function AxiosErrorHelper(error) {
         if (error.code === 'ERR_BAD_REQUEST' && error.response) {
             switch (error.response.status) {
                 case 401:
-                    const localcookies = new Cookies();
-                    localcookies.remove("patientcare")
-                    if (window.location.pathname !== "/Login") {
-                        window.location = `/Login?redirecturl=${window.location.pathname}`
-                    }
-                    if (window.location.pathname === "/Login") {
-                        return { type: 'Error', code: error.code, description: 'Kullanıcı Adı veya şifre Hatalı' }
-                    } else {
-                        return { type: 'Error', code: error.code, description: 'Lütfen Tekrardan Giriş Yapınız' }
-                    }
+                    return handle401Error(error)
                 case 404:
-                    return { type: 'Error', code: error.code, description: 'URL BULUNAMADI' }
+                    return handle404Error(error)
                 case 400:
-                    console.log('error: ', error);
-                    return { type: 'Error', code: error.code, description: 'EKSİK DATA' }
+                    return handle400Error(error)
                 case 500:
                     return { type: 'Error', code: error.code, description: 'SERVER HATASI' }
                 case 403:
@@ -36,4 +24,77 @@ export default function AxiosErrorHelper(error) {
     }
 
     return null
+}
+
+
+
+function handle401Error(error) {
+    const localcookies = new Cookies();
+    localcookies.remove("patientcare")
+    if (window.location.pathname !== "/Login") {
+        window.location = `/Login?redirecturl=${window.location.pathname}`
+    }
+    if (window.location.pathname === "/Login") {
+        return { type: 'Error', code: error.code, description: 'Kullanıcı Adı veya şifre Hatalı' }
+    } else {
+        return { type: 'Error', code: error.code, description: 'Lütfen Tekrardan Giriş Yapınız' }
+    }
+}
+
+
+function handle404Error(error) {
+    if (error.response && error.response.data) {
+        let data = error.response.data
+        if (Array.isArray(data)) {
+            data.forEach(err => {
+                if (err.status && err.massage) {
+                    return { type: 'Error', code: err.status, description: err.massage }
+                }
+                if (err.Msg && error.request.responseURL) {
+                    return { type: 'Error', code: err.Msg, description: error.request.responseURL }
+                }
+            });
+        } else {
+            if (data.status && data.massage) {
+                return { type: 'Error', code: data.status, description: data.massage }
+            }
+            if (data.Msg && error.request.responseURL) {
+                return { type: 'Error', code: data.Msg, description: error.request.responseURL }
+            }
+        }
+        return { type: 'Error', code: error.code, description: 'URL BULUNAMADI' }
+    }
+
+}
+
+function handle400Error(error) {
+    if (error.response && error.response.data) {
+        let data = error.response.data
+        if (Array.isArray(Object.keys(data?.errors))) {
+            if (Array.isArray(Object.values(data?.errors))) {
+                console.log('data: ', data);
+                console.log('Object.values(data?.errors): ', Object.values(data?.errors));
+                return { type: 'Error', code: data.title, description: Object.values(data?.errors)[0] }
+            } else {
+                data?.errors.forEach(err => {
+                    if (err.status && err.massage) {
+                        return { type: 'Error', code: err.status, description: err.massage }
+                    }
+                    if (err.Msg && error.request.responseURL) {
+                        return { type: 'Error', code: err.Msg, description: error.request.responseURL }
+                    }
+
+                });
+            }
+        } else {
+            if (data.status && data.massage) {
+                return { type: 'Error', code: data.status, description: data.massage }
+            }
+            if (data.Msg && error.request.responseURL) {
+                return { type: 'Error', code: data.Msg, description: error.request.responseURL }
+            }
+        }
+        return { type: 'Error', code: error.code, description: 'URL BULUNAMADI' }
+    }
+
 }

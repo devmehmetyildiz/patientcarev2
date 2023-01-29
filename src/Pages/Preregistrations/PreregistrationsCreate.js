@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Checkbox, Container, Divider, Dropdown, Form, FormField, Icon, Popup } from 'semantic-ui-react'
-import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
+import {  Divider, Dropdown, Form, FormField, Popup } from 'semantic-ui-react'
+import { Breadcrumb, Button,  Header } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
 import LoadingPage from '../../Utils/LoadingPage'
 import Notification from '../../Utils/Notification'
@@ -151,6 +151,12 @@ export default class PreregistrationsCreate extends Component {
     const { Patientdefines, fillPatientnotification, Patients, AddPatients, history, removePatientnotification } = this.props
     const { selectedCase, selectedDepartment, selectedGenderstatus, selectedPatientdefine } = this.state
     const data = formToObject(e.target)
+    if(data.registerdate==='' || data.registerdate===undefined){
+      data.registerdate=null
+    }
+    if(data.approvaldate==='' || data.approvaldate===undefined){
+      data.approvaldate=null
+    }
     const response = {
       id: 0,
       concurrencyStamp: null,

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Breadcrumb, Button, Divider, Dropdown, Form, FormGroup, Header } from 'semantic-ui-react'
+import { Breadcrumb, Button, Divider, Dropdown, Form,  Header } from 'semantic-ui-react'
 import Popup from '../../Utils/Popup'
 import formToObject from 'form-to-object'
 import LoadingPage from '../../Utils/LoadingPage'
@@ -9,16 +9,11 @@ export default class UsersCreate extends Component {
 
   constructor(props) {
     super(props)
-    const selectedstations = []
-    const selectedroles = []
-    const selecteddepartments = []
-    const selectedlanguage = {}
-    const record = {}
     this.state = {
-      selectedstations,
-      selectedroles,
-      selectedlanguage,
-      selecteddepartments,
+      selectedstations:[],
+      selectedroles:[],
+      selectedlanguage:{},
+      selecteddepartments:[],
     }
   }
 
@@ -161,16 +156,16 @@ export default class UsersCreate extends Component {
     data.isActive = true
 
     let errors = []
-    if (!data.name || data.name == '') {
+    if (!data.name || data.name === '') {
       errors.push({ type: 'Error', code: 'Kullanıcılar', description: 'İsim boş olamaz' })
     }
-    if (!data.surname || data.surname == '') {
+    if (!data.surname || data.surname === '') {
       errors.push({ type: 'Error', code: 'Kullanıcılar', description: 'Soy isim boş olamaz' })
     }
-    if (!data.username || data.username == '') {
+    if (!data.username || data.username === '') {
       errors.push({ type: 'Error', code: 'Kullanıcılar', description: 'Kullanıcı adı boş olamaz' })
     }
-    if (!data.email || data.email == '') {
+    if (!data.email || data.email === '') {
       errors.push({ type: 'Error', code: 'Kullanıcılar', description: 'E-posta boş olamaz' })
     }
     if (!data.stations || data.stations.length <= 0) {
@@ -182,7 +177,7 @@ export default class UsersCreate extends Component {
     if (!data.roles || data.roles.length <= 0) {
       errors.push({ type: 'Error', code: 'Kullanıcılar', description: 'Hiç Bir Rol seçili değil' })
     }
-    if (!data.language || data.language == '' || Object.keys(data.language).length <= 0) {
+    if (!data.language || data.language === '' || Object.keys(data.language).length <= 0) {
       errors.push({ type: 'Error', code: 'Kullanıcılar', description: 'Dil seçili değil' })
     }
     if (errors.length > 0) {

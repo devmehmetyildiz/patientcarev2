@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Breadcrumb, Button, Checkbox, Divider, Form, Header } from 'semantic-ui-react'
+import { Breadcrumb, Button, Divider, Form, Header } from 'semantic-ui-react'
 import Popup from '../../Utils/Popup'
 import formToObject from 'form-to-object'
 import LoadingPage from '../../Utils/LoadingPage'
 
-export class StationsEdit extends Component {
+export default class StationsEdit extends Component {
   constructor(props) {
     super(props)
     const isDatafetched = false
@@ -71,10 +71,9 @@ export class StationsEdit extends Component {
     e.preventDefault()
 
     const { EditStations, history, fillStationnotification, Stations } = this.props
-    const pushData = { ...Stations.selected_record }
-    const editData = formToObject(e.target)
+    const data = formToObject(e.target)
     let errors = []
-    if (!editData.name || editData.name == '') {
+    if (!data.name || data.name === '') {
       errors.push({ type: 'Error', code: 'Stations', description: 'İsim Boş Olamaz' })
     }
     if (errors.length > 0) {
@@ -82,10 +81,8 @@ export class StationsEdit extends Component {
         fillStationnotification(error)
       })
     } else {
-      pushData.name = editData.name
-      EditStations(pushData, history)
+      EditStations({...Stations.selected_record,...data}, history)
     }
 
   }
 }
-export default StationsEdit

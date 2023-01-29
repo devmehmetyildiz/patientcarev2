@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Breadcrumb, Button, Checkbox, Divider, Dropdown, Form, Header } from 'semantic-ui-react'
+import { Breadcrumb, Button,  Divider, Dropdown, Form, Header } from 'semantic-ui-react'
 import Popup from '../../Utils/Popup'
 import formToObject from 'form-to-object'
 import LoadingPage from '../../Utils/LoadingPage'
@@ -10,7 +10,6 @@ export default class StockdefinesEdit extends Component {
     super(props)
     const selecteddepartment = {}
     const selectedunit = {}
-    const record = {}
     const isDatafetched = false
     this.state = {
       selecteddepartment,
@@ -33,7 +32,7 @@ export default class StockdefinesEdit extends Component {
   componentDidUpdate() {
     const { Departments, Units, Stockdefines } = this.props
     const { selected_record, isLoading } = Stockdefines
-    if (selected_record && Object.keys(selected_record).length > 0 && selected_record.id != 0 && Units.list.length > 0 && !Units.isLoading && Departments.list.length > 0 && !Departments.isLoading && !isLoading && !this.state.isDatafetched) {
+    if (selected_record && Object.keys(selected_record).length > 0 && selected_record.id !== 0 && Units.list.length > 0 && !Units.isLoading && Departments.list.length > 0 && !Departments.isLoading && !isLoading && !this.state.isDatafetched) {
       this.setState({
         selecteddepartment: selected_record.department.concurrencyStamp, selectedunit: selected_record.unit.concurrencyStamp, isDatafetched: true
       })
@@ -120,7 +119,7 @@ export default class StockdefinesEdit extends Component {
     data.unit = this.state.selectedunit
 
     let errors = []
-    if (!data.name || data.name == '') {
+    if (!data.name || data.name === '') {
       errors.push({ type: 'Error', code: 'Ürün Tanımları', description: 'İsim Boş Olamaz' })
     }
     if (!Departments.list.find(u => u.concurrencyStamp === this.state.selecteddepartment)) {

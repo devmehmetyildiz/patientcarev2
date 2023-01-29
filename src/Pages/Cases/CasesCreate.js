@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Checkbox, Container, Divider, Dropdown, Form, FormGroup, Icon, Popup } from 'semantic-ui-react'
-import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
+import { Divider, Dropdown, Form, Icon, Popup } from 'semantic-ui-react'
+import { Breadcrumb, Button, Header } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
-import Popuputil from '../../Utils/Popup'
+import Notification from '../../Utils/Notification'
 import LoadingPage from '../../Utils/LoadingPage'
 
 export default class CasesCreate extends Component {
@@ -25,18 +25,15 @@ export default class CasesCreate extends Component {
     GetDepartments()
   }
 
+  componentDidUpdate() {
+    const { Cases, removeCasenotification, Departments, removeDepartmentnotification } = this.props
+    Notification(Cases.notifications, removeCasenotification)
+    Notification(Departments.notifications, removeDepartmentnotification)
+  }
+
+
   render() {
-    const { Cases, Departments, removeCasenotification, removeDepartmentnotification } = this.props
-    if (Cases.notifications && Cases.notifications.length > 0) {
-      let msg = Cases.notifications[0]
-      Popuputil(msg.type, msg.code, msg.description)
-      removeCasenotification()
-    }
-    if (Departments.notifications && Departments.notifications.length > 0) {
-      let msg = Departments.notifications[0]
-      Popuputil(msg.type, msg.code, msg.description)
-      removeDepartmentnotification()
-    }
+    const { Cases, Departments } = this.props
 
     const Departmentoptions = Departments.list.map(department => {
       return { key: department.concurrencyStamp, text: department.name, value: department.concurrencyStamp }

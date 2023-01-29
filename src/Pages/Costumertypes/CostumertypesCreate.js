@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Checkbox, Container, Divider, Dropdown, Form, FormGroup, Icon, Popup } from 'semantic-ui-react'
-import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
+import { Divider, Dropdown, Form, } from 'semantic-ui-react'
+import { Breadcrumb, Button, Header } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
-import Popuputil from '../../Utils/Popup'
+import Notification from '../../Utils/Notification'
 import LoadingPage from '../../Utils/LoadingPage'
 
 export default class CostumertypesCreate extends Component {
@@ -23,23 +23,18 @@ export default class CostumertypesCreate extends Component {
     GetDepartments()
   }
 
+  componentDidUpdate() {
+    const { Costumertypes, removeCostumertypenotification, Departments, removeDepartmentnotification } = this.props
+    Notification(Costumertypes.notifications, removeCostumertypenotification)
+    Notification(Departments.notifications, removeDepartmentnotification)
+  }
+
   render() {
-    const { Costumertypes, Departments, removeCostumertypenotification, removeDepartmentnotification } = this.props
-    if (Costumertypes.notifications && Costumertypes.notifications.length > 0) {
-      let msg = Costumertypes.notifications[0]
-      Popuputil(msg.type, msg.code, msg.description)
-      removeCostumertypenotification()
-    }
-    if (Departments.notifications && Departments.notifications.length > 0) {
-      let msg = Departments.notifications[0]
-      Popuputil(msg.type, msg.code, msg.description)
-      removeDepartmentnotification()
-    }
+    const { Costumertypes, Departments } = this.props
 
     const Departmentoptions = Departments.list.map(department => {
       return { key: department.concurrencyStamp, text: department.name, value: department.concurrencyStamp }
     })
-
 
     return (
       Costumertypes.isLoading || Costumertypes.isDispatching || Departments.isLoading || Departments.isDispatching ? <LoadingPage /> :

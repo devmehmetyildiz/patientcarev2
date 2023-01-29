@@ -1,6 +1,5 @@
 import { ROUTES } from "../../Utils/Constants";
 import AxiosErrorHelper from "../../Utils/AxiosErrorHelper";
-import Popup from "../../Utils/Popup";
 import instanse from "./axios"
 
 export const ACTION_TYPES = {
@@ -46,7 +45,7 @@ export const GetRoles = () => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.GET_ROLES_INIT })
     await instanse.get(ROUTES.ROLE + "/GetAll")
         .then(response => {
-            { dispatch({ type: ACTION_TYPES.GET_ROLES_SUCCESS, payload: response.data }) }
+            dispatch({ type: ACTION_TYPES.GET_ROLES_SUCCESS, payload: response.data })
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_ROLES_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -58,7 +57,7 @@ export const GetRole = (guid) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.GET_ROLE_INIT })
     await instanse.get(ROUTES.ROLE + `/Getselected?guid=${guid}`)
         .then(response => {
-            { dispatch({ type: ACTION_TYPES.GET_ROLE_SUCCESS, payload: response.data }) }
+            dispatch({ type: ACTION_TYPES.GET_ROLE_SUCCESS, payload: response.data }) 
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_ROLES_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -70,7 +69,7 @@ export const GetAuthories = () => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.GET_ALLAUTHS_INIT })
     await instanse.get(ROUTES.ROLE + "/GetAllAuthories")
         .then(response => {
-            { dispatch({ type: ACTION_TYPES.GET_ALLAUTHS_SUCCESS, payload: response.data }) }
+            dispatch({ type: ACTION_TYPES.GET_ALLAUTHS_SUCCESS, payload: response.data })
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_ROLES_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -81,7 +80,7 @@ export const GetAuthorygroups = () => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.GET_ALLAUTHGROUP_INIT })
     await instanse.get(ROUTES.ROLE + "/GetAllAuthoryGroups")
         .then(response => {
-            { dispatch({ type: ACTION_TYPES.GET_ALLAUTHGROUP_SUCCESS, payload: response.data }) }
+            dispatch({ type: ACTION_TYPES.GET_ALLAUTHGROUP_SUCCESS, payload: response.data })
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_ROLES_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -93,10 +92,8 @@ export const AddRoles = (data, historypusher) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.ADD_ROLE_INIT })
     await instanse.post(ROUTES.ROLE + "/Add", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.ADD_ROLE_SUCCESS, payload: response.data })
                 historypusher.push('/Roles')
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_ROLES_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -108,10 +105,8 @@ export const EditRoles = (data, historypusher) => async (dispatch, getState) => 
     dispatch({ type: ACTION_TYPES.EDIT_ROLE_INIT })
     await instanse.post(ROUTES.ROLE + "/Update", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.EDIT_ROLE_SUCCESS, payload: response.data })
                 historypusher.push('/Roles')
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_ROLES_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -125,9 +120,7 @@ export const DeleteRoles = (data) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.DELETE_ROLE_INIT })
     await instanse.post(ROUTES.ROLE + "/Delete", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.DELETE_ROLE_SUCCESS, payload: response.data })
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_ROLES_NOTIFICATION, payload: AxiosErrorHelper(error) })

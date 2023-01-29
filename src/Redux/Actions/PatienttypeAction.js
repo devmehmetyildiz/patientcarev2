@@ -1,6 +1,5 @@
 import { ROUTES } from "../../Utils/Constants";
 import AxiosErrorHelper from "../../Utils/AxiosErrorHelper";
-import Popup from "../../Utils/Popup";
 import instanse from "./axios"
 
 export const ACTION_TYPES = {
@@ -38,7 +37,7 @@ export const GetPatienttypes = () => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.GET_PATIENTTYPES_INIT })
     await instanse.get(ROUTES.PATIENTTYPE + "/GetAll")
         .then(response => {
-            { dispatch({ type: ACTION_TYPES.GET_PATIENTTYPES_SUCCESS, payload: response.data }) }
+            dispatch({ type: ACTION_TYPES.GET_PATIENTTYPES_SUCCESS, payload: response.data })
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_PATIENTTYPES_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -50,7 +49,7 @@ export const GetPatienttype = (guid) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.GET_PATIENTTYPE_INIT })
     await instanse.get(ROUTES.PATIENTTYPE + `/Getselected?guid=${guid}`)
         .then(response => {
-            { dispatch({ type: ACTION_TYPES.GET_PATIENTTYPE_SUCCESS, payload: response.data }) }
+            dispatch({ type: ACTION_TYPES.GET_PATIENTTYPE_SUCCESS, payload: response.data })
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_PATIENTTYPES_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -62,10 +61,8 @@ export const AddPatienttypes = (data, historypusher) => async (dispatch, getStat
     dispatch({ type: ACTION_TYPES.ADD_PATIENTTYPE_INIT })
     await instanse.post(ROUTES.PATIENTTYPE + "/Add", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.ADD_PATIENTTYPE_SUCCESS, payload: response.data })
                 historypusher.push('/Patienttypes')
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_PATIENTTYPES_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -77,10 +74,8 @@ export const EditPatienttypes = (data, historypusher) => async (dispatch, getSta
     dispatch({ type: ACTION_TYPES.EDIT_PATIENTTYPE_INIT })
     await instanse.post(ROUTES.PATIENTTYPE + "/Update", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.EDIT_PATIENTTYPE_SUCCESS, payload: response.data })
                 historypusher.push('/Patienttypes')
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_PATIENTTYPES_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -94,9 +89,7 @@ export const DeletePatienttypes = (data) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.DELETE_PATIENTTYPE_INIT })
     await instanse.post(ROUTES.PATIENTTYPE + "/Delete", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.DELETE_PATIENTTYPE_SUCCESS, payload: response.data })
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_PATIENTTYPES_NOTIFICATION, payload: AxiosErrorHelper(error) })

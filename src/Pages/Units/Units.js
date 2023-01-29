@@ -12,13 +12,10 @@ export default class Units extends Component {
 
   constructor(props) {
     super(props)
-    const open = false
-    const selectedrecord = {}
-    const departmentStatus = []
     this.state = {
-      open,
-      selectedrecord,
-      departmentStatus
+      open:false,
+      selectedrecord:{},
+      departmentStatus:[]
     }
   }
 
@@ -51,7 +48,7 @@ export default class Units extends Component {
       {
         Header: 'Birim Türü', accessor: 'unittype', sortable: true, canGroupBy: true, canFilter: true,
         Cell: col => {
-          return unitstatusOption.find(u => u.value == col.value) ? unitstatusOption.find(u => u.value == col.value).text : 'tanımsız'
+          return unitstatusOption.find(u => u.value === col.value) ? unitstatusOption.find(u => u.value === col.value).text : 'tanımsız'
         },
       },
       {
@@ -100,7 +97,7 @@ export default class Units extends Component {
       }) : []
     };
 
-    (list || []).map(item => {
+    (list || []).forEach(item => {
       var text = item.departments.map((department) => {
         return department.name;
       }).join(", ")

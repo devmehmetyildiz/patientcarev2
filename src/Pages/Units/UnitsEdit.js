@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Breadcrumb, Button, Checkbox, Divider, Dropdown, Form, Header } from 'semantic-ui-react'
+import { Breadcrumb, Button, Divider, Dropdown, Form, Header } from 'semantic-ui-react'
 import Popup from '../../Utils/Popup'
 import formToObject from 'form-to-object'
 import LoadingPage from '../../Utils/LoadingPage'
@@ -8,14 +8,10 @@ export default class UnitsEdit extends Component {
 
   constructor(props) {
     super(props)
-    const selecteddepartments = []
-    const record = {}
-    const selectedstatusOption = {}
-    const isDatafetched = false
     this.state = {
-      selecteddepartments,
-      isDatafetched,
-      selectedstatusOption
+      selecteddepartments: [],
+      isDatafetched: false,
+      selectedstatusOption: {}
     }
   }
 
@@ -32,7 +28,7 @@ export default class UnitsEdit extends Component {
   componentDidUpdate() {
     const { Departments, Units } = this.props
     const { selected_record, isLoading } = Units
-    if (selected_record && Object.keys(selected_record).length > 0 && selected_record.id != 0 && Departments.list.length > 0 && !Departments.isLoading && !isLoading && !this.state.isDatafetched) {
+    if (selected_record && Object.keys(selected_record).length > 0 && selected_record.id !== 0 && Departments.list.length > 0 && !Departments.isLoading && !isLoading && !this.state.isDatafetched) {
       this.setState({
         selecteddepartments: selected_record.departments.map(department => {
           return department.concurrencyStamp
@@ -128,7 +124,6 @@ export default class UnitsEdit extends Component {
 
     const { EditUnits, history, fillUnitnotification, Departments, Units } = this.props
     const { list } = Departments
-    const pushData = { ...Units.selected_record }
     const data = formToObject(e.target)
     data.unittype = this.state.selectedstatusOption
     data.departments = this.state.selecteddepartments.map(department => {
@@ -136,7 +131,7 @@ export default class UnitsEdit extends Component {
     })
 
     let errors = []
-    if (!data.name || data.name == '') {
+    if (!data.name || data.name === '') {
       errors.push({ type: 'Error', code: 'Birimler', description: 'İsim Boş Olamaz' })
     }
     if ((Number.isNaN(data.unittype))) {
@@ -150,10 +145,8 @@ export default class UnitsEdit extends Component {
         fillUnitnotification(error)
       })
     } else {
-      pushData.name = data.name
-      pushData.departments = data.departments
-      pushData.unittype = data.unittype
-      EditUnits(pushData, history)
+
+      EditUnits({ ...Units.selected_record, ...data }, history)
     }
   }
 
@@ -162,7 +155,6 @@ export default class UnitsEdit extends Component {
   }
 
   handleChangeOption = (e, { value }) => {
-    console.log('value: ', value);
     this.setState({ selectedstatusOption: value })
   }
 }

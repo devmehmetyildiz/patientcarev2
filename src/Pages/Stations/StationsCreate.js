@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
-import { Link, withRouter } from 'react-router-dom'
-import { Checkbox, Container, Divider, Form, Icon } from 'semantic-ui-react'
-import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
+import { Link,  } from 'react-router-dom'
+import { Divider, Form } from 'semantic-ui-react'
+import { Breadcrumb, Button, Header } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
-import Popup from '../../Utils/Popup'
 import LoadingPage from '../../Utils/LoadingPage'
 import Notification from '../../Utils/Notification'
 
-export  class StationsCreate extends Component {
+export  default class StationsCreate extends Component {
   render() {
 
     const { removeStationnotification, Stations } = this.props
@@ -67,7 +66,7 @@ export  class StationsCreate extends Component {
     data.isActive = true
 
     let errors = []
-    if (!data.name || data.name == '') {
+    if (!data.name || data.name === '') {
       errors.push({ type: 'Error', code: 'Stations', description: 'İsim Boş Olamaz' })
     }
     if (errors.length > 0) {
@@ -81,4 +80,3 @@ export  class StationsCreate extends Component {
 
 
 }
-export default withRouter(StationsCreate)

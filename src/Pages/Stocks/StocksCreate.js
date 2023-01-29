@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Checkbox, Container, Divider, Dropdown, Form, Icon } from 'semantic-ui-react'
-import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
+import { Divider, Dropdown, Form } from 'semantic-ui-react'
+import { Breadcrumb, Button, Header } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
 import Popuputil from '../../Utils/Popup'
 import LoadingPage from '../../Utils/LoadingPage'
@@ -13,7 +13,7 @@ export default class StocksCreate extends Component {
       selecteddepartments: "",
       selectedstockdefine: "",
       selectedwarehouse: "",
-      open:false
+      open: false
     }
   }
 
@@ -79,7 +79,7 @@ export default class StocksCreate extends Component {
           <div className='w-full bg-white p-4 rounded-lg shadow-md outline outline-[1px] outline-gray-200 '>
             <Form className='' onSubmit={this.handleSubmit}>
               <Form.Group widths='equal'>
-              <Form.Field>
+                <Form.Field>
                   <label className='text-[#000000de]'>Ambar</label>
                   <Dropdown placeholder='Ambar' fluid selection options={Warehouseoptions} onChange={this.handleChangeWarehouse} value={this.state.selectedwarehouse} />
                 </Form.Field>
@@ -138,16 +138,16 @@ export default class StocksCreate extends Component {
     data.source = "Single Request"
 
     let errors = []
-    if (!data.departmentid || data.departmentid == '') {
+    if (!data.departmentid || data.departmentid === '') {
       errors.push({ type: 'Error', code: 'Ürünler', description: 'Departman Seçili Değil' })
     }
-    if (!data.warehouseID || data.warehouseID == '') {
+    if (!data.warehouseID || data.warehouseID === '') {
       errors.push({ type: 'Error', code: 'Ürünler', description: 'Ambar Seçili Değil' })
     }
-    if (!data.stockdefineID || data.stockdefineID == '') {
+    if (!data.stockdefineID || data.stockdefineID === '') {
       errors.push({ type: 'Error', code: 'Ürünler', description: 'Ürün Seçili Değil' })
     }
-    if (!data.amount || data.amount == '' || data.amount == 0) {
+    if (!data.amount || data.amount === '' || data.amount === 0) {
       errors.push({ type: 'Error', code: 'Ürünler', description: 'Miktar girilmedi' })
     }
     if (errors.length > 0) {

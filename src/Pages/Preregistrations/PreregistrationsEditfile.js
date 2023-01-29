@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Breadcrumb, Button, Divider, Form, Header, Icon, Label, Table } from 'semantic-ui-react'
+import { Breadcrumb, Button, Divider, Dropdown, Form, Header, Icon, Label, Table } from 'semantic-ui-react'
 import { ROUTES } from '../../Utils/Constants'
 import LoadingPage from '../../Utils/LoadingPage'
 import Notification from '../../Utils/Notification'
@@ -11,7 +11,8 @@ export default class PreregistrationsEditfile extends Component {
         super(props)
         this.state = {
             isDatafetched: false,
-            selectedFiles: []
+            selectedFiles: [],
+            showImage: true
         }
     }
 
@@ -28,9 +29,13 @@ export default class PreregistrationsEditfile extends Component {
         const { Patients } = this.props
         const { selected_record, isLoading } = Patients
         if (selected_record && Object.keys(selected_record).length > 0 &&
-            selected_record.id != 0 && !isLoading && !this.state.isDatafetched) {
+            selected_record.id !== 0 && !isLoading && !this.state.isDatafetched) {
+            var response = (selected_record.files || [])
+            response.forEach(element => {
+                element.key = Math.random()
+            });
             this.setState({
-                selectedFiles: (selected_record.files || []), isDatafetched: true
+                selectedFiles: response, isDatafetched: true
             })
         }
     }
@@ -42,8 +47,20 @@ export default class PreregistrationsEditfile extends Component {
         const { selected_record, isLoading, isDispatching } = Patients
         Notification(Files.notifications, removeFilenotification)
         Notification(Patients.notifications, removePatientnotification)
+
+        const usagetypes = [
+            { key: 'Genel Depolama', value: 'Genel Depolama', text: 'Genel Depolama' },
+            { key: 'Hasta Dosyaları', value: 'Hasta Dosyaları', text: 'Hasta Dosyaları' },
+            { key: 'PP', value: 'PP', text: 'PP' },
+            { key: 'ilk görüşme formu', value: 'ilk görüşme formu', text: 'ilk görüşme formu' },
+            { key: 'engelli teslim etme-alma formu', value: 'engelli teslim etme-alma formu', text: 'engelli teslim etme-alma formu' },
+            { key: 'ilk kabul formu', value: 'ilk kabul formu', text: 'ilk kabul formu' },
+            { key: 'engelli mülkiyeti teslim alma formu', value: 'engelli mülkiyeti teslim alma formu', text: 'engelli mülkiyeti teslim alma formu' },
+            { key: 'genel vücut kontrol formu', value: 'genel vücut kontrol formu', text: 'genel vücut kontrol formu' },
+        ]
+
         return (
-            isLoading || isDispatching ? <LoadingPage /> :
+            Files.isLoading || Files.isDispatching || isLoading || isDispatching ? <LoadingPage /> :
                 <div className='w-full h-[calc(100vh-59px-2rem)] mx-auto flex flex-col  justify-start items-center pb-[2rem] px-[2rem]'>
                     <div className='w-full mx-auto align-middle'>
                         <Header style={{ backgroundColor: 'transparent', border: 'none', color: '#3d3d3d' }} as='h1' attached='top' >
@@ -59,7 +76,7 @@ export default class PreregistrationsEditfile extends Component {
                     <Divider className='w-full  h-[1px]' />
                     <div className='w-full bg-white p-4 rounded-lg shadow-md outline outline-[1px] outline-gray-200 '>
                         <Header as='h2' icon textAlign='center'>
-                            {(selected_record.files || []).filter(u => u.name === 'PP').length > 0 ? <img src={`${process.env.REACT_APP_BACKEND_URL}/${ROUTES.FILE}/GetImage?guid=${selected_record.concurrencyStamp}`} className="rounded-full" style={{ width: '100px', height: '100px' }} />
+                            {(selected_record.files || []).filter(u => u.name === 'PP').length > 0 ? <img alt='pp' src={`${process.env.REACT_APP_BACKEND_URL}/${ROUTES.FILE}/GetImage?guid=${selected_record.concurrencyStamp}`} className="rounded-full" style={{ width: '100px', height: '100px' }} />
                                 : <Icon name='users' circular />}
                             <Header.Content>{`${selected_record.patientdefine?.firstname} ${selected_record.patientdefine?.lastname} - ${selected_record.patientdefine?.countryID}`}</Header.Content>
                         </Header>
@@ -92,11 +109,11 @@ export default class PreregistrationsEditfile extends Component {
                                                 <Form.Input disabled={file.willDelete} value={file.parentid} readOnly placeholder="Üst ID" name="parentid" fluid onChange={(e) => { this.selectedFilesChangeHandler(file.key, 'parentid', e.target.value) }} />
                                             </Table.Cell>
                                             <Table.Cell>
-                                                <Form.Input disabled={file.willDelete} placeholder='Kullanım Türü' name="usagetype" fluid onChange={(e) => { this.selectedFilesChangeHandler(file.key, 'usagetype', e.target.value) }} />
+                                                <Dropdown disabled={file.willDelete} value={file.usagetype} placeholder='Ürün Tanımı' name="usagetype" clearable selection fluid options={usagetypes} onChange={(e, data) => { this.selectedFilesChangeHandler(file.key, 'usagetype', data.value) }} />
                                             </Table.Cell>
                                             <Table.Cell>
                                                 {file.fileChanged ? <Form.Input className='w-full flex justify-center items-center' disabled={file.willDelete} type='file' name="file" fluid onChange={(e) => { this.selectedFilesChangeHandler(file.key, 'file', e) }} />
-                                                    : <><Label active={!file.willDelete}>{file.filename}</Label>{(file.concurrencyStamp && file.concurrencyStamp !== "") && <a target="_blank" rel="noopener noreferrer" href={`${process.env.REACT_APP_BACKEND_URL}/File/Getfile?guid=${file.concurrencyStamp}`}><Icon name='download' /></a>}</>}
+                                                    : <><Label active={!file.willDelete}>{file.filename}</Label>{(file.concurrencyStamp && file.concurrencyStamp !== "") && <a target="_blank" rel="noopener noreferrer" href={`${process.env.REACT_APP_BACKEND_URL}/File/Getfile?guid=${file.concurrencyStamp}`} ><Icon name='download' /></a>}</>}
                                             </Table.Cell>
                                             <Table.Cell>
                                                 {!file.fileChanged ? <Icon onClick={() => { this.handleFilechange(file.key, file.fileChanged) }} className='cursor-pointer' color='green' name='checkmark' />
@@ -133,29 +150,11 @@ export default class PreregistrationsEditfile extends Component {
         e.preventDefault()
 
         const { EditFiles, history, fillFilenotification } = this.props
-        const files = this.state.selectedFiles
-
-        files.forEach(data => {
-            if (!data.updateTime) {
-                delete data.updateTime
-            }
-            if (!data.deleteTime) {
-                delete data.deleteTime
-            }
-            delete data.fileChanged
-            delete data.key
-        });
-
-        const formData = new FormData();
-        files.forEach((data, index) => {
-            Object.keys(data).forEach(element => {
-                formData.append(`list[${index}].${element}`, data[element])
-            });
-        })
+        const files = [...this.state.selectedFiles]
 
         let errors = []
         this.state.selectedFiles.forEach(data => {
-            if (!data.name || data.name == '') {
+            if (!data.name || data.name === '') {
                 errors.push({ type: 'Error', code: 'Files', description: 'İsim Boş Olamaz' })
             }
         });
@@ -164,6 +163,24 @@ export default class PreregistrationsEditfile extends Component {
                 fillFilenotification(error)
             })
         } else {
+            files.forEach(data => {
+                if (!data.updateTime) {
+                    delete data.updateTime
+                }
+                if (!data.deleteTime) {
+                    delete data.deleteTime
+                }
+                delete data.fileChanged
+                delete data.key
+            });
+
+            const formData = new FormData();
+            files.forEach((data, index) => {
+                Object.keys(data).forEach(element => {
+                    formData.append(`list[${index}].${element}`, data[element])
+                });
+            })
+
             EditFiles(formData, history, "/Preregistrations")
         }
     }

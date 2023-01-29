@@ -9,7 +9,6 @@ export default function WarehousesList({ Data, Columns, initialConfig }) {
       let stocks = []
       const decoratedstocks = Data.filter(u => u.id === row.original.id)
       decoratedstocks.forEach(element => {
-        console.log('element: ', element);
         stocks = stocks.concat(element.stocks)
       });
       const stockcolumns = [

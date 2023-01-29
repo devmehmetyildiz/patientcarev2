@@ -8,12 +8,9 @@ import LoadingPage from '../../Utils/LoadingPage'
 export class RolesEdit extends Component {
     constructor(props) {
         super(props)
-        const selectedauths = []
-        const record = {}
-        const isDatafetched = false
         this.state = {
-            selectedauths,
-            isDatafetched
+            selectedauths: [],
+            isDatafetched: false
         }
     }
 
@@ -29,17 +26,17 @@ export class RolesEdit extends Component {
     }
 
     componentDidUpdate() {
-        const { EditRoles, GetAuthories, Roles, removeRolenotification } = this.props
-        const { list, notifications, authories, selected_record, authorygroups, isLoading } = Roles
-        if (selected_record && Object.keys(selected_record).length > 0 && selected_record.id != 0 && authories.length > 0 && authorygroups.length > 0 && !isLoading && !this.state.isDatafetched) {
+        const { Roles } = this.props
+        const { authories, selected_record, authorygroups, isLoading } = Roles
+        if (selected_record && Object.keys(selected_record).length > 0 && selected_record.id !== 0 && authories.length > 0 && authorygroups.length > 0 && !isLoading && !this.state.isDatafetched) {
             this.setState({ selectedauths: selected_record.authories, isDatafetched: true })
         }
     }
 
     render() {
 
-        const { EditRoles, GetAuthories, Roles, removeRolenotification } = this.props
-        const { list, notifications, authories, selected_record, authorygroups, isLoading, isDispatching } = Roles
+        const { Roles, removeRolenotification } = this.props
+        const { notifications, authories, selected_record, authorygroups, isLoading, isDispatching } = Roles
         if (notifications && notifications.length > 0) {
             let msg = notifications[0]
             Popup(msg.type, msg.code, msg.description)
@@ -120,39 +117,34 @@ export class RolesEdit extends Component {
         e.preventDefault()
 
         const { EditRoles, history, fillRolenotification, Roles } = this.props
-        const pushData = { ...Roles.selected_record }
-        const editData = formToObject(e.target)
+        const data = formToObject(e.target)
         let errors = []
-        if (!editData.name || editData.name == '') {
+        if (!data.name || data.name === '') {
             errors.push({ type: 'Error', code: 'Roller', description: 'İsim Boş Olamaz' })
         }
         if (!this.state.selectedauths || this.state.selectedauths.length <= 0) {
             errors.push({ type: 'Error', code: 'Roller', description: 'Hiç Bir Yetki seçili değil' })
         }
-
-
         if (errors.length > 0) {
             errors.forEach(error => {
                 fillRolenotification(error)
             })
         } else {
-            pushData.name = editData.name
-            pushData.authories = this.state.selectedauths
-            EditRoles(pushData, history)
+            EditRoles({ ...Roles.selected_record, ...data }, history)
         }
 
     }
 
     handleAddgroup = (e) => {
         e.target.checked
-            ? this.setState({ selectedauths: this.state.selectedauths.filter(function (el) { return el.group != e.target.id; }).concat(this.props.Roles.authories.filter(u => u.group === e.target.id) || []) })
-            : this.setState({ selectedauths: this.state.selectedauths.filter(function (el) { return el.group != e.target.id; }) })
+            ? this.setState({ selectedauths: this.state.selectedauths.filter(function (el) { return el.group !== e.target.id; }).concat(this.props.Roles.authories.filter(u => u.group === e.target.id) || []) })
+            : this.setState({ selectedauths: this.state.selectedauths.filter(function (el) { return el.group !== e.target.id; }) })
     }
 
     handleClickauthory = (e) => {
         e.target.checked
             ? this.setState({ selectedauths: [...this.state.selectedauths, (this.props.Roles.authories.length > 0 ? this.props.Roles.authories : []).find(u => u.name === e.target.id)] })
-            : this.setState({ selectedauths: this.state.selectedauths.filter(function (el) { return el.name != e.target.id; }) })
+            : this.setState({ selectedauths: this.state.selectedauths.filter(function (el) { return el.name !== e.target.id; }) })
     }
 }
 export default RolesEdit

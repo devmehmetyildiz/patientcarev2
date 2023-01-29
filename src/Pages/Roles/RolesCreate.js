@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Checkbox, Container, Divider, Form, Icon } from 'semantic-ui-react'
-import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
+import { Checkbox, Divider, Form } from 'semantic-ui-react'
+import { Breadcrumb, Button, Header } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
 import Popup from '../../Utils/Popup'
 import LoadingPage from '../../Utils/LoadingPage'
@@ -10,10 +10,8 @@ export class RolesCreate extends Component {
 
     constructor(props) {
         super(props)
-        const selectedauths = []
-        const record = {}
         this.state = {
-            selectedauths
+            selectedauths:[]
         }
     }
 
@@ -112,7 +110,7 @@ export class RolesCreate extends Component {
         data.isActive = true
 
         let errors = []
-        if (!data.name || data.name == '') {
+        if (!data.name || data.name === '') {
             errors.push({ type: 'Error', code: 'Roller', description: 'İsim Boş Olamaz' })
         }
         if (!this.state.selectedauths || this.state.selectedauths.length <= 0) {
@@ -129,14 +127,14 @@ export class RolesCreate extends Component {
 
     handleAddgroup = (e) => {
         e.target.checked
-            ? this.setState({ selectedauths: this.state.selectedauths.filter(function (el) { return el.group != e.target.id; }).concat(this.props.Roles.authories.filter(u => u.group === e.target.id) || []) })
-            : this.setState({ selectedauths: this.state.selectedauths.filter(function (el) { return el.group != e.target.id; }) })
+            ? this.setState({ selectedauths: this.state.selectedauths.filter(function (el) { return el.group !== e.target.id; }).concat(this.props.Roles.authories.filter(u => u.group === e.target.id) || []) })
+            : this.setState({ selectedauths: this.state.selectedauths.filter(function (el) { return el.group !== e.target.id; }) })
     }
 
     handleClickauthory = (e) => {
         e.target.checked
             ? this.setState({ selectedauths: [...this.state.selectedauths, this.props.Roles.authories.find(u => u.name === e.target.id)] })
-            : this.setState({ selectedauths: this.state.selectedauths.filter(function (el) { return el.name != e.target.id; }) })
+            : this.setState({ selectedauths: this.state.selectedauths.filter(function (el) { return el.name !== e.target.id; }) })
     }
 }
 export default RolesCreate

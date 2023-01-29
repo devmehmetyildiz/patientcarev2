@@ -1,16 +1,15 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Breadcrumb, Button, Checkbox, Divider, Form, Header } from 'semantic-ui-react'
-import Popup from '../../Utils/Popup'
+import { Breadcrumb, Button,  Divider, Form, Header } from 'semantic-ui-react'
+import Notification from '../../Utils/Notification'
 import formToObject from 'form-to-object'
 import LoadingPage from '../../Utils/LoadingPage'
 
 export class FilesEdit extends Component {
   constructor(props) {
     super(props)
-    const isDatafetched = false
     this.state = {
-      isDatafetched
+      isDatafetched:false
     }
   }
 
@@ -23,16 +22,15 @@ export class FilesEdit extends Component {
     }
   }
 
+  componentDidUpdate() {
+    const { Files, removeFilenotification } = this.props
+    Notification(Files.notifications, removeFilenotification)
+  }
 
   render() {
 
-    const { Files, removeFilenotification } = this.props
-    const { notifications, selected_record, isLoading, isDispatching } = Files
-    if (notifications && notifications.length > 0) {
-      let msg = notifications[0]
-      Popup(msg.type, msg.code, msg.description)
-      removeFilenotification()
-    }
+    const { Files } = this.props
+    const {  selected_record, isLoading, isDispatching } = Files
 
     return (
       isLoading || isDispatching ? <LoadingPage /> :

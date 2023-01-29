@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Checkbox, Container, Divider, Dropdown, Form, Icon } from 'semantic-ui-react'
-import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
+import { Divider, Dropdown, Form} from 'semantic-ui-react'
+import { Breadcrumb, Button, Header } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
 import Popuputil from '../../Utils/Popup'
 import LoadingPage from '../../Utils/LoadingPage'
@@ -33,7 +33,7 @@ export default class StocksEdit extends Component {
   componentDidUpdate() {
     const { Departments, Stockdefines, Stocks, Warehouses } = this.props
     const { selected_record, isLoading } = Stocks
-    if (selected_record && Object.keys(selected_record).length > 0 && selected_record.id != 0
+    if (selected_record && Object.keys(selected_record).length > 0 && selected_record.id !== 0
       && Departments.list.length > 0 && !Departments.isLoading
       && Warehouses.list.length > 0 && !Warehouses.isLoading
       && Stockdefines.list.length > 0 && !Stockdefines.isLoading && !isLoading && !this.state.isDatafetched) {
@@ -147,13 +147,13 @@ export default class StocksEdit extends Component {
     data.warehouseID = this.state.selectedwarehouse
 
     let errors = []
-    if (!data.departmentid || data.departmentid == '') {
+    if (!data.departmentid || data.departmentid === '') {
       errors.push({ type: 'Error', code: 'Ürünler', description: 'Departman Seçili Değil' })
     }
-    if (!data.warehouseID || data.warehouseID == '') {
+    if (!data.warehouseID || data.warehouseID === '') {
       errors.push({ type: 'Error', code: 'Ürünler', description: 'Ambar Seçili Değil' })
     }
-    if (!data.stockdefineID || data.stockdefineID == '') {
+    if (!data.stockdefineID || data.stockdefineID === '') {
       errors.push({ type: 'Error', code: 'Ürünler', description: 'Ürün Seçili Değil' })
     }
     if (errors.length > 0) {

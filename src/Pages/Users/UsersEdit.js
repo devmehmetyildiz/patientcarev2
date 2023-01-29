@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Breadcrumb, Button, Divider, Dropdown, Form, FormGroup, Header } from 'semantic-ui-react'
+import { Breadcrumb, Button, Divider, Dropdown, Form,  Header } from 'semantic-ui-react'
 import Popup from '../../Utils/Popup'
 import formToObject from 'form-to-object'
 import LoadingPage from '../../Utils/LoadingPage'
@@ -9,17 +9,12 @@ export default class UsersEdit extends Component {
 
   constructor(props) {
     super(props)
-    const selectedstations = []
-    const selectedroles = []
-    const selecteddepartments = []
-    const selectedlanguage = {}
-    const isDatafetched = false
     this.state = {
-      selectedstations,
-      selectedroles,
-      selectedlanguage,
-      selecteddepartments,
-      isDatafetched,
+      selectedstations:[],
+      selectedroles:[],
+      selectedlanguage:{},
+      selecteddepartments:[],
+      isDatafetched:false,
     }
   }
 
@@ -38,10 +33,9 @@ export default class UsersEdit extends Component {
   componentDidUpdate() {
     const { Departments, Roles, Stations, Users } = this.props
     const { selected_record, isLoading } = Users
-    if (selected_record && Object.keys(selected_record).length > 0 && selected_record.id != 0 &&
+    if (selected_record && Object.keys(selected_record).length > 0 && selected_record.id !== 0 &&
       Departments.list.length > 0 && !Departments.isLoading && Roles.list.length > 0 && !Roles.isLoading &&
       Stations.list.length > 0 && !Stations.isLoading && !isLoading && !this.state.isDatafetched) {
-      console.log('selected_record: ', selected_record);
       this.setState({
         selecteddepartments: selected_record.departments.map(department => {
           return department.concurrencyStamp
@@ -177,16 +171,16 @@ export default class UsersEdit extends Component {
     data.language = this.state.selectedlanguage
 
     let errors = []
-    if (!data.name || data.name == '') {
+    if (!data.name || data.name === '') {
       errors.push({ type: 'Error', code: 'Kullanıcılar', description: 'İsim boş olamaz' })
     }
-    if (!data.surname || data.surname == '') {
+    if (!data.surname || data.surname === '') {
       errors.push({ type: 'Error', code: 'Kullanıcılar', description: 'Soy isim boş olamaz' })
     }
-    if (!data.username || data.username == '') {
+    if (!data.username || data.username === '') {
       errors.push({ type: 'Error', code: 'Kullanıcılar', description: 'Kullanıcı adı boş olamaz' })
     }
-    if (!data.email || data.email == '') {
+    if (!data.email || data.email === '') {
       errors.push({ type: 'Error', code: 'Kullanıcılar', description: 'E-posta boş olamaz' })
     }
     if (!data.stations || data.stations.length <= 0) {
@@ -198,7 +192,7 @@ export default class UsersEdit extends Component {
     if (!data.roles || data.roles.length <= 0) {
       errors.push({ type: 'Error', code: 'Kullanıcılar', description: 'Hiç Bir Rol seçili değil' })
     }
-    if (!data.language || data.language == '') {
+    if (!data.language || data.language === '') {
       errors.push({ type: 'Error', code: 'Kullanıcılar', description: 'Dil seçili değil' })
     }
     if (errors.length > 0) {

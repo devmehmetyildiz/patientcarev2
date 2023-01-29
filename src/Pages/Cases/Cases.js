@@ -6,7 +6,7 @@ import ColumnChooser from '../../Containers/Utils/ColumnChooser'
 import DataTable from '../../Utils/DataTable'
 import LoadingPage from '../../Utils/LoadingPage'
 import NoDataScreen from '../../Utils/NoDataScreen'
-import Popup from '../../Utils/Popup'
+import Notification from '../../Utils/Notification'
 
 export default class Cases extends Component {
 
@@ -26,6 +26,11 @@ export default class Cases extends Component {
   componentDidMount() {
     const { GetCases } = this.props
     GetCases()
+  }
+
+  componentDidUpdate() {
+    const { Cases, removeCasenotification } = this.props
+    Notification(Cases.notifications, removeCasenotification)
   }
 
 
@@ -90,28 +95,24 @@ export default class Cases extends Component {
       { accessor: 'edit', Header: "Güncelle", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' },
       { accessor: 'delete', Header: "Sil", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
 
-  
 
-    const { Cases, removeCasenotification, DeleteCases,Profile } = this.props
-    const { notifications, list, isLoading, isDispatching } = Cases
-    if (notifications && notifications.length > 0) {
-      let msg = notifications[0]
-      Popup(msg.type, msg.code, msg.description)
-      removeCasenotification()
-    }
+
+    const { Cases, DeleteCases, Profile } = this.props
+    const { list, isLoading, isDispatching } = Cases
+
 
     const metaKey = "Cases"
-      let tableMeta = (Profile.tablemeta || []).find(u => u.meta === metaKey)
-      const initialConfig = {
-        hiddenColumns: tableMeta ? JSON.parse(tableMeta.config).filter(u => u.isVisible === false).map(item => {
-          return item.key
-        }) : [],
-        columnOrder: tableMeta ? JSON.parse(tableMeta.config).sort((a, b) => a.order - b.order).map(item => {
-          return item.key
-        }) : []
-      };
+    let tableMeta = (Profile.tablemeta || []).find(u => u.meta === metaKey)
+    const initialConfig = {
+      hiddenColumns: tableMeta ? JSON.parse(tableMeta.config).filter(u => u.isVisible === false).map(item => {
+        return item.key
+      }) : [],
+      columnOrder: tableMeta ? JSON.parse(tableMeta.config).sort((a, b) => a.order - b.order).map(item => {
+        return item.key
+      }) : []
+    };
 
-    (list || []).map(item => {
+    (list || []).forEach(item => {
       var text = item.departments.map((department) => {
         return department.name;
       }).join(", ")

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Checkbox, Container, Divider, Dropdown, Form, Icon } from 'semantic-ui-react'
-import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
+import {  Divider, Dropdown, Form } from 'semantic-ui-react'
+import { Breadcrumb, Button,  Header } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
 import Popuputil from '../../Utils/Popup'
 import LoadingPage from '../../Utils/LoadingPage'
@@ -43,10 +43,6 @@ export default class PurchaseorderstockmovementsCreate extends Component {
       { key: -1, text: "STOKDAN DÜŞME", value: -1 },
       { key: 1, text: "STOĞA EKLEME", value: 1 },
     ]
-
-
-
-
 
     return (
       Purchaseorderstocks.isLoading || Purchaseorderstocks.isDispatching || Purchaseorderstockmovements.isLoading || Purchaseorderstockmovements.isDispatching ? <LoadingPage /> :
@@ -115,10 +111,10 @@ export default class PurchaseorderstockmovementsCreate extends Component {
     data.isActive = true
 
     let errors = []
-    if (!data.movementtype || data.movementtype == '') {
+    if (!data.movementtype || data.movementtype === '') {
       errors.push({ type: 'Error', code: 'Ürünler', description: 'Hareket Seçili Değil' })
     }
-    if (!data.stockID || data.stockID == '') {
+    if (!data.stockID || data.stockID === '') {
       errors.push({ type: 'Error', code: 'Ürünler', description: 'Ürün Seçili Değil' })
     }
     if (data.amount === '') {

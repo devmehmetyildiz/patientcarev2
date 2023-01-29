@@ -37,7 +37,7 @@ export const GetUnits = () => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.GET_UNITS_INIT })
     await instanse.get(ROUTES.UNIT + "/GetAll")
         .then(response => {
-            { dispatch({ type: ACTION_TYPES.GET_UNITS_SUCCESS, payload: response.data }) }
+            dispatch({ type: ACTION_TYPES.GET_UNITS_SUCCESS, payload: response.data })
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_UNITS_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -49,7 +49,7 @@ export const GetUnit = (guid) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.GET_UNIT_INIT })
     await instanse.get(ROUTES.UNIT + `/Getselected?guid=${guid}`)
         .then(response => {
-            { dispatch({ type: ACTION_TYPES.GET_UNIT_SUCCESS, payload: response.data }) }
+            dispatch({ type: ACTION_TYPES.GET_UNIT_SUCCESS, payload: response.data })
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_UNITS_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -61,10 +61,8 @@ export const AddUnits = (data, historypusher) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.ADD_UNIT_INIT })
     await instanse.post(ROUTES.UNIT + "/Add", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.ADD_UNIT_SUCCESS, payload: response.data })
                 historypusher.push('/Units')
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_UNITS_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -76,10 +74,8 @@ export const EditUnits = (data, historypusher) => async (dispatch, getState) => 
     dispatch({ type: ACTION_TYPES.EDIT_UNIT_INIT })
     await instanse.post(ROUTES.UNIT + "/Update", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.EDIT_UNIT_SUCCESS, payload: response.data })
                 historypusher.push('/Units')
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_UNITS_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -93,9 +89,7 @@ export const DeleteUnits = (data) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.DELETE_UNIT_INIT })
     await instanse.post(ROUTES.UNIT + "/Delete", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.DELETE_UNIT_SUCCESS, payload: response.data })
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_UNITS_NOTIFICATION, payload: AxiosErrorHelper(error) })

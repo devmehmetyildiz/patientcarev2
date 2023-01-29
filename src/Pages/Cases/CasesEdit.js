@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Breadcrumb, Button, Checkbox, Divider, Dropdown, Form, Header, Icon, Popup } from 'semantic-ui-react'
-import PopupUtils from '../../Utils/Popup'
+import { Breadcrumb, Button, Divider, Dropdown, Form, Header, Icon, Popup } from 'semantic-ui-react'
+import Notification from '../../Utils/Notification'
 import formToObject from 'form-to-object'
 import LoadingPage from '../../Utils/LoadingPage'
 export default class CasesEdit extends Component {
@@ -30,7 +30,7 @@ export default class CasesEdit extends Component {
   }
 
   componentDidUpdate() {
-    const { Departments, Cases } = this.props
+    const { Departments, Cases, removeCasenotification, removeDepartmentnotification } = this.props
     const { selected_record, isLoading } = Cases
     if (selected_record && Object.keys(selected_record).length > 0 && selected_record.id != 0 && Departments.list.length > 0 && !Departments.isLoading && !isLoading && !this.state.isDatafetched) {
       this.setState({
@@ -39,22 +39,15 @@ export default class CasesEdit extends Component {
         }), isDatafetched: true, selectedstatusOption: selected_record.caseStatus
       })
     }
+    Notification(Cases.notifications, removeCasenotification)
+    Notification(Departments.notifications, removeDepartmentnotification)
   }
 
   render() {
 
-    const { Cases, Departments, removeDepartmentnotification, removeCasenotification } = this.props
+    const { Cases, Departments } = this.props
     const { selected_record } = Cases
-    if (Cases.notifications && Cases.notifications.length > 0) {
-      let msg = Cases.notifications[0]
-      PopupUtils(msg.type, msg.code, msg.description)
-      removeCasenotification()
-    }
-    if (Departments.notifications && Departments.notifications.length > 0) {
-      let msg = Departments.notifications[0]
-      PopupUtils(msg.type, msg.code, msg.description)
-      removeDepartmentnotification()
-    }
+
 
     const Departmentoptions = Departments.list.map(department => {
       return { key: department.concurrencyStamp, text: department.name, value: department.concurrencyStamp }

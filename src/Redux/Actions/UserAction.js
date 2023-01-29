@@ -33,7 +33,7 @@ export const GetUsers = () => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.GET_USERS_INIT })
     await instanse.get(ROUTES.USER + "/GetAll")
         .then(response => {
-            { dispatch({ type: ACTION_TYPES.GET_USERS_SUCCESS, payload: response.data }) }
+            dispatch({ type: ACTION_TYPES.GET_USERS_SUCCESS, payload: response.data })
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_USERS_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -45,7 +45,7 @@ export const GetUser = (guid) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.GET_USER_INIT })
     await instanse.get(ROUTES.USER + `/Getselected?guid=${guid}`)
         .then(response => {
-            { dispatch({ type: ACTION_TYPES.GET_USER_SUCCESS, payload: response.data }) }
+            dispatch({ type: ACTION_TYPES.GET_USER_SUCCESS, payload: response.data })
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_USERS_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -57,10 +57,8 @@ export const AddUsers = (data, historypusher) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.ADD_USER_INIT })
     await instanse.post(ROUTES.USER + "/Add", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.ADD_USER_SUCCESS, payload: response.data })
                 historypusher.push('/Users')
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_USERS_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -72,10 +70,8 @@ export const EditUsers = (data, historypusher) => async (dispatch, getState) => 
     dispatch({ type: ACTION_TYPES.EDIT_USER_INIT })
     await instanse.post(ROUTES.USER + "/Update", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.EDIT_USER_SUCCESS, payload: response.data })
                 historypusher.push('/Users')
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_USERS_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -89,9 +85,7 @@ export const DeleteUsers = (data) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.DELETE_USER_INIT })
     await instanse.post(ROUTES.USER + "/Delete", data)
         .then(response => {
-            {
                 dispatch({ type: ACTION_TYPES.DELETE_USER_SUCCESS, payload: response.data })
-            }
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_USERS_NOTIFICATION, payload: AxiosErrorHelper(error) })

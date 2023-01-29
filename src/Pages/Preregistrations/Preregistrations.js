@@ -1,24 +1,22 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Divider, Icon, Loader, Modal, Popup } from 'semantic-ui-react'
+import { Divider, Icon, Modal, Popup } from 'semantic-ui-react'
 import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
 import DataTable from '../../Utils/DataTable'
 import LoadingPage from '../../Utils/LoadingPage'
-import DeleteModal from "../../Utils/DeleteModal"
 import NoDataScreen from '../../Utils/NoDataScreen'
 import { ROUTES } from '../../Utils/Constants'
-import Popuputils from '../../Utils/Popup'
 import ColumnChooser from '../../Containers/Utils/ColumnChooser'
+import PreregistrationsComplete from './PreregistrationsComplete'
+import Notification from '../../Utils/Notification'
 
 export default class Preregistrations extends Component {
 
   constructor(props) {
     super(props)
-    const open = false
-    const selectedrecord = {}
     this.state = {
-      open,
-      selectedrecord,
+      open: false,
+      selectedrecord: {},
       stocksStatus: [],
       filesStatus: [],
     }
@@ -26,8 +24,9 @@ export default class Preregistrations extends Component {
 
   componentDidMount() {
     document.title = 'Ön Kayıtlar'
-    const { Getpreregistrations } = this.props
+    const { Getpreregistrations, GetWarehouses } = this.props
     Getpreregistrations()
+    GetWarehouses()
   }
 
   render() {
@@ -39,8 +38,8 @@ export default class Preregistrations extends Component {
         Header: 'İsim', accessor: 'name', sortable: true, canGroupBy: true, canFilter: true,
         Cell: col => {
           const itemId = col.row.original.concurrencyStamp
-          const patient = list.find(u => u.concurrencyStamp == itemId)
-          return <div className='flex justify-center items-center flex-row flex-nowrap whitespace-nowrap'>{patient.files.filter(u => u.name === 'PP').length > 0 ? <img src={`${process.env.REACT_APP_BACKEND_URL}/${ROUTES.FILE}/GetImage?guid=${patient.concurrencyStamp}`} className="rounded-full" style={{ width: '40px', height: '40px' }} />
+          const patient = list.find(u => u.concurrencyStamp === itemId)
+          return <div className='flex justify-center items-center flex-row flex-nowrap whitespace-nowrap'>{patient.files.filter(u => u.name === 'PP').length > 0 ? <img alt='pp' src={`${process.env.REACT_APP_BACKEND_URL}/${ROUTES.FILE}/GetImage?guid=${patient.concurrencyStamp}`} className="rounded-full" style={{ width: '40px', height: '40px' }} />
             : null}{`${patient?.patientdefine?.firstname} ${patient?.patientdefine?.lastname}`}</div>
         },
       },
@@ -108,18 +107,14 @@ export default class Preregistrations extends Component {
       { Header: 'Güncelleyen Kullanıcı', accessor: 'updatedUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Oluşturma Zamanı', accessor: 'createTime', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Güncelleme Zamanı', accessor: 'updateTime', sortable: true, canGroupBy: true, canFilter: true, },
+      { accessor: 'enter', Header: "Kuruma Al", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' },
       { accessor: 'actions', Header: "Eylemler", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }
     ]
 
-
-    const { Patients, DeletePatients, removePatientnotification, Profile } = this.props
+    const { Patients, Warehouses, removeWarehousenotification, DeletePatients, removePatientnotification, Profile, history, fillPatientnotification, CompletePrepatients } = this.props
     const { notifications, list, isLoading, isDispatching } = Patients
-    if (notifications && notifications.length > 0) {
-      let msg = notifications[0]
-      Popuputils(msg.type, msg.code, msg.description)
-      removePatientnotification()
-    }
-
+    Notification(notifications, removePatientnotification)
+    Notification(Warehouses.notifications, removeWarehousenotification)
 
     const metaKey = "Preregistrations"
     let tableMeta = (Profile.tablemeta || []).find(u => u.meta === metaKey)
@@ -132,7 +127,7 @@ export default class Preregistrations extends Component {
       }) : []
     };
 
-    (list || []).map(item => {
+    (list || []).forEach(item => {
       var filestext = item.files.map((file) => {
         return file.name;
       }).join(", ")
@@ -155,6 +150,9 @@ export default class Preregistrations extends Component {
           hideOnScroll
           position='left center'
         />
+      </React.Fragment>
+      item.enter = <React.Fragment>
+        <PreregistrationsComplete Warehouseslist={Warehouses.list} data={item} history={history} CompletePrepatients={CompletePrepatients} fillPatientnotification={fillPatientnotification} removePatientnotification={removePatientnotification} />
       </React.Fragment>
     })
     return (

@@ -12,13 +12,10 @@ export class Roles extends Component {
 
   constructor(props) {
     super(props)
-    const open = false
-    const selectedrecord = {}
-    const authoriesStatus = []
     this.state = {
-      open,
-      selectedrecord,
-      authoriesStatus
+      open:false,
+      selectedrecord:{},
+      authoriesStatus:[]
     }
   }
 
@@ -82,7 +79,7 @@ export class Roles extends Component {
       }) : []
     };
 
-    (list || []).map(item => {
+    (list || []).forEach(item => {
       var text = item.authories.map((authory) => {
         return authory.name;
       }).join(", ")

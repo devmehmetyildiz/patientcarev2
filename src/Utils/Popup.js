@@ -1,5 +1,4 @@
-import cogoToast from 'cogo-toast';
-
+import cogoToast from "@successtar/cogo-toast";
 
 function Popup(type, subject, message) {
     const toastoptions = {

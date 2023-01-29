@@ -7,19 +7,15 @@ import DataTable from '../../Utils/DataTable'
 import LoadingPage from '../../Utils/LoadingPage'
 import NoDataScreen from '../../Utils/NoDataScreen'
 import Notification from '../../Utils/Notification'
-import Popup from '../../Utils/Popup'
 
 export class Departments extends Component {
 
   constructor(props) {
     super(props)
-    const open = false
-    const selectedrecord = {}
-    const stationsStatus = []
     this.state = {
-      open,
-      selectedrecord,
-      stationsStatus
+      open: false,
+      selectedrecord: {},
+      stationsStatus: []
     }
   }
 
@@ -29,9 +25,12 @@ export class Departments extends Component {
     GetDepartments()
   }
 
-  render() {
+  componentDidUpdate() {
+    const { Departments, removeDepartmentnotification } = this.props
+    Notification(Departments.notifications, removeDepartmentnotification)
+  }
 
-    
+  render() {
 
     const Columns = [
       { Header: 'Id', accessor: 'id', sortable: true, canGroupBy: true, canFilter: true, },
@@ -64,14 +63,9 @@ export class Departments extends Component {
       { accessor: 'delete', Header: "Sil", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
 
 
-    const { Departments, removeDepartmentnotification, DeleteDepartments, Profile } = this.props
-    const { notifications, list, isLoading, isDispatching } = Departments
+    const { Departments, DeleteDepartments, Profile } = this.props
+    const { list, isLoading, isDispatching } = Departments
 
-    if (notifications && notifications.length > 0) {
-      let msg = notifications[0]
-      Popup(msg.type, msg.code, msg.description)
-      removeDepartmentnotification()
-    }
     const metaKey = "Departments"
     let tableMeta = (Profile.tablemeta || []).find(u => u.meta === metaKey)
     const initialConfig = {
@@ -83,7 +77,7 @@ export class Departments extends Component {
       }) : []
     };
 
-    (list || []).map(item => {
+    (list || []).forEach(item => {
       var text = item.stations.map((station) => {
         return station.name;
       }).join(", ")

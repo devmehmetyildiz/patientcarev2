@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Icon, Button, Modal, Radio, Header, Table, Label, Checkbox } from 'semantic-ui-react'
+import { Icon, Button, Modal,  Table, Label, Checkbox } from 'semantic-ui-react'
 
 class ColumnChooser extends Component {
   constructor(props) {
@@ -37,7 +37,7 @@ class ColumnChooser extends Component {
     const { decoratedColumns } = this.state
 
     return <React.Fragment>
-      <Button Inverted icon='settings' color='violet' floated='right' onClick={() => { this.setState({ opened: !this.state.opened }) }} >Görünüm</Button>
+      <Button  color='violet' floated='right' onClick={() => { this.setState({ opened: !this.state.opened }) }} >Görünüm</Button>
       <Modal
         open={this.state.opened}
         size={'tiny'}

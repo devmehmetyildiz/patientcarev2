@@ -1,8 +1,6 @@
 import instanse from "./axios"
 import cookies from 'universal-cookie';
 import AxiosErrorHelper from '../../Utils/AxiosErrorHelper';
-import { AuthContext } from "../../Provider/AuthProvider";
-import { useContext } from "react";
 
 export const ACTION_TYPES = {
   LOGIN_REQUEST_INIT: 'LOGIN_REQUEST_INIT',
@@ -107,7 +105,7 @@ export const SaveTableMeta = (data) => async (dispatch, getState) => {
   dispatch({ type: ACTION_TYPES.SAVE_TABLEMETA_INIT })
   await instanse.post("Auth/SaveTableMeta", data)
     .then(response => {
-      { dispatch({ type: ACTION_TYPES.SAVE_TABLEMETA_SUCCESS, payload: response.data }) }
+      dispatch({ type: ACTION_TYPES.SAVE_TABLEMETA_SUCCESS, payload: response.data })
     })
     .catch(error => {
       dispatch({ type: ACTION_TYPES.FILL_USER_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -119,7 +117,7 @@ export const ChangePassword = (data) => async (dispatch, getState) => {
   dispatch({ type: ACTION_TYPES.GET_USERSROLES_INIT })
   await instanse.post("Auth/ChangePassword", data)
     .then(response => {
-      { dispatch({ type: ACTION_TYPES.GET_USERSROLES_SUCCESS, payload: response.data }) }
+      dispatch({ type: ACTION_TYPES.GET_USERSROLES_SUCCESS, payload: response.data })
     })
     .catch(error => {
       dispatch({ type: ACTION_TYPES.FILL_USER_NOTIFICATION, payload: AxiosErrorHelper(error) })

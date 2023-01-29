@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link} from 'react-router-dom'
-import { Checkbox, Container, Divider, Dropdown, Form, FormGroup, Icon, Popup } from 'semantic-ui-react'
-import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
+import {  Divider, Dropdown, Form } from 'semantic-ui-react'
+import { Breadcrumb, Button,Header } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
 import Popuputil from '../../Utils/Popup'
 import LoadingPage from '../../Utils/LoadingPage'
@@ -10,12 +10,9 @@ export default class CasesCreate extends Component {
 
   constructor(props) {
     super(props)
-    const selecteddepartments = []
-    const record = {}
-    const selectedstatusOption = {}
     this.state = {
-      selecteddepartments,
-      selectedstatusOption
+      selecteddepartments:[],
+      selectedstatusOption:{}
     }
   }
 
@@ -120,7 +117,7 @@ export default class CasesCreate extends Component {
     data.isActive = true
 
     let errors = []
-    if (!data.name || data.name == '') {
+    if (!data.name || data.name === '') {
       errors.push({ type: 'Error', code: 'Birimler', description: 'İsim Boş Olamaz' })
     }
     if ((Number.isNaN(data.unittype))) {

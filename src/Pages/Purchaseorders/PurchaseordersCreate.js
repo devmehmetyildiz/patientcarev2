@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Checkbox, Container, Divider, Dropdown, Form, Icon, Modal, Popup, Table } from 'semantic-ui-react'
-import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
+import {  Divider, Dropdown, Form, Icon, Modal,  Table } from 'semantic-ui-react'
+import { Breadcrumb, Button,  Header } from 'semantic-ui-react'
 import Popuputils from '../../Utils/Popup'
 import LoadingPage from '../../Utils/LoadingPage'
 import formToObject from 'form-to-object'
@@ -20,7 +20,7 @@ export default class PurchaseordersCreate extends Component {
   }
 
   componentDidMount() {
-    const { GetStockdefines, GetCases,  GetDepartments,GetWarehouses } = this.props
+    const { GetStockdefines, GetCases, GetDepartments, GetWarehouses } = this.props
     GetStockdefines()
     GetCases()
     GetDepartments()
@@ -29,8 +29,8 @@ export default class PurchaseordersCreate extends Component {
 
   render() {
 
-    const { removePurchaseordernotification, removeDepartmentnotification, removeUnitnotification, Warehouses, removeWarehousenotification,
-      removeCasenotification, removeStockdefinenotification, Cases, Units, Departments, Stockdefines,
+    const { removePurchaseordernotification, removeDepartmentnotification,  Warehouses, removeWarehousenotification,
+      removeCasenotification, removeStockdefinenotification, Cases, Departments, Stockdefines,
       Purchaseorders } = this.props
     const { notifications, isLoading, isDispatching } = Purchaseorders
 
@@ -63,22 +63,20 @@ export default class PurchaseordersCreate extends Component {
       removeStockdefinenotification()
     }
 
-    const Stockdefinesoption = Stockdefines.list.map(stockdefine => {
+    const Stockdefinesoption = (Stockdefines.list || []).map(stockdefine => {
       return { key: stockdefine.concurrencyStamp, text: stockdefine.name, value: stockdefine.concurrencyStamp }
     })
 
-    const Departmentsoption = Departments.list.map(department => {
+    const Departmentsoption = (Departments.list || []).map(department => {
       return { key: department.concurrencyStamp, text: department.name, value: department.concurrencyStamp }
     })
 
-    const Unitsoption = Units.list.map(unit => {
-      return { key: unit.concurrencyStamp, text: unit.name, value: unit.concurrencyStamp }
-    })
 
-    const Casesoption = Cases.list.map(cases => {
+
+    const Casesoption = (Cases.list || []).map(cases => {
       return { key: cases.concurrencyStamp, text: cases.name, value: cases.concurrencyStamp }
     })
-    const Warehousesoption = Warehouses.list.map(warehouse => {
+    const Warehousesoption = (Warehouses.list || []).map(warehouse => {
       return { key: warehouse.concurrencyStamp, text: warehouse.name, value: warehouse.concurrencyStamp }
     })
 
@@ -246,45 +244,45 @@ export default class PurchaseordersCreate extends Component {
 
     let errors = []
     responseData.stocks.forEach(data => {
-      if (!data.stockdefineID || data.stockdefineID == '') {
+      if (!data.stockdefineID || data.stockdefineID === '') {
         errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Ürün Tanımı Bulunamadı' })
       }
-      if (!data.departmentid || data.departmentid == '') {
+      if (!data.departmentid || data.departmentid === '') {
         errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Departman Bulunamadı' })
       }
-      if (!data.skt || data.skt == '') {
+      if (!data.skt || data.skt === '') {
         errors.push({ type: 'Error', code: 'Puchaseorders', description: 'SKT Girilmemiş' })
       }
-      if (!data.barcodeno || data.barcodeno == '') {
+      if (!data.barcodeno || data.barcodeno === '') {
         errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Barkod Girilmemiş' })
       }
-      if (!data.amount || data.amount == '' || data.amount == 0) {
+      if (!data.amount || data.amount === '' || data.amount === 0) {
         errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Miktar Girilmemiş' })
       }
     });
 
-    if (!responseData.company || responseData.company == '') {
+    if (!responseData.company || responseData.company === '') {
       errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Firma Bilgisi Bulunamadı' })
     }
-    if (!responseData.purchaseprice || responseData.purchaseprice == '') {
+    if (!responseData.purchaseprice || responseData.purchaseprice === '') {
       errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Alış Fiyatı bulunamadı' })
     }
-    if (!responseData.companypersonelname || responseData.companypersonelname == '') {
+    if (!responseData.companypersonelname || responseData.companypersonelname === '') {
       errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Teslimatcı Adı bulunamadı' })
     }
-    if (!responseData.purchasenumber || responseData.purchasenumber == '') {
+    if (!responseData.purchasenumber || responseData.purchasenumber === '') {
       errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Sipariş Numarası bulunamadı' })
     }
-    if (!responseData.personelname || responseData.personelname == '') {
+    if (!responseData.personelname || responseData.personelname === '') {
       errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Teslim Alan Kişi belirtilmedi' })
     }
-    if (!responseData.caseID || responseData.caseID == '') {
+    if (!responseData.caseID || responseData.caseID === '') {
       errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Sipariş durumu girilmedi' })
     }
-    if (!responseData.warehouseID || responseData.warehouseID == '') {
+    if (!responseData.warehouseID || responseData.warehouseID === '') {
       errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Ambar girilmedi' })
     }
-    if (!responseData.purchasedate || responseData.purchasedate == '') {
+    if (!responseData.purchasedate || responseData.purchasedate === '') {
       errors.push({ type: 'Error', code: 'Puchaseorders', description: 'Satın alma tarihi girilmemiş' })
     }
     if (errors.length > 0) {
@@ -310,9 +308,9 @@ export default class PurchaseordersCreate extends Component {
         skt: null,
         barcodeno: '',
         amount: 0,
-        status:0,
+        status: 0,
         info: '',
-        willdelete:false,
+        willdelete: false,
         concurrencyStamp: '',
         createdUser: '',
         updatedUser: '',

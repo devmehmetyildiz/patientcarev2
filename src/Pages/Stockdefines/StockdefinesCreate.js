@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Checkbox, Container, Divider, Dropdown, Form, FormField, Icon } from 'semantic-ui-react'
-import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
+import { Divider, Dropdown, Form, FormField} from 'semantic-ui-react'
+import { Breadcrumb, Button, Header } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
 import Popup from '../../Utils/Popup'
 import LoadingPage from '../../Utils/LoadingPage'
@@ -11,12 +11,9 @@ export default class StockdefinesCreate extends Component {
 
   constructor(props) {
     super(props)
-    const selecteddepartment = {}
-    const selectedunit = {}
-    const record = {}
     this.state = {
-      selecteddepartment,
-      selectedunit
+      selecteddepartment :{},
+      selectedunit:{}
     }
   }
 

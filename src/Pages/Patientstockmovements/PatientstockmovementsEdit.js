@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Checkbox, Container, Divider, Dropdown, Form, Icon } from 'semantic-ui-react'
-import { Breadcrumb, Button, Grid, GridColumn, Header } from 'semantic-ui-react'
+import { Divider, Dropdown, Form } from 'semantic-ui-react'
+import { Breadcrumb, Button, Header } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
-import Popuputil from '../../Utils/Popup'
+import Notification from '../../Utils/Notification'
 import LoadingPage from '../../Utils/LoadingPage'
 
 export default class PatientstockmovementsEdit extends Component {
@@ -27,9 +27,9 @@ export default class PatientstockmovementsEdit extends Component {
   }
 
   componentDidUpdate() {
-    const { Patientstocks, Patientstockmovements } = this.props
+    const { Patientstockmovements, Patientstocks, removePatientstocknotification, removePatientstockmovementnotification } = this.props
     const { selected_record, isLoading } = Patientstockmovements
-    if (selected_record && Object.keys(selected_record).length > 0 && selected_record.id != 0
+    if (selected_record && Object.keys(selected_record).length > 0 && selected_record.id !== 0
       && Patientstocks.list.length > 0 && !Patientstocks.isLoading
       && !isLoading && !this.state.isDatafetched) {
       this.setState({
@@ -38,21 +38,12 @@ export default class PatientstockmovementsEdit extends Component {
         isDatafetched: true
       })
     }
+    Notification(Patientstockmovements.notifications, removePatientstockmovementnotification)
+    Notification(Patientstocks.notifications, removePatientstocknotification)
   }
 
   render() {
-    const { Patientstockmovements, removePatientstockmovementnotification, Patientstocks, removePatientstocknotification } = this.props
-    if (Patientstockmovements.notifications && Patientstockmovements.notifications.length > 0) {
-      let msg = Patientstockmovements.notifications[0]
-      Popuputil(msg.type, msg.code, msg.description)
-      removePatientstockmovementnotification()
-    }
-    if (Patientstocks.notifications && Patientstocks.notifications.length > 0) {
-      let msg = Patientstocks.notifications[0]
-      Popuputil(msg.type, msg.code, msg.description)
-      removePatientstocknotification()
-    }
-
+    const { Patientstockmovements, Patientstocks } = this.props
 
     const Patientstockoptions = Patientstocks.list.map(stock => {
       return { key: stock.concurrencyStamp, text: `${stock.stockdefine.name} - ${stock.barcodeno}`, value: stock.concurrencyStamp }
@@ -62,10 +53,6 @@ export default class PatientstockmovementsEdit extends Component {
       { key: -1, text: "STOKDAN DÜŞME", value: -1 },
       { key: 1, text: "STOĞA EKLEME", value: 1 },
     ]
-
-
-
-
 
     return (
       Patientstocks.isLoading || Patientstocks.isDispatching || Patientstockmovements.isLoading || Patientstockmovements.isDispatching ? <LoadingPage /> :
@@ -120,10 +107,10 @@ export default class PatientstockmovementsEdit extends Component {
     data.stockID = this.state.selectedstock
 
     let errors = []
-    if (!data.movementtype || data.movementtype == '') {
+    if (!data.movementtype || data.movementtype === '') {
       errors.push({ type: 'Error', code: 'Ürünler', description: 'Hareket Seçili Değil' })
     }
-    if (!data.stockID || data.stockID == '') {
+    if (!data.stockID || data.stockID === '') {
       errors.push({ type: 'Error', code: 'Ürünler', description: 'Ürün Seçili Değil' })
     }
     if (data.amount === '') {

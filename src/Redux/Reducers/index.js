@@ -20,6 +20,11 @@ import PatientstockReducer from "./PatientstockReducer"
 import PurchaseorderstockmovementReducer from "./PurchaseorderstockmovementReducer"
 import PurchaseorderstockReducer from "./PurchaseorderstockReducer"
 import WarehouseReducer from "./WarehouseReducer"
+import TododefineReducer from "./TododefineReducer";
+import TodogroupdefineReducer from "./TodogroupdefineReducer";
+import PatientmovementReducer from "./PatientmovementReducer";
+import PeriodReducer from "./PeriodReducer";
+import CheckperiodReducer from "./CheckperiodReducer";
 
 const reducers = combineReducers({
     Units: UnitReducer,
@@ -42,7 +47,12 @@ const reducers = combineReducers({
     Patientstocks: PatientstockReducer,
     Purchaseorderstockmovements: PurchaseorderstockmovementReducer,
     Purchaseorderstocks: PurchaseorderstockReducer,
-    Warehouses: WarehouseReducer
+    Warehouses: WarehouseReducer,
+    Tododefines: TododefineReducer,
+    Todogroupdefines: TodogroupdefineReducer,
+    Patientmovements: PatientmovementReducer,
+    Periods: PeriodReducer,
+    Checkperiods: CheckperiodReducer
 });
 
 export default reducers;
