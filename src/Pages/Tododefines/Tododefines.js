@@ -14,7 +14,8 @@ export default class Tododefines extends Component {
     super(props)
     this.state = {
       open: false,
-      selectedrecord: []
+      selectedrecord: [],
+      periodStatus: []
     }
   }
 
@@ -34,9 +35,10 @@ export default class Tododefines extends Component {
       { Header: 'Id', accessor: 'id', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Tekil ID', accessor: 'concurrencyStamp', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'İsim', accessor: 'name', sortable: true, canGroupBy: true, canFilter: true },
-      { Header: 'Zorunlu alan mı?', accessor: 'isRequired', sortable: true, canGroupBy: true, canFilter: true, Cell: col => { return col.value ? "EVET" : "HAYIR" } },
-      { Header: 'Onay Gerekli mi?', accessor: 'isNeedactivation', sortable: true, canGroupBy: true, canFilter: true, Cell: col => { return col.value ? "EVET" : "HAYIR" } },
+      { Header: 'Zorunlu alan mı?', accessor: 'isRequired', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.boolCellhandler(col) },
+      { Header: 'Onay Gerekli mi?', accessor: 'isNeedactivation', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.boolCellhandler(col) },
       { Header: 'Açıklama', accessor: 'info', sortable: true, canGroupBy: true, canFilter: true },
+      { Header: 'Periyodlar', accessor: 'periodstxt', sortable: true, canGroupBy: true, canFilter: true, isOpen: false, Cell: col => this.periodCellhandler(col) },
       { Header: 'Oluşturan Kullanıcı', accessor: 'createdUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Güncelleyen Kullanıcı', accessor: 'updatedUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Oluşturma Zamanı', accessor: 'createTime', sortable: true, canGroupBy: true, canFilter: true, },
@@ -50,16 +52,20 @@ export default class Tododefines extends Component {
 
     const metaKey = "Tododefines"
     let tableMeta = (Profile.tablemeta || []).find(u => u.meta === metaKey)
-    const initialConfig = JSON.parse(tableMeta.config).length === Columns.length ? {
+    const initialConfig = {
       hiddenColumns: tableMeta ? JSON.parse(tableMeta.config).filter(u => u.isVisible === false).map(item => {
         return item.key
-      }) : [],
+      }) : ["concurrencyStamp", "createdUser", "updatedUser", "createTime", "updateTime"],
       columnOrder: tableMeta ? JSON.parse(tableMeta.config).sort((a, b) => a.order - b.order).map(item => {
         return item.key
       }) : []
-    } : {};
+    };
 
     (list || []).forEach(item => {
+      var text = item.periods.map((period) => {
+        return period.name;
+      }).join(", ")
+      item.periodstxt = text;
       item.edit = <Link to={`/Tododefines/${item.concurrencyStamp}/edit`} ><Icon size='large' className='row-edit' name='edit' /></Link>
       item.delete = <Icon link size='large' color='red' name='alternate trash' onClick={() => { this.setState({ selectedrecord: item, open: true }) }} />
     })
@@ -134,4 +140,41 @@ export default class Tododefines extends Component {
     this.setState({ modal: value })
   }
 
+  expandPeriods = (rowid) => {
+    const prevData = this.state.periodStatus
+    prevData.push(rowid)
+    this.setState({ periodStatus: [...prevData] })
+  }
+
+  shrinkPeriods = (rowid) => {
+    const index = this.state.periodStatus.indexOf(rowid)
+    const prevData = this.state.periodStatus
+    if (index > -1) {
+      prevData.splice(index, 1)
+      this.setState({ periodStatus: [...prevData] })
+    }
+  }
+
+  periodCellhandler = (col) => {
+    if (col.value) {
+      if (!col.cell.isGrouped) {
+        const itemId = col.row.original.id
+        const itemPeriods = col.row.original.periods
+        return col.value.length - 35 > 20 ?
+          (
+            !this.state.periodStatus.includes(itemId) ?
+              [col.value.slice(0, 35) + ' ...(' + itemPeriods.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandPeriods(itemId)}> ...Daha Fazla Göster</Link>] :
+              [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkPeriods(itemId)}> ...Daha Az Göster</Link>]
+          ) : col.value
+      }
+      return col.value
+    }
+    return null
+  }
+
+  boolCellhandler = (col) => {
+    return col.value !== null && (col.value ? "EVET" : "HAYIR")
+  }
 }
+
+

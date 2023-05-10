@@ -10,10 +10,10 @@ export default class CheckperiodsCreate extends Component {
 
   constructor(props) {
     super(props)
-    const selectedstations = []
-    const record = {}
     this.state = {
-      selectedstations
+      selectedPeriods: [],
+      selectedDays: [],
+      selectedType: null
     }
   }
 
@@ -50,8 +50,7 @@ export default class CheckperiodsCreate extends Component {
     })
 
     const Periodtypeoption = [
-      { key: 0, text: "", value: 0 },
-
+      { key: "1", text: "Sürekli Kontrol", value: "1" },
     ]
 
     return (
@@ -72,14 +71,26 @@ export default class CheckperiodsCreate extends Component {
           <div className='w-full bg-white p-4 rounded-lg shadow-md outline outline-[1px] outline-gray-200 '>
             <Form className='' onSubmit={this.handleSubmit}>
               <Form.Field>
-                <Form.Input label="Departman Adı" placeholder="Departman Adı" name="name" fluid />
+                <Form.Input label="Kontrol Grup Adı" placeholder="Kontrol Grup Adı" name="name" fluid />
               </Form.Field>
-              <Form.Field>
-                <label className='text-[#000000de]'>Tanımlı İstasyonlar</label>
-                <Dropdown label="İstasyonlar" placeholder='İstasyonlar' clearable search fluid multiple selection options={Stationoptions} onChange={this.handleChange} />
-              </Form.Field>
+              <Form.Group widths={"equal"}>
+                <Form.Field>
+                  <label className='text-[#000000de]'>Kullanılacak Günler</label>
+                  <Dropdown placeholder='Kullanılacak Günler' clearable search fluid multiple selection options={Dayoptions} onChange={(e, { value }) => { this.setState({ selectedDays: value }) }} />
+                </Form.Field>
+                <Form.Field>
+                  <label className='text-[#000000de]'>Kontrol Türü</label>
+                  <Dropdown placeholder='Kontrol Türü' clearable search fluid selection options={Periodtypeoption} onChange={(e, { value }) => { this.setState({ selectedType: value }) }} />
+                </Form.Field>
+              </Form.Group>
+              <Form.Group widths={"equal"}>
+                <Form.Field>
+                  <label className='text-[#000000de]'>Kontroller</label>
+                  <Dropdown placeholder='Kontroller' clearable search fluid multiple selection options={Periodoptions} onChange={(e, { value }) => { this.setState({ selectedPeriods: value }) }} />
+                </Form.Field>
+              </Form.Group>
               <div className='flex flex-row w-full justify-between py-4  items-center'>
-                <Link to="/Departments">
+                <Link to="/Checkperiods">
                   <Button floated="left" color='grey'>Geri Dön</Button>
                 </Link>
                 <Button floated="right" type='submit' color='blue'>Oluştur</Button>
@@ -95,12 +106,18 @@ export default class CheckperiodsCreate extends Component {
   handleSubmit = (e) => {
     e.preventDefault()
 
-    const { AddDepartments, history, fillDepartmentnotification, Stations } = this.props
-    const { list } = Stations
+    const { AddCheckperiods, history, fillCheckperiodnotification, Periods } = this.props
+    const { list } = Periods
+    const { selectedDays, selectedPeriods, selectedType } = this.state
     const data = formToObject(e.target)
-    data.stations = this.state.selectedstations.map(station => {
+    data.periods = selectedPeriods.map(station => {
       return list.find(u => u.concurrencyStamp === station)
     })
+    var days = selectedDays.map((day) => {
+      return day;
+    }).join(", ")
+    data.occureddays = days
+    data.periodtype = selectedType
     data.stationstxt = null
     data.id = 0
     data.concurrencyStamp = null
@@ -113,18 +130,25 @@ export default class CheckperiodsCreate extends Component {
     data.isActive = true
 
     let errors = []
-    if (!data.name || data.name == '') {
-      errors.push({ type: 'Error', code: 'Departmanlar', description: 'İsim Boş Olamaz' })
+    if (!data.name || data.name === '') {
+      errors.push({ type: 'Error', code: 'Kontrol Grupları', description: 'İsim Boş Olamaz' })
     }
-    if (!data.stations || data.stations.length <= 0) {
-      errors.push({ type: 'Error', code: 'Departmanlar', description: 'Hiç Bir İstasyon seçili değil' })
+    if (!data.periods || data.periods.length <= 0) {
+      errors.push({ type: 'Error', code: 'Kontrol Grupları', description: 'Hiç Bir Kontrol seçili değil' })
     }
+    if (!data.occureddays || data.occureddays === "") {
+      errors.push({ type: 'Error', code: 'Kontrol Grupları', description: 'Hiç Bir Gün seçili değil' })
+    }
+    if (!selectedType || selectedType === "") {
+      errors.push({ type: 'Error', code: 'Kontrol Grupları', description: 'Hiç Bir Kontrol tipi seçili değil' })
+    }
+    console.log('data: ', data);
     if (errors.length > 0) {
       errors.forEach(error => {
-        fillDepartmentnotification(error)
+        fillCheckperiodnotification(error)
       })
     } else {
-      AddDepartments(data, history)
+      AddCheckperiods(data, history)
     }
   }
 

@@ -38,9 +38,9 @@ export default class Patientdefines extends Component {
       { Header: 'Baba Adı', accessor: 'fathername', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Anne Adı', accessor: 'mothername', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Anne Yakınlık Derecesi', accessor: 'motherbiologicalaffinity', sortable: true, canGroupBy: true, canFilter: true },
-      { Header: 'Anne Hayatta mı?', accessor: 'ismotheralive', sortable: true, canGroupBy: true, canFilter: true },
+      { Header: 'Anne Hayatta mı?', accessor: 'ismotheralive', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.boolCellhandler(col) },
       { Header: 'Baba Yakınlık Derecesi', accessor: 'fatherbiologicalaffinity', sortable: true, canGroupBy: true, canFilter: true },
-      { Header: 'Baba Hayatta mı?', accessor: 'isfatheralive', sortable: true, canGroupBy: true, canFilter: true },
+      { Header: 'Baba Hayatta mı?', accessor: 'isfatheralive', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.boolCellhandler(col) },
       { Header: 'TC Kimlik No', accessor: 'countryID', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Doğum Tarihi', accessor: 'dateofbirth', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Doğum Yeri', accessor: 'placeofbirth', sortable: true, canGroupBy: true, canFilter: true },
@@ -81,7 +81,7 @@ export default class Patientdefines extends Component {
     const initialConfig = {
       hiddenColumns: tableMeta ? JSON.parse(tableMeta.config).filter(u => u.isVisible === false).map(item => {
         return item.key
-      }) : [],
+      }) : ["concurrencyStamp", "createdUser", "updatedUser", "createTime", "updateTime"],
       columnOrder: tableMeta ? JSON.parse(tableMeta.config).sort((a, b) => a.order - b.order).map(item => {
         return item.key
       }) : []
@@ -161,6 +161,10 @@ export default class Patientdefines extends Component {
 
   handleChangeModal = (value) => {
     this.setState({ modal: value })
+  }
+
+  boolCellhandler = (col) => {
+    return col.value !== null && (col.value ? "EVET" : "HAYIR")
   }
 
 }

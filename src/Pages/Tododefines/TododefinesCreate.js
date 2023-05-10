@@ -1,8 +1,8 @@
 
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Checkbox,Divider, Form } from 'semantic-ui-react'
-import { Breadcrumb, Button,  Header } from 'semantic-ui-react'
+import { Checkbox, Divider, Dropdown, Form } from 'semantic-ui-react'
+import { Breadcrumb, Button, Header } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
 import LoadingPage from '../../Utils/LoadingPage'
 import Notification from '../../Utils/Notification'
@@ -12,19 +12,30 @@ export default class TododefinesCreate extends Component {
     super(props)
     this.state = {
       isRequired: false,
-      isNeedactivation: false
+      isNeedactivation: false,
+      selectedPeriods: []
     }
   }
 
+  componentDidMount() {
+    const { GetPeriods } = this.props
+    GetPeriods()
+  }
+
   componentDidUpdate() {
-    const { notifications, removeTododefinenotification } = this.props
-    Notification(notifications, removeTododefinenotification)
+    const { Tododefines, removeTododefinenotification, Periods, removePeriodnotification } = this.props
+    Notification(Tododefines.notifications, removeTododefinenotification)
+    Notification(Periods.notifications, removePeriodnotification)
   }
 
   render() {
 
-    const { Tododefines } = this.props
+    const { Tododefines, Periods } = this.props
     const { isLoading, isDispatching } = Tododefines
+
+    const Periodsoptions = Periods.list.map(period => {
+      return { key: period.concurrencyStamp, text: period.name, value: period.concurrencyStamp }
+    })
 
     return (
       isLoading || isDispatching ? <LoadingPage /> :
@@ -51,6 +62,12 @@ export default class TododefinesCreate extends Component {
                 <Form.Field>
                   <label className='text-[#000000de]'>Açıklama</label>
                   <Form.Input placeholder="Açıklama" name="info" fluid />
+                </Form.Field>
+              </Form.Group>
+              <Form.Group widths={'equal'}>
+                <Form.Field>
+                  <label className='text-[#000000de]'>Kontroller</label>
+                  <Dropdown label="Kontroller" placeholder='Kontroller' clearable search fluid multiple selection options={Periodsoptions} onChange={(e, { value }) => { this.setState({ selectedPeriods: value }) }} />
                 </Form.Field>
               </Form.Group>
               <Form.Group widths={'equal'}>
@@ -83,9 +100,12 @@ export default class TododefinesCreate extends Component {
   handleSubmit = (e) => {
     e.preventDefault()
 
-    const { AddTododefines, history, fillTododefinenotification } = this.props
+    const { AddTododefines, history, fillTododefinenotification, Periods } = this.props
 
     const data = formToObject(e.target)
+    data.periods = this.state.selectedPeriods.map(period => {
+      return Periods.list.find(u => u.concurrencyStamp === period)
+    })
     data.isRequired = this.state.isRequired
     data.isNeedactivation = this.state.isNeedactivation
     data.id = 0
@@ -101,6 +121,9 @@ export default class TododefinesCreate extends Component {
     let errors = []
     if (!data.name || data.name == '') {
       errors.push({ type: 'Error', code: 'Yapılacaklar', description: 'İsim Boş Olamaz' })
+    }
+    if (!data.periods || data.periods.length <= 0) {
+      errors.push({ type: 'Error', code: 'Yapılacaklar', description: 'Hiç Bir Kontrol seçili değil' })
     }
     if (errors.length > 0) {
       errors.forEach(error => {

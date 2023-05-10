@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import {  Divider, Dropdown, Form, Icon, Popup, Table } from 'semantic-ui-react'
+import { Divider, Dropdown, Form, Icon, Popup, Table } from 'semantic-ui-react'
 import { Breadcrumb, Button, Header } from 'semantic-ui-react'
 import Popuputils from '../../Utils/Popup'
 import LoadingPage from '../../Utils/LoadingPage'
@@ -19,7 +19,7 @@ export default class PurchaseordersEdit extends Component {
   }
 
   componentDidMount() {
-    const { GetPurchaseorder, match, history, GetStockdefines, GetCases,  GetDepartments, GetWarehouses } = this.props
+    const { GetPurchaseorder, match, history, GetStockdefines, GetCases, GetDepartments, GetWarehouses } = this.props
     if (match.params.PurchaseorderID) {
       GetPurchaseorder(match.params.PurchaseorderID)
       GetStockdefines()
@@ -33,7 +33,7 @@ export default class PurchaseordersEdit extends Component {
   }
 
   componentDidUpdate() {
-    const { Stockdefines, Purchaseorders, Cases,  Departments, Warehouses } = this.props
+    const { Stockdefines, Purchaseorders, Cases, Departments, Warehouses } = this.props
     const { selected_record, isLoading } = Purchaseorders
     if (selected_record && Object.keys(selected_record).length > 0 &&
       selected_record.id !== 0 && Stockdefines.list.length > 0 && !Stockdefines.isLoading
@@ -49,8 +49,8 @@ export default class PurchaseordersEdit extends Component {
 
   render() {
 
-    const { removePurchaseordernotification, removeDepartmentnotification, 
-      removeCasenotification, removeStockdefinenotification, Cases,  Departments, Stockdefines, Warehouses, removeWarehousenotification,
+    const { removePurchaseordernotification, removeDepartmentnotification,
+      removeCasenotification, removeStockdefinenotification, Cases, Departments, Stockdefines, Warehouses, removeWarehousenotification,
       Purchaseorders } = this.props
     const { notifications, isLoading, isDispatching, selected_record } = Purchaseorders
 
@@ -175,12 +175,12 @@ export default class PurchaseordersEdit extends Component {
                         </Table.Cell>
                         <Table.Cell>
                           <Form.Field>
-                            <Dropdown  value={stock.stockdefineID} placeholder='Ürün Tanımı' name="stockdefineID" clearable search fluid selection options={Stockdefinesoption} onChange={(e, data) => { this.selectedProductChangeHandler(stock.key, 'stockdefineID', data.value) }} />
+                            <Dropdown value={stock.stockdefineID} placeholder='Ürün Tanımı' name="stockdefineID" clearable search fluid selection options={Stockdefinesoption} onChange={(e, data) => { this.selectedProductChangeHandler(stock.key, 'stockdefineID', data.value) }} />
                           </Form.Field>
                         </Table.Cell>
                         <Table.Cell>
                           <Form.Field>
-                            <Dropdown  value={stock.departmentid} placeholder='Departman' name="departmentid" clearable search fluid selection options={Departmentsoption} onChange={(e, data) => { this.selectedProductChangeHandler(stock.key, 'departmentid', data.value) }} />
+                            <Dropdown value={stock.departmentid} placeholder='Departman' name="departmentid" clearable search fluid selection options={Departmentsoption} onChange={(e, data) => { this.selectedProductChangeHandler(stock.key, 'departmentid', data.value) }} />
                           </Form.Field>
                         </Table.Cell>
                         <Table.Cell>
@@ -354,6 +354,7 @@ export default class PurchaseordersEdit extends Component {
     this.setState({ selectedStocks: productionRoutes })
   }
 
+ 
 }
 
 

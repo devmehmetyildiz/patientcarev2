@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
-import { TbGauge, Tb3DRotate, TbAccessPoint, TbActivity, TbAd } from "react-icons/tb";
-import { IoIosArrowDown, IoSettingsSharp } from "react-icons/io";
+import { TbGauge, Tb3DRotate, TbAccessPoint, TbActivity } from "react-icons/tb";
+import { IoIosArrowDown } from "react-icons/io";
 import { MdSettings } from "react-icons/md";
 import { Collapse } from 'react-collapse';
 import { withRouter } from 'react-router-dom';
 
 export function Sidebar(props) {
 
-    const { iconOnly, seticonOnly } = props
+    const { iconOnly } = props
     const [Pages, setPages] = useState([
         {
             id: 1,
@@ -27,6 +27,7 @@ export function Sidebar(props) {
                 { id: 4, subtitle: "Hasta Tanımları", url: "/Patientdefines" },
                 { id: 5, subtitle: "Hasta Stokları", url: "/Patientstocks" },
                 { id: 6, subtitle: "Hasta Stok Hareketleri", url: "/Patientstockmovements" },
+                { id: 6, subtitle: "Yapılacaklar", url: "/Todos" },
             ]
         },
         {
@@ -73,6 +74,8 @@ export function Sidebar(props) {
                 { id: 13, subtitle: "Yapılacaklar Grup Tanımları", url: "/Todogroupdefines" },
                 { id: 14, subtitle: "Kontrol Grupları", url: "/Checkperiods" },
                 { id: 15, subtitle: "Kontrol Periyodları", url: "/Periods" },
+                { id: 16, subtitle: "Mail Ayarları", url: "/Mailsettings" },
+                { id: 17, subtitle: "Yazdırma Taslakları", url: "/Printtemplates" },
             ]
         },
     ])
@@ -110,7 +113,7 @@ export function Sidebar(props) {
                                     <div className='ml-2 p-2 text-lg text-purple-600 rounded-full bg-[#6c729333] group-hover:bg-[#7eb7ce] dark:group-hover:bg-Contentfg transition-all duration-300'>
                                         {item.icon}
                                     </div>
-                                    <h1 className={`${iconOnly ? 'hidden' : 'visible'} m-0 ml-2 text-TextColor text-sm tracking-wider font-semibold  group-hover:text-[#2b7694] transition-all duration-1000`}>
+                                    <h1 className={`${iconOnly ? 'hidden' : 'visible'} m-0 ml-2 text-TextColor whitespace-nowrap  text-sm tracking-wider font-semibold  group-hover:text-[#2b7694] transition-all duration-1000`}>
                                         {item.title}
                                     </h1>
                                 </div>
@@ -119,7 +122,7 @@ export function Sidebar(props) {
                             {!iconOnly && item.items ?
                                 <Collapse isOpened={item.isOpened}>
                                     {item.items.map((subitem, index) => {
-                                        return <h1 key={index + index} onClick={() => { props.history.push(subitem.url) }} className=' m-0 cursor-pointer hover:text-[#2b7694] whitespace-nowrap dark:hover:text-white text-TextColor text-sm w-full px-8 py-1' > {subitem.subtitle}</h1>
+                                        return <h1 key={index + index} onAuxClick={() => { window.open(subitem.url, "_blank") }} onClick={() => { props.history.push(subitem.url) }} className=' m-0 cursor-pointer hover:text-[#2b7694] whitespace-nowrap dark:hover:text-white text-TextColor text-sm w-full px-8 py-1' > {subitem.subtitle}</h1>
                                     })}
                                 </Collapse>
                                 : null}
@@ -129,7 +132,7 @@ export function Sidebar(props) {
                                     {item.items ?
                                         <Collapse isOpened={item.isOpened}>
                                             {item.items.map((subitem, index) => {
-                                                return <h1 key={index + index + index} className='hover:text-[#2b7694] m-0 whitespace-nowrap dark:hover:text-white text-TextColor text-sm w-full px-2 py-1'>{subitem.subtitle}</h1>
+                                                return <h1 key={index + index + index} onAuxClick={() => { props.history.push(subitem.url) }} onClick={() => { props.history.push(subitem.url) }} className='hover:text-[#2b7694] m-0 whitespace-nowrap dark:hover:text-white text-TextColor text-sm w-full px-2 py-1'>{subitem.subtitle}</h1>
                                             })}
                                         </Collapse>
                                         : null}

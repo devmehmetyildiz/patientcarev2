@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import Sidebar from './Common/Sidebar';
-import Navbar from './Common/Navbar';
 import AppRoutes from './AppRoutes';
 import Layout from './Containers/Layout/Layout';
 import { withRouter } from 'react-router-dom';
@@ -39,7 +37,8 @@ class App extends Component {
 
   onRouteChanged = () => {
     window.scrollTo(0, 0);
-    const fullPageLayoutRoutes = ['/Login'];
+    const fullPageLayoutRoutes = ['/Login', '/login', '/Register', '/register','/Forgetpassword','/forgetpassword'];
+    document.title = fullPageLayoutRoutes.includes(this.props.location.pathname) ? "Elder Camp" : this.props.location.pathname.replace('/','')
     for (let i = 0; i < fullPageLayoutRoutes.length; i++) {
       if (this.props.location.pathname === fullPageLayoutRoutes[i]) {
         this.setState({

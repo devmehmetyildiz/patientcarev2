@@ -36,25 +36,7 @@ export default class Checkperiods extends Component {
       { Header: 'Id', accessor: 'id', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Tekil ID', accessor: 'concurrencyStamp', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'İsim', accessor: 'name', sortable: true, canGroupBy: true, canFilter: true },
-      {
-        Header: 'Kontrol Periyodları', accessor: 'periodstxt', sortable: true, canGroupBy: true, canFilter: true, isOpen: false,
-        Cell: col => {
-          if (col.value) {
-            if (!col.cell.isGrouped) {
-              const itemId = col.row.original.id
-              const itemPeriods = col.row.original.periods
-              return col.value.length - 35 > 20 ?
-                (
-                  !this.state.periodStatus.includes(itemId) ?
-                    [col.value.slice(0, 35) + ' ...(' + itemPeriods.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandPeriods(itemId)}> ...Daha Fazla Göster</Link>] :
-                    [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkPeriods(itemId)}> ...Daha Az Göster</Link>]
-                ) : col.value
-            }
-            return col.value
-          }
-          return null
-        },
-      },
+      { Header: 'Kontrol Periyodları', accessor: 'periodstxt', sortable: true, canGroupBy: true, canFilter: true, isOpen: false, Cell: col => this.periodCellhandler(col) },
       { Header: 'Periyot Türü', accessor: 'periodtype', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Gerçekleşecek Günler', accessor: 'occureddays', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Oluşturan Kullanıcı', accessor: 'createdUser', sortable: true, canGroupBy: true, canFilter: true, },
@@ -64,7 +46,6 @@ export default class Checkperiods extends Component {
       { accessor: 'edit', Header: "Güncelle", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' },
       { accessor: 'delete', Header: "Sil", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
 
-
     const { Checkperiods, DeleteCheckperiods, Profile } = this.props
     const { list, isLoading, isDispatching } = Checkperiods
 
@@ -73,7 +54,7 @@ export default class Checkperiods extends Component {
     const initialConfig = {
       hiddenColumns: tableMeta ? JSON.parse(tableMeta.config).filter(u => u.isVisible === false).map(item => {
         return item.key
-      }) : [],
+      }) : ["concurrencyStamp", "createdUser", "updatedUser", "createTime", "updateTime"],
       columnOrder: tableMeta ? JSON.parse(tableMeta.config).sort((a, b) => a.order - b.order).map(item => {
         return item.key
       }) : []
@@ -169,4 +150,20 @@ export default class Checkperiods extends Component {
     }
   }
 
+  periodCellhandler = (col) => {
+    if (col.value) {
+      if (!col.cell.isGrouped) {
+        const itemId = col.row.original.id
+        const itemPeriods = col.row.original.periods
+        return col.value.length - 35 > 20 ?
+          (
+            !this.state.periodStatus.includes(itemId) ?
+              [col.value.slice(0, 35) + ' ...(' + itemPeriods.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandPeriods(itemId)}> ...Daha Fazla Göster</Link>] :
+              [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkPeriods(itemId)}> ...Daha Az Göster</Link>]
+          ) : col.value
+      }
+      return col.value
+    }
+    return null
+  }
 }

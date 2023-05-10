@@ -1,4 +1,3 @@
-import React from 'react'
 import { connect } from 'react-redux'
 import Login from "../../Pages/Auth/Login"
 import { logIn, logOut, removenotification, fillnotification } from "../../Redux/Actions/ProfileAction"

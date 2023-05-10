@@ -12,8 +12,8 @@ export default class Patientstocks extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      open:false,
-      selectedrecord:{}
+      open: false,
+      selectedrecord: {}
     }
   }
 
@@ -26,15 +26,13 @@ export default class Patientstocks extends Component {
 
     const Columns = [
       { Header: 'Id', accessor: 'id', sortable: true, canGroupBy: true, canFilter: true, },
-      { Header: 'Hasta Bilgisi', accessor: 'patient.patientdefine.firstname', sortable: true, canGroupBy: true, canFilter: true,},
+      { Header: 'Hasta Bilgisi', accessor: 'patient.patientdefine.firstname', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.patientdefineCellhandler(col) },
       { Header: 'Tekil ID', accessor: 'concurrencyStamp', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Ürün', accessor: 'stockdefine.name', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Departman', accessor: 'department.name', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Skt', accessor: 'skt', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Barkod No', accessor: 'barcodeno', sortable: true, canGroupBy: true, canFilter: true },
-      { Header: 'Toplam Miktar', accessor: 'maxamount', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Aktüel Miktar', accessor: 'amount', sortable: true, canGroupBy: true, canFilter: true },
-      { Header: 'Kullanılan Miktar', accessor: 'usageamount', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Açıklama', accessor: 'info', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Kaynak', accessor: 'source', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Oluşturan Kullanıcı', accessor: 'createdUser', sortable: true, canGroupBy: true, canFilter: true, },
@@ -45,7 +43,7 @@ export default class Patientstocks extends Component {
       { accessor: 'edit', Header: "Güncelle", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' },
       { accessor: 'delete', Header: "Sil", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
 
-    const { Patientstocks, DeletePatientstocks, removePatientstocknotification,Profile } = this.props
+    const { Patientstocks, DeletePatientstocks, removePatientstocknotification, Profile } = this.props
     const { notifications, list, isLoading, isDispatching } = Patientstocks
     if (notifications && notifications.length > 0) {
       let msg = notifications[0]
@@ -58,7 +56,7 @@ export default class Patientstocks extends Component {
     const initialConfig = {
       hiddenColumns: tableMeta ? JSON.parse(tableMeta.config).filter(u => u.isVisible === false).map(item => {
         return item.key
-      }) : [],
+      }) : ["concurrencyStamp", "createdUser", "updatedUser", "createTime", "updateTime"],
       columnOrder: tableMeta ? JSON.parse(tableMeta.config).sort((a, b) => a.order - b.order).map(item => {
         return item.key
       }) : []
@@ -138,6 +136,22 @@ export default class Patientstocks extends Component {
 
   handleChangeModal = (value) => {
     this.setState({ modal: value })
+  }
+
+  patientdefineCellhandler = (col) => {
+    if (col.value) {
+      let value = col?.row?.original
+      if (value) {
+        let define = value?.patient?.patientdefine
+        if (define) {
+          return `${define.firstname} ${define.lastname} - ${define.countryID}`
+        } else {
+          return "Hasta Kaydı Bulunamadı"
+        }
+      } else {
+        return "Hata"
+      }
+    }
   }
 
 }

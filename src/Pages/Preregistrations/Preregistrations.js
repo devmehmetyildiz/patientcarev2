@@ -34,75 +34,13 @@ export default class Preregistrations extends Component {
     const Columns = [
       { Header: 'Id', accessor: 'id', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Tekil ID', accessor: 'concurrencyStamp', sortable: true, canGroupBy: true, canFilter: true, },
-      {
-        Header: 'İsim', accessor: 'name', sortable: true, canGroupBy: true, canFilter: true,
-        Cell: col => {
-          const itemId = col.row.original.concurrencyStamp
-          const patient = list.find(u => u.concurrencyStamp === itemId)
-          return <div className='flex justify-center items-center flex-row flex-nowrap whitespace-nowrap'>{patient.files.filter(u => u.name === 'PP').length > 0 ? <img alt='pp' src={`${process.env.REACT_APP_BACKEND_URL}/${ROUTES.FILE}/GetImage?guid=${patient.concurrencyStamp}`} className="rounded-full" style={{ width: '40px', height: '40px' }} />
-            : null}{`${patient?.patientdefine?.firstname} ${patient?.patientdefine?.lastname}`}</div>
-        },
-      },
-      {
-        Header: 'TC Kimlik No', accessor: 'patientdefine.countryID', sortable: true, canGroupBy: true, canFilter: true,
-      },
-      {
-        Header: 'Kayıt Tarihi', accessor: 'registerdate', sortable: true, canGroupBy: true, canFilter: true,
-        Cell: col => {
-          if (col.value) {
-            return col.value.split('T')[0]
-          }
-          return null
-        },
-      },
-      {
-        Header: 'Kuruma Giriş Tarihi', accessor: 'approvaldate', sortable: true, canGroupBy: true, canFilter: true,
-        Cell: col => {
-          if (col.value) {
-            return col.value.split('T')[0]
-          }
-          return null
-        },
-      },
+      { Header: 'İsim', accessor: 'name', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.nameCellhandler(col) },
+      { Header: 'TC Kimlik No', accessor: 'patientdefine.countryID', sortable: true, canGroupBy: true, canFilter: true, },
+      { Header: 'Kayıt Tarihi', accessor: 'registerdate', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.dateCellhandler(col) },
+      { Header: 'Kuruma Giriş Tarihi', accessor: 'approvaldate', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.dateCellhandler(col) },
       { Header: 'Durum', accessor: 'case.name', sortable: true, canGroupBy: true, canFilter: true, },
-      {
-        Header: 'Stoklar', accessor: 'stockstxt', sortable: true, canGroupBy: true, canFilter: true,
-        Cell: col => {
-          if (col.value) {
-            if (!col.cell.isGrouped) {
-              const itemId = col.row.original.id
-              const itemStocks = col.row.original.stocks
-              return col.value.length - 35 > 20 ?
-                (
-                  !this.state.stocksStatus.includes(itemId) ?
-                    [col.value.slice(0, 35) + ' ...(' + itemStocks.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandStocks(itemId)}> ...Daha Fazla Göster</Link>] :
-                    [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkStocks(itemId)}> ...Daha Az Göster</Link>]
-                ) : col.value
-            }
-            return col.value
-          }
-          return null
-        },
-      },
-      {
-        Header: 'Dosyalar', accessor: 'filestxt', sortable: true, canGroupBy: true, canFilter: true,
-        Cell: col => {
-          if (col.value) {
-            if (!col.cell.isGrouped) {
-              const itemId = col.row.original.id
-              const itemFiles = col.row.original.files
-              return col.value.length - 35 > 20 ?
-                (
-                  !this.state.filesStatus.includes(itemId) ?
-                    [col.value.slice(0, 35) + ' ...(' + itemFiles.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandFiles(itemId)}> ...Daha Fazla Göster</Link>] :
-                    [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkFiles(itemId)}> ...Daha Az Göster</Link>]
-                ) : col.value
-            }
-            return col.value
-          }
-          return null
-        },
-      },
+      { Header: 'Stoklar', accessor: 'stockstxt', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.stockCellhandler(col) },
+      { Header: 'Dosyalar', accessor: 'filestxt', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.filesCellhandler(col) },
       { Header: 'Oluşturan Kullanıcı', accessor: 'createdUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Güncelleyen Kullanıcı', accessor: 'updatedUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Oluşturma Zamanı', accessor: 'createTime', sortable: true, canGroupBy: true, canFilter: true, },
@@ -121,7 +59,7 @@ export default class Preregistrations extends Component {
     const initialConfig = {
       hiddenColumns: tableMeta ? JSON.parse(tableMeta.config).filter(u => u.isVisible === false).map(item => {
         return item.key
-      }) : [],
+      }) : ["concurrencyStamp", "createdUser", "updatedUser", "createTime", "updateTime"],
       columnOrder: tableMeta ? JSON.parse(tableMeta.config).sort((a, b) => a.order - b.order).map(item => {
         return item.key
       }) : []
@@ -256,5 +194,52 @@ export default class Preregistrations extends Component {
       prevData.splice(index, 1)
       this.setState({ filesStatus: [...prevData] })
     }
+  }
+
+  nameCellhandler = (col) => {
+    const patient = col.row.original
+    return <div className='flex justify-center items-center flex-row flex-nowrap whitespace-nowrap'>{patient.files.filter(u => u.usagetype === 'PP').length > 0 ? <img alt='pp' src={`${process.env.REACT_APP_BACKEND_URL}/${ROUTES.FILE}/GetImage?guid=${patient.concurrencyStamp}`} className="rounded-full" style={{ width: '40px', height: '40px' }} />
+      : null}{`${patient?.patientdefine?.firstname} ${patient?.patientdefine?.lastname}`}</div>
+  }
+
+  dateCellhandler = (col) => {
+    if (col.value) {
+      return col.value.split('T')[0]
+    }
+    return null
+  }
+
+  stockCellhandler = (col) => {
+    if (col.value) {
+      if (!col.cell.isGrouped) {
+        const itemId = col.row.original.id
+        const itemStocks = col.row.original.stocks
+        return col.value.length - 35 > 20 ?
+          (
+            !this.state.stocksStatus.includes(itemId) ?
+              [col.value.slice(0, 35) + ' ...(' + itemStocks.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandStocks(itemId)}> ...Daha Fazla Göster</Link>] :
+              [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkStocks(itemId)}> ...Daha Az Göster</Link>]
+          ) : col.value
+      }
+      return col.value
+    }
+    return null
+  }
+
+  filesCellhandler = (col) => {
+    if (col.value) {
+      if (!col.cell.isGrouped) {
+        const itemId = col.row.original.id
+        const itemFiles = col.row.original.files
+        return col.value.length - 35 > 20 ?
+          (
+            !this.state.filesStatus.includes(itemId) ?
+              [col.value.slice(0, 35) + ' ...(' + itemFiles.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandFiles(itemId)}> ...Daha Fazla Göster</Link>] :
+              [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkFiles(itemId)}> ...Daha Az Göster</Link>]
+          ) : col.value
+      }
+      return col.value
+    }
+    return null
   }
 }

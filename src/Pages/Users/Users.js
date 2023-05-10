@@ -12,11 +12,11 @@ export default class Users extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      open:false,
-      selectedrecord:{},
-      stationsStatus:[],
-      rolesStatus:[],
-      departmentsStatus:[],
+      open: false,
+      selectedrecord: {},
+      stationsStatus: [],
+      rolesStatus: [],
+      departmentsStatus: [],
     }
   }
 
@@ -44,63 +44,9 @@ export default class Users extends Component {
       { Header: 'Adres', accessor: 'address', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Dil', accessor: 'language', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Kullanıcı ID', accessor: 'userID', sortable: true, canGroupBy: true, canFilter: true },
-      {
-        Header: 'İstasyonlar', accessor: 'stationstxt', sortable: true, canGroupBy: true, canFilter: true, isOpen: false,
-        Cell: col => {
-          if (col.value) {
-            if (!col.cell.isGrouped) {
-              const itemId = col.row.original.id
-              const itemStations = col.row.original.stations
-              return col.value.length - 35 > 20 ?
-                (
-                  !this.state.stationsStatus.includes(itemId) ?
-                    [col.value.slice(0, 35) + ' ...(' + itemStations.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandStations(itemId)}> ...Daha Fazla Göster</Link>] :
-                    [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkStations(itemId)}> ...Daha Az Göster</Link>]
-                ) : col.value
-            }
-            return col.value
-          }
-          return null
-        },
-      },
-      {
-        Header: 'Departmanlar', accessor: 'departmentstxt', sortable: true, canGroupBy: true, canFilter: true, isOpen: false,
-        Cell: col => {
-          if (col.value) {
-            if (!col.cell.isGrouped) {
-              const itemId = col.row.original.id
-              const itemDepartments = col.row.original.departments
-              return col.value.length - 35 > 20 ?
-                (
-                  !this.state.departmentsStatus.includes(itemId) ?
-                    [col.value.slice(0, 35) + ' ...(' + itemDepartments.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandDepartments(itemId)}> ...Daha Fazla Göster</Link>] :
-                    [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkDepartments(itemId)}> ...Daha Az Göster</Link>]
-                ) : col.value
-            }
-            return col.value
-          }
-          return null
-        },
-      },
-      {
-        Header: 'Roller', accessor: 'rolestxt', sortable: true, canGroupBy: true, canFilter: true, isOpen: false,
-        Cell: col => {
-          if (col.value) {
-            if (!col.cell.isGrouped) {
-              const itemId = col.row.original.id
-              const itemRoles = col.row.original.roles
-              return col.value.length - 35 > 20 ?
-                (
-                  !this.state.rolesStatus.includes(itemId) ?
-                    [col.value.slice(0, 35) + ' ...(' + itemRoles.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandRoles(itemId)}> ...Daha Fazla Göster</Link>] :
-                    [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkRoles(itemId)}> ...Daha Az Göster</Link>]
-                ) : col.value
-            }
-            return col.value
-          }
-          return null
-        },
-      },
+      { Header: 'İstasyonlar', accessor: 'stationstxt', sortable: true, canGroupBy: true, canFilter: true, isOpen: false, Cell: col => this.stationCellhandler(col) },
+      { Header: 'Departmanlar', accessor: 'departmentstxt', sortable: true, canGroupBy: true, canFilter: true, isOpen: false, Cell: col => this.departmentCellhandler(col) },
+      { Header: 'Roller', accessor: 'rolestxt', sortable: true, canGroupBy: true, canFilter: true, isOpen: false, Cell: col => this.rolesCellhandler(col) },
       { Header: 'Oluşturan Kullanıcı', accessor: 'createdUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Güncelleyen Kullanıcı', accessor: 'updatedUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Oluşturma Zamanı', accessor: 'createTime', sortable: true, canGroupBy: true, canFilter: true, },
@@ -109,7 +55,7 @@ export default class Users extends Component {
       { accessor: 'delete', Header: "Sil", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
 
 
-    const { Users, removeUsernotification, DeleteUsers,Profile } = this.props
+    const { Users, removeUsernotification, DeleteUsers, Profile } = this.props
     const { notifications, list, isLoading, isDispatching } = Users
     if (notifications && notifications.length > 0) {
       let msg = notifications[0]
@@ -122,7 +68,7 @@ export default class Users extends Component {
     const initialConfig = {
       hiddenColumns: tableMeta ? JSON.parse(tableMeta.config).filter(u => u.isVisible === false).map(item => {
         return item.key
-      }) : [],
+      }) : ["concurrencyStamp", "createdUser", "updatedUser", "createTime", "updateTime"],
       columnOrder: tableMeta ? JSON.parse(tableMeta.config).sort((a, b) => a.order - b.order).map(item => {
         return item.key
       }) : []
@@ -252,6 +198,57 @@ export default class Users extends Component {
       prevData.splice(index, 1)
       this.setState({ departmentsStatus: [...prevData] })
     }
+  }
+
+  rolesCellhandler = (col) => {
+    if (col.value) {
+      if (!col.cell.isGrouped) {
+        const itemId = col.row.original.id
+        const itemRoles = col.row.original.roles
+        return col.value.length - 35 > 20 ?
+          (
+            !this.state.rolesStatus.includes(itemId) ?
+              [col.value.slice(0, 35) + ' ...(' + itemRoles.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandRoles(itemId)}> ...Daha Fazla Göster</Link>] :
+              [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkRoles(itemId)}> ...Daha Az Göster</Link>]
+          ) : col.value
+      }
+      return col.value
+    }
+    return null
+  }
+
+  departmentCellhandler = (col) => {
+    if (col.value) {
+      if (!col.cell.isGrouped) {
+        const itemId = col.row.original.id
+        const itemDepartments = col.row.original.departments
+        return col.value.length - 35 > 20 ?
+          (
+            !this.state.departmentsStatus.includes(itemId) ?
+              [col.value.slice(0, 35) + ' ...(' + itemDepartments.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandDepartments(itemId)}> ...Daha Fazla Göster</Link>] :
+              [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkDepartments(itemId)}> ...Daha Az Göster</Link>]
+          ) : col.value
+      }
+      return col.value
+    }
+    return null
+  }
+
+  stationCellhandler = (col) => {
+    if (col.value) {
+      if (!col.cell.isGrouped) {
+        const itemId = col.row.original.id
+        const itemStations = col.row.original.stations
+        return col.value.length - 35 > 20 ?
+          (
+            !this.state.stationsStatus.includes(itemId) ?
+              [col.value.slice(0, 35) + ' ...(' + itemStations.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandStations(itemId)}> ...Daha Fazla Göster</Link>] :
+              [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkStations(itemId)}> ...Daha Az Göster</Link>]
+          ) : col.value
+      }
+      return col.value
+    }
+    return null
   }
 
 }

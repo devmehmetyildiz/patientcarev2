@@ -4,6 +4,7 @@ import Spinner from './Common/Spinner'
 import ProtectedRoute from './Utils/ProtectedRoute';
 
 const Login = lazy(() => import('./Containers/Auth/Login'));
+const Register = lazy(() => import('./Containers/Auth/Register'));
 const Roles = lazy(() => import('./Containers/Roles/Roles'));
 const RolesCreate = lazy(() => import('./Containers/Roles/RolesCreate'));
 const RolesEdit = lazy(() => import('./Containers/Roles/RolesEdit'));
@@ -110,9 +111,21 @@ const Patientmovements = lazy(() => import('./Containers/Patientmovements/Patien
 const PatientmovementsCreate = lazy(() => import('./Containers/Patientmovements/PatientmovementsCreate'));
 const PatientmovementsEdit = lazy(() => import('./Containers/Patientmovements/PatientmovementsEdit'));
 
+const Todos = lazy(() => import('./Containers/Todos/Todos'));
+
+const Mailsettings = lazy(() => import('./Containers/Mailsettings/Mailsettings'));
+const MailsettingsCreate = lazy(() => import('./Containers/Mailsettings/MailsettingsCreate'));
+const MailsettingsEdit = lazy(() => import('./Containers/Mailsettings/MailsettingsEdit'));
+
+const Printtemplates = lazy(() => import('./Containers/Printtemplates/Printtemplates'));
+const PrinttemplatesCreate = lazy(() => import('./Containers/Printtemplates/PrinttemplatesCreate'));
+const PrinttemplatesEdit = lazy(() => import('./Containers/Printtemplates/PrinttemplatesEdit'));
+
 const Stockmovementsdetail = lazy(() => import('./Containers/Stocks/Stockmovementsdetail'));
 
 const ProfileEdit = lazy(() => import('./Containers/Auth/ProfileEdit'));
+const PasswordChange = lazy(() => import('./Containers/Auth/PasswordChange'));
+const Passwordforget = lazy(() => import('./Containers/Auth/Passwordforget'));
 const Home = lazy(() => import('./Pages/Home'));
 
 
@@ -120,7 +133,8 @@ class AppRoutes extends Component {
   render() {
 
     const routes = [
-      { exact: false, path: "/Login", auth: false, component: Login },
+      { exact: true, path: "/Login", auth: false, component: Login },
+      { exact: true, path: "/Register", auth: false, component: Register },
       { exact: true, path: "/Home", auth: true, component: Home },
       { exact: true, path: "/Roles", auth: true, component: Roles },
       { exact: true, path: "/Roles/Create", auth: true, component: RolesCreate },
@@ -190,25 +204,30 @@ class AppRoutes extends Component {
       { exact: true, path: "/Purchaseorderstockmovements", auth: true, component: Purchaseorderstockmovements },
       { exact: true, path: "/Purchaseorderstockmovements/Create", auth: true, component: PurchaseorderstockmovementsCreate },
       { exact: true, path: "/Purchaseorderstockmovements/:PurchaseorderstockmovementID/Edit", auth: true, component: PurchaseorderstockmovementsEdit },
-
       { exact: true, path: "/Patientmovements", auth: true, component: Patientmovements },
       { exact: true, path: "/Patientmovements/Create", auth: true, component: PatientmovementsCreate },
       { exact: true, path: "/Patientmovements/:PatientmovementID/Edit", auth: true, component: PatientmovementsEdit },
-
+      { exact: true, path: "/Mailsettings", auth: true, component: Mailsettings },
+      { exact: true, path: "/Mailsettings/Create", auth: true, component: MailsettingsCreate },
+      { exact: true, path: "/Mailsettings/:MailsettingID/Edit", auth: true, component: MailsettingsEdit },
+      { exact: true, path: "/Todos", auth: true, component: Todos },
       { exact: true, path: "/Checkperiods", auth: true, component: Checkperiods },
       { exact: true, path: "/Checkperiods/Create", auth: true, component: CheckperiodsCreate },
       { exact: true, path: "/Checkperiods/:CheckperiodID/Edit", auth: true, component: CheckperiodsEdit },
-
+      { exact: true, path: "/Printtemplates", auth: true, component: Printtemplates },
+      { exact: true, path: "/Printtemplates/Create", auth: true, component: PrinttemplatesCreate },
+      { exact: true, path: "/Printtemplates/:PrinttemplateID/Edit", auth: true, component: PrinttemplatesEdit },
       { exact: true, path: "/Periods", auth: true, component: Periods },
       { exact: true, path: "/Periods/Create", auth: true, component: PeriodsCreate },
       { exact: true, path: "/Periods/:PeriodID/Edit", auth: true, component: PeriodsEdit },
-
       { exact: true, path: "/Preregistrations", auth: true, component: Preregistrations },
       { exact: true, path: "/Preregistrations/Create", auth: true, component: PreregistrationsCreate },
       { exact: true, path: "/Preregistrations/:PatientID/Edit", auth: true, component: PreregistrationsEdit },
       { exact: true, path: "/Preregistrations/:PatientID/Editfile", auth: true, component: PreregistrationsEditfile },
       { exact: true, path: "/Preregistrations/:PatientID/Editstock", auth: true, component: PreregistrationsEditstock },
-      { exact: true, path: "/Profile/Edit", auth: true, component: ProfileEdit }
+      { exact: true, path: "/Profile/Edit", auth: true, component: ProfileEdit },
+      { exact: true, path: "/Profile/Change-Password", auth: true, component: PasswordChange },
+      { exact: true, path: "/Forgetpassword", auth: false, component: Passwordforget }
     ]
 
     return (

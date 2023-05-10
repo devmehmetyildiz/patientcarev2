@@ -77,7 +77,7 @@ export default class PreregistrationsEditstock extends Component {
           <Divider className='w-full  h-[1px]' />
           <div className='w-full bg-white p-4 rounded-lg shadow-md outline outline-[1px] outline-gray-200 '>
             <Header as='h2' icon textAlign='center'>
-              {(selected_record.files || []).filter(u => u.name === 'PP').length > 0 ? <img alt='pp' src={`${process.env.REACT_APP_BACKEND_URL}/${ROUTES.FILE}/GetImage?guid=${selected_record.concurrencyStamp}`} className="rounded-full" style={{ width: '100px', height: '100px' }} />
+              {(selected_record.files || []).filter(u => u.usagetype === 'PP').length > 0 ? <img alt='pp' src={`${process.env.REACT_APP_BACKEND_URL}/${ROUTES.FILE}/GetImage?guid=${selected_record.concurrencyStamp}`} className="rounded-full" style={{ width: '100px', height: '100px' }} />
                 : <Icon name='users' circular />}
               <Header.Content>{`${selected_record.patientdefine?.firstname} ${selected_record.patientdefine?.lastname} - ${selected_record.patientdefine?.countryID}`}</Header.Content>
             </Header>

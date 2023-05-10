@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Breadcrumb, Button, Checkbox, Divider, Form, Header } from 'semantic-ui-react'
+import { Breadcrumb, Button, Checkbox, Divider, Dropdown, Form, Header } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
 import LoadingPage from '../../Utils/LoadingPage'
 import Notification from '../../Utils/Notification'
@@ -11,7 +11,8 @@ export default class TododefinesEdit extends Component {
     this.state = {
       isDatafetched: false,
       isRequired: false,
-      isNeedactivation: false
+      isNeedactivation: false,
+      selectedPeriods: []
     }
   }
 
@@ -25,22 +26,30 @@ export default class TododefinesEdit extends Component {
   }
 
   componentDidUpdate() {
-    const { Tododefines, removeTododefinenotification } = this.props
+    const { Tododefines, removeTododefinenotification, Periods, removePeriodnotification } = this.props
     const { notifications, selected_record, isLoading } = Tododefines
     if (selected_record && Object.keys(selected_record).length > 0 && !isLoading && selected_record.id !== 0 && !this.state.isDatafetched) {
       this.setState({
         isDatafetched: true,
         isRequired: selected_record.isRequired,
-        isNeedactivation: selected_record.isNeedactivation
+        isNeedactivation: selected_record.isNeedactivation,
+        selectedPeriods: selected_record.periods.map(period => {
+          return period.concurrencyStamp
+        })
       })
     }
     Notification(notifications, removeTododefinenotification)
+    Notification(Periods.notifications, removePeriodnotification)
   }
 
   render() {
 
-    const { Tododefines } = this.props
+    const { Tododefines, Periods } = this.props
     const { selected_record, isLoading, isDispatching } = Tododefines
+
+    const Periodsoptions = Periods.list.map(period => {
+      return { key: period.concurrencyStamp, text: period.name, value: period.concurrencyStamp }
+    })
 
     return (
       isLoading || isDispatching ? <LoadingPage /> :
@@ -67,6 +76,12 @@ export default class TododefinesEdit extends Component {
                 <Form.Field>
                   <label className='text-[#000000de]'>Açıklama</label>
                   <Form.Input defaultValue={selected_record.value} placeholder="Açıklama" name="info" fluid />
+                </Form.Field>
+              </Form.Group>
+              <Form.Group widths={'equal'}>
+                <Form.Field>
+                  <label className='text-[#000000de]'>Kontroller</label>
+                  <Dropdown value={this.state.selectedPeriods} label="Kontroller" placeholder='Kontroller' clearable search fluid multiple selection options={Periodsoptions} onChange={(e, { value }) => { this.setState({ selectedPeriods: value }) }} />
                 </Form.Field>
               </Form.Group>
               <Form.Group widths={'equal'}>
@@ -100,13 +115,19 @@ export default class TododefinesEdit extends Component {
   handleSubmit = (e) => {
     e.preventDefault()
 
-    const { EditTododefines, history, removeTododefinenotification, Tododefines } = this.props
+    const { EditTododefines, history, removeTododefinenotification, Tododefines, Periods } = this.props
     const data = formToObject(e.target)
+    data.periods = this.state.selectedPeriods.map(period => {
+      return Periods.list.find(u => u.concurrencyStamp === period)
+    })
     data.isNeedactivation = this.state.isNeedactivation
     data.isRequired = this.state.isRequired
     let errors = []
     if (!data.name || data.name === '') {
       errors.push({ type: 'Error', code: 'Yapılacaklar', description: 'İsim Boş Olamaz' })
+    }
+    if (!data.periods || data.periods.length <= 0) {
+      errors.push({ type: 'Error', code: 'Yapılacaklar', description: 'Hiç Bir Kontrol seçili değil' })
     }
     if (errors.length > 0) {
       errors.forEach(error => {

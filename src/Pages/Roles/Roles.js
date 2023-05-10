@@ -13,9 +13,9 @@ export class Roles extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      open:false,
-      selectedrecord:{},
-      authoriesStatus:[]
+      open: false,
+      selectedrecord: {},
+      authoriesStatus: []
     }
   }
 
@@ -31,26 +31,7 @@ export class Roles extends Component {
       { Header: 'Id', accessor: 'id', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Tekil ID', accessor: 'concurrencyStamp', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'İsim', accessor: 'name', sortable: true, canGroupBy: true, canFilter: true },
-      {
-        Header: 'Yetkiler', accessor: 'authoriestxt', sortable: true, canGroupBy: true, canFilter: true, isOpen: false,
-        Cell: col => {
-          if (col.value) {
-            if (!col.cell.isGrouped) {
-              console.log('col.row: ', col.row);
-              const itemId = col.row.original.id
-              const itemPrivileges = col.row.original.authories
-              return col.value.length - 35 > 20 ?
-                (
-                  !this.state.authoriesStatus.includes(itemId) ?
-                    [col.value.slice(0, 35) + ' ...(' + itemPrivileges.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandAuthory(itemId)}> ...Daha Fazla Göster</Link>] :
-                    [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkAuthory(itemId)}> ...Daha Az Göster</Link>]
-                ) : col.value
-            }
-            return col.value
-          }
-          return null
-        },
-      },
+      { Header: 'Yetkiler', accessor: 'authoriestxt', sortable: true, canGroupBy: true, canFilter: true, isOpen: false, Cell: col => this.authoryCellhandler(col) },
       { Header: 'Oluşturan Kullanıcı', accessor: 'createdUser', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Güncelleyen Kullanıcı', accessor: 'updatedUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Oluşturma Zamanı', accessor: 'createTime', sortable: true, canGroupBy: true, canFilter: true, },
@@ -58,9 +39,9 @@ export class Roles extends Component {
       { accessor: 'edit', Header: "Güncelle", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' },
       { accessor: 'delete', Header: "Sil", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
 
-    
 
-    const { Roles, removeRolenotification, DeleteRoles,Profile } = this.props
+
+    const { Roles, removeRolenotification, DeleteRoles, Profile } = this.props
     const { notifications, list, isLoading, isDispatching } = Roles
     if (notifications && notifications.length > 0) {
       let msg = notifications[0]
@@ -73,7 +54,7 @@ export class Roles extends Component {
     const initialConfig = {
       hiddenColumns: tableMeta ? JSON.parse(tableMeta.config).filter(u => u.isVisible === false).map(item => {
         return item.key
-      }) : [],
+      }) : ["concurrencyStamp", "createdUser", "updatedUser", "createTime", "updateTime"],
       columnOrder: tableMeta ? JSON.parse(tableMeta.config).sort((a, b) => a.order - b.order).map(item => {
         return item.key
       }) : []
@@ -167,6 +148,24 @@ export class Roles extends Component {
       prevData.splice(index, 1)
       this.setState({ authoriesStatus: [...prevData] })
     }
+  }
+
+  authoryCellhandler = (col) => {
+    if (col.value) {
+      if (!col.cell.isGrouped) {
+        console.log('col.row: ', col.row);
+        const itemId = col.row.original.id
+        const itemPrivileges = col.row.original.authories
+        return col.value.length - 35 > 20 ?
+          (
+            !this.state.authoriesStatus.includes(itemId) ?
+              [col.value.slice(0, 35) + ' ...(' + itemPrivileges.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandAuthory(itemId)}> ...Daha Fazla Göster</Link>] :
+              [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkAuthory(itemId)}> ...Daha Az Göster</Link>]
+          ) : col.value
+      }
+      return col.value
+    }
+    return null
   }
 
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import {  Divider, Dropdown, Form, FormField, Popup } from 'semantic-ui-react'
-import { Breadcrumb, Button,  Header } from 'semantic-ui-react'
+import { Divider, Dropdown, Form, FormField, Popup } from 'semantic-ui-react'
+import { Breadcrumb, Button, Header } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
 import LoadingPage from '../../Utils/LoadingPage'
 import Notification from '../../Utils/Notification'
@@ -47,7 +47,7 @@ export default class PreregistrationsCreate extends Component {
       return { key: department.concurrencyStamp, text: department.name, value: department.concurrencyStamp }
     })
 
-    const Casesoptions = Cases.list.map(cases => {
+    const Casesoptions = Cases.list.filter(u => u.caseStatus !== 1).map(cases => {
       return { key: cases.concurrencyStamp, text: cases.name, value: cases.concurrencyStamp }
     })
 
@@ -96,13 +96,13 @@ export default class PreregistrationsCreate extends Component {
                           trigger={<Button onClick={(e) => {
                             e.preventDefault()
                             this.setState({ newRegister: !this.state.newRegister })
-                          }} className='cursor-pointer absolute -top-2 left-20'  circular size='mini' icon="redo"></Button>}
+                          }} className='cursor-pointer absolute -top-2 left-20' circular size='mini' icon="redo"></Button>}
                           content={`${!this.state.newRegister ? 'Kayıtlı Olmayan' : 'Kayıtlı'} Hasta Girişi İçin Tıklanıyız`}
                           position='top left'
-                         
+
                         />
                       </label>
-                      <Form.Input  placeholder="Hasta Adı" name="firstname" fluid />
+                      <Form.Input placeholder="Hasta Adı" name="firstname" fluid />
                     </FormField>
                     <Form.Input label="Hasta Soyadı" placeholder="Hasta Soyadı" name="lastname" fluid />
                     <Form.Input label="Baba Adı" placeholder="Baba Adı" name="fathername" fluid />
@@ -148,14 +148,14 @@ export default class PreregistrationsCreate extends Component {
   handleSubmit = (e) => {
     e.preventDefault()
 
-    const { Patientdefines, fillPatientnotification, Patients, AddPatients, history, removePatientnotification } = this.props
+    const { Patientdefines, fillPatientnotification, AddPatients, history } = this.props
     const { selectedCase, selectedDepartment, selectedGenderstatus, selectedPatientdefine } = this.state
     const data = formToObject(e.target)
-    if(data.registerdate==='' || data.registerdate===undefined){
-      data.registerdate=null
+    if (data.registerdate === '' || data.registerdate === undefined) {
+      data.registerdate = null
     }
-    if(data.approvaldate==='' || data.approvaldate===undefined){
-      data.approvaldate=null
+    if (data.approvaldate === '' || data.approvaldate === undefined) {
+      data.approvaldate = null
     }
     const response = {
       id: 0,
@@ -184,6 +184,10 @@ export default class PreregistrationsCreate extends Component {
       approvaldate: data.approvaldate,
       registerdate: data.registerdate,
       departmentid: selectedDepartment,
+      checkperiodID: "",
+      checkperiod: {},
+      todogroupdefineID: "",
+      todogroupdefine: {},
       caseId: selectedCase
     }
 

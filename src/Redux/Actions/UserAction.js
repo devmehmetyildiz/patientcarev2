@@ -57,8 +57,8 @@ export const AddUsers = (data, historypusher) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.ADD_USER_INIT })
     await instanse.post(ROUTES.USER + "/Add", data)
         .then(response => {
-                dispatch({ type: ACTION_TYPES.ADD_USER_SUCCESS, payload: response.data })
-                historypusher.push('/Users')
+            dispatch({ type: ACTION_TYPES.ADD_USER_SUCCESS, payload: response.data })
+            historypusher.push('/Users')
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_USERS_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -66,12 +66,12 @@ export const AddUsers = (data, historypusher) => async (dispatch, getState) => {
         })
 }
 
-export const EditUsers = (data, historypusher) => async (dispatch, getState) => {
+export const EditUsers = (data, historypusher, redirecturl) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.EDIT_USER_INIT })
     await instanse.post(ROUTES.USER + "/Update", data)
         .then(response => {
-                dispatch({ type: ACTION_TYPES.EDIT_USER_SUCCESS, payload: response.data })
-                historypusher.push('/Users')
+            dispatch({ type: ACTION_TYPES.EDIT_USER_SUCCESS, payload: response.data })
+            historypusher.push(redirecturl ? redirecturl : '/Users')
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_USERS_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -85,7 +85,7 @@ export const DeleteUsers = (data) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.DELETE_USER_INIT })
     await instanse.post(ROUTES.USER + "/Delete", data)
         .then(response => {
-                dispatch({ type: ACTION_TYPES.DELETE_USER_SUCCESS, payload: response.data })
+            dispatch({ type: ACTION_TYPES.DELETE_USER_SUCCESS, payload: response.data })
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_USERS_NOTIFICATION, payload: AxiosErrorHelper(error) })

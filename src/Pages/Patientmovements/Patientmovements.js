@@ -35,36 +35,15 @@ export default class Patientmovements extends Component {
     const Columns = [
       { Header: 'Id', accessor: 'id', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Tekil ID', accessor: 'concurrencyStamp', sortable: true, canGroupBy: true, canFilter: true, },
-      {
-        Header: 'Hasta Adı', accessor: 'patientname', sortable: true, canGroupBy: true, canFilter: true,
-        Cell: col => {
-          console.log('col: ', col);
-          return  col.value
-        },
-      },
-      {
-        Header: 'Hareket Türü', accessor: 'patientmovementtype', sortable: true, canGroupBy: true, canFilter: true,
-        Cell: col => {
-          return PATIENTMOVEMENTTYPE.find(u => u.value === col.value) ? MOVEMENTTYPES.find(u => u.value === col.value).Name : col.value
-        },
-      },
-      { Header: 'İptal mi?', accessor: 'isDeactive', sortable: true, canGroupBy: true, canFilter: true, Cell: col => { return col.value ? "EVET" : "HAYIR" } },
-      {
-        Header: 'Önceki Hareket', accessor: 'oldPatientmovementtype', sortable: true, canGroupBy: true, canFilter: true,
-        Cell: col => {
-          return PATIENTMOVEMENTTYPE.find(u => u.value === col.value) ? MOVEMENTTYPES.find(u => u.value === col.value).Name : col.value
-        },
-      },
-      {
-        Header: 'Yeni Hareket', accessor: 'newPatientmovementtype', sortable: true, canGroupBy: true, canFilter: true,
-        Cell: col => {
-          return PATIENTMOVEMENTTYPE.find(u => u.value === col.value) ? MOVEMENTTYPES.find(u => u.value === col.value).Name : col.value
-        },
-      },
-      { Header: 'Yapılacaklar Aktif mi?', accessor: 'isTodoneed', sortable: true, canGroupBy: true, canFilter: true, Cell: col => { return col.value ? "EVET" : "HAYIR" } },
-      { Header: 'Yapılacaklar Tamamlandı mı?', accessor: 'isTodocompleted', sortable: true, canGroupBy: true, canFilter: true, Cell: col => { return col.value ? "EVET" : "HAYIR" } },
-      { Header: 'Tamamlandı mı?', accessor: 'isComplated', sortable: true, canGroupBy: true, canFilter: true, Cell: col => { return col.value ? "EVET" : "HAYIR" } },
-      { Header: 'Aktivasyon mu bekleniyor?', accessor: 'iswaitingactivation', sortable: true, canGroupBy: true, canFilter: true, Cell: col => { return col.value ? "EVET" : "HAYIR" } },
+      { Header: 'Hasta Adı', accessor: 'patientdefine.firstname', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.nameCellhandler(col) },
+      { Header: 'Hareket Türü', accessor: 'patientmovementtype', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.movementCellhandler(col) },
+      { Header: 'İptal mi?', accessor: 'isDeactive', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.boolCellhandler(col) },
+      { Header: 'Önceki Hareket', accessor: 'oldPatientmovementtype', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.movementCellhandler(col) },
+      { Header: 'Yeni Hareket', accessor: 'newPatientmovementtype', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.movementCellhandler(col) },
+      { Header: 'Yapılacaklar Aktif mi?', accessor: 'isTodoneed', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.boolCellhandler(col) },
+      { Header: 'Yapılacaklar Tamamlandı mı?', accessor: 'isTodocompleted', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.boolCellhandler(col) },
+      { Header: 'Tamamlandı mı?', accessor: 'isComplated', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.boolCellhandler(col) },
+      { Header: 'Aktivasyon mu bekleniyor?', accessor: 'iswaitingactivation', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.boolCellhandler(col) },
       { Header: 'Hareket Tarihi', accessor: 'movementdate', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Oluşturan Kullanıcı', accessor: 'createdUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Güncelleyen Kullanıcı', accessor: 'updatedUser', sortable: true, canGroupBy: true, canFilter: true, },
@@ -81,7 +60,7 @@ export default class Patientmovements extends Component {
     const initialConfig = {
       hiddenColumns: tableMeta ? JSON.parse(tableMeta.config).filter(u => u.isVisible === false).map(item => {
         return item.key
-      }) : [],
+      }) : ["concurrencyStamp", "createdUser", "updatedUser", "createTime", "updateTime"],
       columnOrder: tableMeta ? JSON.parse(tableMeta.config).sort((a, b) => a.order - b.order).map(item => {
         return item.key
       }) : []
@@ -161,6 +140,18 @@ export default class Patientmovements extends Component {
 
   handleChangeModal = (value) => {
     this.setState({ modal: value })
+  }
+
+  boolCellhandler = (col) => {
+    return col.value !== null && (col.value ? "EVET" : "HAYIR")
+  }
+
+  movementCellhandler = (col) => {
+    return PATIENTMOVEMENTTYPE.find(u => u.value === col.value) ? PATIENTMOVEMENTTYPE.find(u => u.value === col.value).Name : col.value
+  }
+
+  nameCellhandler = (col) => {
+    return col ? col.cell.row.original?.patient?.patientdefine ? `${col.cell.row.original?.patient?.patientdefine?.firstname} ${col.cell.row.original?.patient?.patientdefine?.lastname}` : "Hasta Kaydı Bulunamadı" : "Tanımsız"
   }
 
 }

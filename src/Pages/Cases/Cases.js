@@ -54,40 +54,9 @@ export default class Cases extends Component {
       { Header: 'Tekil ID', accessor: 'concurrencyStamp', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Durum Adı', accessor: 'name', sortable: true, canGroupBy: true, canFilter: true },
       { Header: 'Durum Kısaltması', accessor: 'shortname', sortable: true, canGroupBy: true, canFilter: true },
-      {
-        Header: 'Durum Türü', accessor: 'caseStatus', sortable: true, canGroupBy: true, canFilter: true,
-        Cell: col => {
-          return casestatusOption.find(u => u.value === col.value) ? casestatusOption.find(u => u.value === col.value).text : ''
-        },
-      },
-      {
-        Header: 'Durum Rengi', accessor: 'casecolor', sortable: true, canGroupBy: true, canFilter: true,
-        Cell: col => {
-          if (col.value) {
-            return <div className='flex flex-row justify-center items-center text-center'><p className='m-0 p-0'>{col.value}</p><Icon style={{ color: col.value }} className="ml-2" name='circle' /></div>
-          }
-          return null
-        },
-      },
-      {
-        Header: 'Departmanlar', accessor: 'departmentstxt', sortable: true, canGroupBy: true, canFilter: true, isOpen: false,
-        Cell: col => {
-          if (col.value) {
-            if (!col.cell.isGrouped) {
-              const itemId = col.row.original.id
-              const itemDepartments = col.row.original.departments
-              return col.value.length - 35 > 20 ?
-                (
-                  !this.state.departmentStatus.includes(itemId) ?
-                    [col.value.slice(0, 35) + ' ...(' + itemDepartments.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandDepartments(itemId)}> ...Daha Fazla Göster</Link>] :
-                    [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkDepartments(itemId)}> ...Daha Az Göster</Link>]
-                ) : col.value
-            }
-            return col.value
-          }
-          return null
-        },
-      },
+      { Header: 'Durum Türü', accessor: 'caseStatus', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.casesstatusCellhandler(col, casestatusOption) },
+      { Header: 'Durum Rengi', accessor: 'casecolor', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.casecolorCellhandler(col) },
+      { Header: 'Departmanlar', accessor: 'departmentstxt', sortable: true, canGroupBy: true, canFilter: true, isOpen: false, Cell: col => this.departmentCellhandler(col) },
       { Header: 'Oluşturan Kullanıcı', accessor: 'createdUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Güncelleyen Kullanıcı', accessor: 'updatedUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Oluşturma Zamanı', accessor: 'createTime', sortable: true, canGroupBy: true, canFilter: true, },
@@ -106,7 +75,7 @@ export default class Cases extends Component {
     const initialConfig = {
       hiddenColumns: tableMeta ? JSON.parse(tableMeta.config).filter(u => u.isVisible === false).map(item => {
         return item.key
-      }) : [],
+      }) : ["concurrencyStamp", "createdUser", "updatedUser", "createTime", "updateTime"],
       columnOrder: tableMeta ? JSON.parse(tableMeta.config).sort((a, b) => a.order - b.order).map(item => {
         return item.key
       }) : []
@@ -202,4 +171,31 @@ export default class Cases extends Component {
     }
   }
 
+  casesstatusCellhandler = (col, casestatusOption) => {
+    return casestatusOption.find(u => u.value === col.value) ? casestatusOption.find(u => u.value === col.value).text : ''
+  }
+
+  casecolorCellhandler = (col) => {
+    if (col.value) {
+      return <div className='flex flex-row justify-center items-center text-center'><p className='m-0 p-0'>{col.value}</p><Icon style={{ color: col.value }} className="ml-2" name='circle' /></div>
+    }
+    return null
+  }
+
+  departmentCellhandler = (col) => {
+    if (col.value) {
+      if (!col.cell.isGrouped) {
+        const itemId = col.row.original.id
+        const itemDepartments = col.row.original.departments
+        return col.value.length - 35 > 20 ?
+          (
+            !this.state.departmentStatus.includes(itemId) ?
+              [col.value.slice(0, 35) + ' ...(' + itemDepartments.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandDepartments(itemId)}> ...Daha Fazla Göster</Link>] :
+              [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkDepartments(itemId)}> ...Daha Az Göster</Link>]
+          ) : col.value
+      }
+      return col.value
+    }
+    return null
+  }
 }

@@ -13,9 +13,9 @@ export default class Units extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      open:false,
-      selectedrecord:{},
-      departmentStatus:[]
+      open: false,
+      selectedrecord: {},
+      departmentStatus: []
     }
   }
 
@@ -45,31 +45,8 @@ export default class Units extends Component {
       { Header: 'Id', accessor: 'id', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Tekil ID', accessor: 'concurrencyStamp', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Birim Adı', accessor: 'name', sortable: true, canGroupBy: true, canFilter: true },
-      {
-        Header: 'Birim Türü', accessor: 'unittype', sortable: true, canGroupBy: true, canFilter: true,
-        Cell: col => {
-          return unitstatusOption.find(u => u.value === col.value) ? unitstatusOption.find(u => u.value === col.value).text : 'tanımsız'
-        },
-      },
-      {
-        Header: 'Departmanlar', accessor: 'departmentstxt', sortable: true, canGroupBy: true, canFilter: true, isOpen: false,
-        Cell: col => {
-          if (col.value) {
-            if (!col.cell.isGrouped) {
-              const itemId = col.row.original.id
-              const itemDepartments = col.row.original.departments
-              return col.value.length - 35 > 20 ?
-                (
-                  !this.state.departmentStatus.includes(itemId) ?
-                    [col.value.slice(0, 35) + ' ...(' + itemDepartments.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandDepartments(itemId)}> ...Daha Fazla Göster</Link>] :
-                    [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkDepartments(itemId)}> ...Daha Az Göster</Link>]
-                ) : col.value
-            }
-            return col.value
-          }
-          return null
-        },
-      },
+      { Header: 'Birim Türü', accessor: 'unittype', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.unittypeCellhandler(col, unitstatusOption) },
+      { Header: 'Departmanlar', accessor: 'departmentstxt', sortable: true, canGroupBy: true, canFilter: true, isOpen: false, Cell: col => this.departmentCellhandler(col) },
       { Header: 'Oluşturan Kullanıcı', accessor: 'createdUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Güncelleyen Kullanıcı', accessor: 'updatedUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Oluşturma Zamanı', accessor: 'createTime', sortable: true, canGroupBy: true, canFilter: true, },
@@ -78,7 +55,7 @@ export default class Units extends Component {
       { accessor: 'delete', Header: "Sil", canGroupBy: false, canFilter: false, disableFilters: true, sortable: false, className: 'text-center action-column' }]
 
 
-    const { Units, removeUnitnotification, DeleteUnits,Profile } = this.props
+    const { Units, removeUnitnotification, DeleteUnits, Profile } = this.props
     const { notifications, list, isLoading, isDispatching } = Units
     if (notifications && notifications.length > 0) {
       let msg = notifications[0]
@@ -91,7 +68,7 @@ export default class Units extends Component {
     const initialConfig = {
       hiddenColumns: tableMeta ? JSON.parse(tableMeta.config).filter(u => u.isVisible === false).map(item => {
         return item.key
-      }) : [],
+      }) : ["concurrencyStamp", "createdUser", "updatedUser", "createTime", "updateTime"],
       columnOrder: tableMeta ? JSON.parse(tableMeta.config).sort((a, b) => a.order - b.order).map(item => {
         return item.key
       }) : []
@@ -187,4 +164,25 @@ export default class Units extends Component {
     }
   }
 
+  departmentCellhandler = (col) => {
+    if (col.value) {
+      if (!col.cell.isGrouped) {
+        const itemId = col.row.original.id
+        const itemDepartments = col.row.original.departments
+        return col.value.length - 35 > 20 ?
+          (
+            !this.state.departmentStatus.includes(itemId) ?
+              [col.value.slice(0, 35) + ' ...(' + itemDepartments.length + ')', <Link to='#' className='showMoreOrLess' onClick={() => this.expandDepartments(itemId)}> ...Daha Fazla Göster</Link>] :
+              [col.value, <Link to='#' className='showMoreOrLess' onClick={() => this.shrinkDepartments(itemId)}> ...Daha Az Göster</Link>]
+          ) : col.value
+      }
+      return col.value
+    }
+    return null
+  }
+
+  unittypeCellhandler = (col, unitstatusOption) => {
+    return unitstatusOption.find(u => u.value === col.value) ? unitstatusOption.find(u => u.value === col.value).text : (col.value ? "tanımsız" : '')
+  }
 }
+

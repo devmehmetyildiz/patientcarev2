@@ -6,11 +6,21 @@ import { Sidebar } from '../../Common/Sidebar'
 export default class Layout extends Component {
 
   componentDidMount() {
-    const { GetActiveUser, GetUserRoles, GetTableMeta } = this.props
-    if (window.location.pathname !== "/Login") {
+    const { GetActiveUser, GetUserRoles, GetTableMeta,GetUserMeta } = this.props
+    const routes = [
+      "/Login",
+      "/login",
+      "/Register",
+      "/register",
+      "/Forget-password",
+      "/Forgetpassword",
+      "/forgetpassword",
+    ]
+    if (!routes.includes(window.location.pathname)) {
       GetActiveUser()
       GetUserRoles()
       GetTableMeta()
+      GetUserMeta()
     }
   }
 
@@ -23,7 +33,7 @@ export default class Layout extends Component {
         <div className='flex flex-row justify-start items-start '>
           <Sidebar history={history} iconOnly={iconOnly} seticonOnly={seticonOnly} Profile={Profile} />
           <div className={`mt-[58.61px] p-4 w-full min-w-[0px] contentWrapper`}>
-            <div className='  w-full '>
+            <div className='w-full '>
               <AppRoutes />
             </div>
           </div>

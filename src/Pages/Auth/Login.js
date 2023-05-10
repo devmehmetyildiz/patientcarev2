@@ -1,10 +1,10 @@
 
 import React, { Component, useContext } from 'react'
 import img from "../../Assets/img"
-import { Button, Form, Grid, Header, Divider } from 'semantic-ui-react'
+import { Button, Form, Grid, Header, Divider, Icon } from 'semantic-ui-react'
 import formToObject from 'form-to-object'
 import Notification from '../../Utils/Notification'
-import { withRouter } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 
 class Login extends Component {
 
@@ -35,10 +35,10 @@ class Login extends Component {
                                 <Divider />
                                 <Form.Input type='password' transparent placeholder="Parola" name="password" fluid icon='lock' iconPosition='left' />
                                 <Divider />
-                                <div className='mt-4 w-full flex justify-end items-center'>
-                                    <div className='w-1/3 '>
-                                        {Profile.isLogging ? <Button loading className='mt-4' color='blue' fluid size='medium' >Giriş Yap</Button>
-                                            : <Button className='mt-4' color='blue' fluid size='medium' type='submit' >Giriş Yap</Button>}
+                                <div className='mt-4 w-full flex flex-col justify-end items-end'>
+                                    <Link to='/Forgetpassword' className='text-[#3d3d3d] text-sm whitespace-nowrap'><Icon className='text-blue-300' name='key' /> Parolamı Unuttum</Link>
+                                    <div className='w-1/3 mt-2'>
+                                        <Button loading={Profile.isLogging} className='mt-8' color='blue' fluid size='medium' >Giriş Yap</Button>
                                     </div>
                                 </div>
                                 <div className='mt-4 flex flex-col justify-center items-center'>

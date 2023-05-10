@@ -31,42 +31,12 @@ export default class Purchaseorderstockmovements extends Component {
       { Header: 'Tekil ID', accessor: 'concurrencyStamp', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Ürün', accessor: 'stock.stockdefine.name', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Departman', accessor: 'stock.department.name', sortable: true, canGroupBy: true, canFilter: true, },
-      {
-        Header: 'Hareket Tarihi', accessor: 'movementdate', sortable: true, canGroupBy: true, canFilter: true,
-        Cell: col => {
-          return col.value.split('T').length > 0 ? col.value.split('T')[0] : col.value
-        },
-      },
-      {
-        Header: 'Hareket Saati', accessor: 'movementhour', sortable: true, canGroupBy: true, canFilter: true,
-        Cell: col => {
-          return col.cell?.row?.original?.movementdate?.split('T').length > 0 ? col.cell?.row?.original?.movementdate?.split('T')[1] : col.value
-        },
-      },
-      {
-        Header: 'Hareket Türü', accessor: 'movementtype', sortable: true, canGroupBy: true, canFilter: true,
-        Cell: col => {
-          return MOVEMENTTYPES.find(u => u.value === col.value) ? MOVEMENTTYPES.find(u => u.value === col.value).Name : col.value
-        },
-      },
-      {
-        Header: 'Hareket Miktarı', accessor: 'amount', sortable: true, canGroupBy: true, canFilter: true,
-        Cell: col => {
-          return <p>{`${col.value}  ${col.row.original.stock.stockdefine.unit.name}`}</p>
-        },
-      },
-      {
-        Header: 'Önceki Değer', accessor: 'prevvalue', sortable: true, canGroupBy: true, canFilter: true,
-        Cell: col => {
-          return <p>{`${col.value}  ${col.row.original.stock.stockdefine.unit.name}`}</p>
-        },
-      },
-      {
-        Header: 'Yeni Değer', accessor: 'newvalue', sortable: true, canGroupBy: true, canFilter: true,
-        Cell: col => {
-          return <p>{`${col.value}  ${col.row.original.stock.stockdefine.unit.name}`}</p>
-        },
-      },
+      { Header: 'Kullanıcı', accessor: 'username', sortable: true, canGroupBy: true, canFilter: true },
+      { Header: 'Hareket Zamanı', accessor: 'movementdate', sortable: true, canGroupBy: true, canFilter: true },
+      { Header: 'Hareket Türü', accessor: 'movementtype', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.movementCellhandler(col) },
+      { Header: 'Hareket Miktarı', accessor: 'amount', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.amountCellhandler(col) },
+      { Header: 'Önceki Değer', accessor: 'prevvalue', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.amountCellhandler(col) },
+      { Header: 'Yeni Değer', accessor: 'newvalue', sortable: true, canGroupBy: true, canFilter: true, Cell: col => this.amountCellhandler(col) },
       { Header: 'Oluşturan Kullanıcı', accessor: 'createdUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Güncelleyen Kullanıcı', accessor: 'updatedUser', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Oluşturma Zamanı', accessor: 'createTime', sortable: true, canGroupBy: true, canFilter: true, },
@@ -88,7 +58,7 @@ export default class Purchaseorderstockmovements extends Component {
     const initialConfig = {
       hiddenColumns: tableMeta ? JSON.parse(tableMeta.config).filter(u => u.isVisible === false).map(item => {
         return item.key
-      }) : [],
+      }) : ["concurrencyStamp", "createdUser", "updatedUser", "createTime", "updateTime"],
       columnOrder: tableMeta ? JSON.parse(tableMeta.config).sort((a, b) => a.order - b.order).map(item => {
         return item.key
       }) : []
@@ -168,6 +138,14 @@ export default class Purchaseorderstockmovements extends Component {
 
   handleChangeModal = (value) => {
     this.setState({ modal: value })
+  }
+
+  amountCellhandler = (col) => {
+    return <p>{`${col.value}  ${col.row.original.stock.stockdefine.unit.name}`}</p>
+  }
+
+  movementCellhandler = (col) => {
+    return MOVEMENTTYPES.find(u => u.value === col.value) ? MOVEMENTTYPES.find(u => u.value === col.value).Name : col.value
   }
 
 }

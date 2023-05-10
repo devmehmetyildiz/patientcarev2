@@ -47,7 +47,7 @@ export const GetFile = (guid) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.GET_FILE_INIT })
     await instanse.get(ROUTES.FILE + `/Getselected?guid=${guid}`)
         .then(response => {
-            dispatch({ type: ACTION_TYPES.GET_FILE_SUCCESS, payload: response.data }) 
+            dispatch({ type: ACTION_TYPES.GET_FILE_SUCCESS, payload: response.data })
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_FILES_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -85,8 +85,8 @@ export const EditFiles = (data, historypusher, url) => async (dispatch, getState
         data: data
     })
         .then(response => {
-                dispatch({ type: ACTION_TYPES.EDIT_FILE_SUCCESS, payload: response.data })
-                historypusher.push(url ? url : '/Files')
+            dispatch({ type: ACTION_TYPES.EDIT_FILE_SUCCESS, payload: response.data })
+            historypusher && historypusher.push(url ? url : '/Files')
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_FILES_NOTIFICATION, payload: AxiosErrorHelper(error) })
@@ -100,7 +100,7 @@ export const DeleteFiles = (data) => async (dispatch, getState) => {
     dispatch({ type: ACTION_TYPES.DELETE_FILE_INIT })
     await instanse.post(ROUTES.FILE + "/Files", data)
         .then(response => {
-                dispatch({ type: ACTION_TYPES.DELETE_FILE_SUCCESS, payload: response.data })
+            dispatch({ type: ACTION_TYPES.DELETE_FILE_SUCCESS, payload: response.data })
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.FILL_FILES_NOTIFICATION, payload: AxiosErrorHelper(error) })

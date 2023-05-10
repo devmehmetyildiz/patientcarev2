@@ -76,7 +76,7 @@ export default class PreregistrationsEditfile extends Component {
                     <Divider className='w-full  h-[1px]' />
                     <div className='w-full bg-white p-4 rounded-lg shadow-md outline outline-[1px] outline-gray-200 '>
                         <Header as='h2' icon textAlign='center'>
-                            {(selected_record.files || []).filter(u => u.name === 'PP').length > 0 ? <img alt='pp' src={`${process.env.REACT_APP_BACKEND_URL}/${ROUTES.FILE}/GetImage?guid=${selected_record.concurrencyStamp}`} className="rounded-full" style={{ width: '100px', height: '100px' }} />
+                            {(selected_record.files || []).filter(u => u.usagetype === 'PP').length > 0 ? <img alt='pp' src={`${process.env.REACT_APP_BACKEND_URL}/${ROUTES.FILE}/GetImage?guid=${selected_record.concurrencyStamp}`} className="rounded-full" style={{ width: '100px', height: '100px' }} />
                                 : <Icon name='users' circular />}
                             <Header.Content>{`${selected_record.patientdefine?.firstname} ${selected_record.patientdefine?.lastname} - ${selected_record.patientdefine?.countryID}`}</Header.Content>
                         </Header>
@@ -86,7 +86,6 @@ export default class PreregistrationsEditfile extends Component {
                                     <Table.Row>
                                         <Table.HeaderCell width={1}>Sıra</Table.HeaderCell>
                                         <Table.HeaderCell width={3}>Dosya Adı</Table.HeaderCell>
-                                        <Table.HeaderCell width={3}>Üst ID</Table.HeaderCell>
                                         <Table.HeaderCell width={3}>Kullanım Türü</Table.HeaderCell>
                                         <Table.HeaderCell width={9}>Dosya</Table.HeaderCell>
                                         <Table.HeaderCell width={9}>Yüklenme Durumu</Table.HeaderCell>
@@ -104,9 +103,6 @@ export default class PreregistrationsEditfile extends Component {
                                             </Table.Cell>
                                             <Table.Cell>
                                                 <Form.Input disabled={file.willDelete} value={file.name} placeholder="Dosya Adı" name="name" fluid onChange={(e) => { this.selectedFilesChangeHandler(file.key, 'name', e.target.value) }} />
-                                            </Table.Cell>
-                                            <Table.Cell>
-                                                <Form.Input disabled={file.willDelete} value={file.parentid} readOnly placeholder="Üst ID" name="parentid" fluid onChange={(e) => { this.selectedFilesChangeHandler(file.key, 'parentid', e.target.value) }} />
                                             </Table.Cell>
                                             <Table.Cell>
                                                 <Dropdown disabled={file.willDelete} value={file.usagetype} placeholder='Ürün Tanımı' name="usagetype" clearable selection fluid options={usagetypes} onChange={(e, data) => { this.selectedFilesChangeHandler(file.key, 'usagetype', data.value) }} />
@@ -253,6 +249,7 @@ export default class PreregistrationsEditfile extends Component {
             if (value.target.files && value.target.files.length > 0) {
                 selectedFiles[index][property] = value.target.files[0]
                 selectedFiles[index].filename = selectedFiles[index].file?.name
+                selectedFiles[index].name = selectedFiles[index].file?.name
                 selectedFiles[index].fileChanged = false
             }
         } else {

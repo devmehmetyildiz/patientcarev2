@@ -12,8 +12,8 @@ export default class Warehouses extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      open:false,
-      selectedrecord:{}
+      open: false,
+      selectedrecord: {}
     }
   }
 
@@ -33,7 +33,6 @@ export default class Warehouses extends Component {
             {row.isExpanded ? <Icon name='triangle down' /> : <Icon name='triangle right' />}
           </span>
         ),
-
       },
       { Header: 'Id', accessor: 'id', sortable: true, canGroupBy: true, canFilter: true, },
       { Header: 'Tekil ID', accessor: 'concurrencyStamp', sortable: true, canGroupBy: true, canFilter: true, },
@@ -59,7 +58,7 @@ export default class Warehouses extends Component {
     const initialConfig = {
       hiddenColumns: tableMeta ? JSON.parse(tableMeta.config).filter(u => u.isVisible === false).map(item => {
         return item.key
-      }) : [],
+      }) : ["concurrencyStamp", "createdUser", "updatedUser", "createTime", "updateTime"],
       columnOrder: tableMeta ? JSON.parse(tableMeta.config).sort((a, b) => a.order - b.order).map(item => {
         return item.key
       }) : []

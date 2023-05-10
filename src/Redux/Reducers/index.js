@@ -25,6 +25,9 @@ import TodogroupdefineReducer from "./TodogroupdefineReducer";
 import PatientmovementReducer from "./PatientmovementReducer";
 import PeriodReducer from "./PeriodReducer";
 import CheckperiodReducer from "./CheckperiodReducer";
+import MailsettingReducer from "./MailsettingReducer";
+import PrinttemplateReducer from "./PrinttemplateReducer";
+import TodoReducer from "./TodoReducer";
 
 const reducers = combineReducers({
     Units: UnitReducer,
@@ -52,7 +55,10 @@ const reducers = combineReducers({
     Todogroupdefines: TodogroupdefineReducer,
     Patientmovements: PatientmovementReducer,
     Periods: PeriodReducer,
-    Checkperiods: CheckperiodReducer
+    Checkperiods: CheckperiodReducer,
+    Mailsettings: MailsettingReducer,
+    Printtemplates: PrinttemplateReducer,
+    Todos: TodoReducer
 });
 
 export default reducers;

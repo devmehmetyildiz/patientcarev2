@@ -11,16 +11,31 @@ const defaultState = {
   username: "",
   roles: [],
   auth: false,
-  tablemeta: []
+  tablemeta: [],
+  resetpasswordStatus: false
 }
+
 const ProfileReducer = (state = defaultState, { type, payload }) => {
   switch (type) {
     case ACTION_TYPES.LOGIN_REQUEST_INIT:
       return { ...state, isLogging: true }
     case ACTION_TYPES.LOGIN_REQUEST_SUCCESS: {
-      return { ...state, isLogging: false }
+      return {
+        ...state, isLogging: false,
+        notifications: [{ type: 'Success', code: 'Elder Camp', description: 'Uygulamaya Giriş Yapıldı' }].concat(state.notifications || [])
+      }
     }
     case ACTION_TYPES.LOGIN_REQUEST_ERROR:
+      return { ...state, isLogging: false, error: payload }
+    case ACTION_TYPES.REGISTER_REQUEST_INIT:
+      return { ...state, isLogging: true }
+    case ACTION_TYPES.REGISTER_REQUEST_SUCCESS: {
+      return {
+        ...state, isLogging: false,
+        notifications: [{ type: 'Success', code: 'Elder Camp', description: 'Kullanıcı Başarı ile oluşturuldu' }].concat(state.notifications || [])
+      }
+    }
+    case ACTION_TYPES.REGISTER_REQUEST_ERROR:
       return { ...state, isLogging: false, error: payload }
     case ACTION_TYPES.LOGOUT_REQUEST_INIT:
       return { ...state, isLogging: true }
@@ -38,6 +53,15 @@ const ProfileReducer = (state = defaultState, { type, payload }) => {
       return { ...state, isLogging: false, meta: payload }
     case ACTION_TYPES.GET_USERMETA_ERROR:
       return { ...state, isLogging: false, error: payload }
+    case ACTION_TYPES.CHANGE_PASSWORD_INIT:
+      return { ...state, isLogging: true }
+    case ACTION_TYPES.CHANGE_PASSWORD_SUCCESS:
+      return {
+        ...state, isLogging: false,
+        notifications: [{ type: 'Success', code: 'Elder Camp', description: 'Parola Başarı ile güncellendi' }].concat(state.notifications || [])
+      }
+    case ACTION_TYPES.CHANGE_PASSWORD_ERROR:
+      return { ...state, isLogging: false, error: payload }
     case ACTION_TYPES.GET_USERSROLES_INIT:
       return { ...state, isLogging: true }
     case ACTION_TYPES.GET_USERSROLES_SUCCESS:
@@ -52,7 +76,6 @@ const ProfileReducer = (state = defaultState, { type, payload }) => {
       const messages1 = [...state.notifications]
       messages1.splice(0, 1)
       return { ...state, notifications: messages1 }
-
     case ACTION_TYPES.GET_TABLEMETA_INIT:
       return { ...state, isLogging: true }
     case ACTION_TYPES.GET_TABLEMETA_SUCCESS:
@@ -67,6 +90,12 @@ const ProfileReducer = (state = defaultState, { type, payload }) => {
     case ACTION_TYPES.SAVE_TABLEMETA_ERROR:
       return { ...state, isLogging: false, error: payload }
 
+    case ACTION_TYPES.RESETPASSWORD_REQUEST_INIT:
+      return { ...state, resetpasswordStatus: false, isLogging: true }
+    case ACTION_TYPES.RESETPASSWORD_REQUEST_SUCCESS:
+      return { ...state, isLogging: false, resetpasswordStatus: true }
+    case ACTION_TYPES.RESETPASSWORD_REQUEST_ERROR:
+      return { ...state, isLogging: false, resetpasswordStatus: false, error: payload }
     default:
       return state
   }

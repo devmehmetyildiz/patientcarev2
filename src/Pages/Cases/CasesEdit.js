@@ -8,14 +8,10 @@ export default class CasesEdit extends Component {
 
   constructor(props) {
     super(props)
-    const selecteddepartments = []
-    const record = {}
-    const selectedstatusOption = {}
-    const isDatafetched = false
     this.state = {
-      selecteddepartments,
-      isDatafetched,
-      selectedstatusOption
+      selecteddepartments: [],
+      isDatafetched: false,
+      selectedstatusOption: {}
     }
   }
 

@@ -10,6 +10,10 @@ export const ACTION_TYPES = {
   LOGOUT_REQUEST_INIT: 'LOGOUT_REQUEST_INIT',
   LOGOUT_REQUEST_SUCCESS: 'LOGOUT_REQUEST_SUCCESS',
 
+  REGISTER_REQUEST_INIT: 'REGISTER_REQUEST_INIT',
+  REGISTER_REQUEST_SUCCESS: 'REGISTER_REQUEST_SUCCESS',
+  REGISTER_REQUEST_ERROR: 'REGISTER_REQUEST_ERROR',
+
   GET_ACTIVEUSER_INIT: 'GET_ACTIVEUSER_INIT',
   GET_ACTIVEUSER_SUCCESS: 'GET_ACTIVEUSER_SUCCESS',
   GET_ACTIVEUSER_ERROR: 'GET_ACTIVEUSER_ERROR',
@@ -22,9 +26,9 @@ export const ACTION_TYPES = {
   GET_USERSROLES_SUCCESS: 'GET_USERSROLES_SUCCESS',
   GET_USERSROLES_ERROR: 'GET_USERSROLES_ERROR',
 
-  CHECK_PASSWORD_INIT: 'CHECK_PASSWORD_INIT',
-  CHECK_PASSWORD_SUCCESS: 'CHECK_PASSWORD_SUCCESS',
-  CHECK_PASSWORD_ERROR: 'CHECK_PASSWORD_ERROR',
+  CHANGE_PASSWORD_INIT: 'CHANGE_PASSWORD_INIT',
+  CHANGE_PASSWORD_SUCCESS: 'CHANGE_PASSWORD_SUCCESS',
+  CHANGE_PASSWORD_ERROR: 'CHANGE_PASSWORD_ERROR',
 
   FILL_USER_NOTIFICATION: 'FILL_USER_NOTIFICATION',
   REMOVE_USER_NOTIFICATION: 'REMOVE_USER_NOTIFICATION',
@@ -36,6 +40,40 @@ export const ACTION_TYPES = {
   SAVE_TABLEMETA_INIT: 'SAVE_TABLEMETA_INIT',
   SAVE_TABLEMETA_SUCCESS: 'SAVE_TABLEMETA_SUCCESS',
   SAVE_TABLEMETA_ERROR: 'SAVE_TABLEMETA_ERROR',
+
+  RESETPASSWORD_REQUEST_INIT: 'RESETPASSWORD_REQUEST_INIT',
+  RESETPASSWORD_REQUEST_SUCCESS: 'RESETPASSWORD_REQUEST_SUCCESS',
+  RESETPASSWORD_REQUEST_ERROR: 'RESETPASSWORD_REQUEST_ERROR',
+}
+
+export const Passwordforget = (data, historyPusher, redirecturl) => {
+  return (dispatch, getState) => {
+    dispatch({ type: ACTION_TYPES.LOGIN_REQUEST_INIT })
+    instanse.post(`/auth/login`, data)
+      .then(result => {
+        dispatch({ type: ACTION_TYPES.LOGIN_REQUEST_SUCCESS })
+        redirecturl ? window.location = (redirecturl) : window.location = ('Home')
+      })
+      .catch(error => {
+        dispatch({ type: ACTION_TYPES.FILL_USER_NOTIFICATION, payload: AxiosErrorHelper(error) })
+        dispatch({ type: ACTION_TYPES.LOGIN_REQUEST_ERROR, payload: AxiosErrorHelper(error) })
+      })
+  }
+}
+
+export const Passwordresetrequest = (data, historyPusher, redirecturl) => {
+  return (dispatch, getState) => {
+    dispatch({ type: ACTION_TYPES.RESETPASSWORD_REQUEST_INIT })
+    instanse.post(`/auth/CreateResetPasswordRequest`, data)
+      .then(result => {
+        dispatch({ type: ACTION_TYPES.RESETPASSWORD_REQUEST_SUCCESS })
+        redirecturl ? window.location = (redirecturl) : window.location = ('Home')
+      })
+      .catch(error => {
+        dispatch({ type: ACTION_TYPES.FILL_USER_NOTIFICATION, payload: AxiosErrorHelper(error) })
+        dispatch({ type: ACTION_TYPES.RESETPASSWORD_REQUEST_ERROR, payload: AxiosErrorHelper(error) })
+      })
+  }
 }
 
 export const logIn = (data, historyPusher, redirecturl) => {
@@ -49,6 +87,21 @@ export const logIn = (data, historyPusher, redirecturl) => {
       .catch(error => {
         dispatch({ type: ACTION_TYPES.FILL_USER_NOTIFICATION, payload: AxiosErrorHelper(error) })
         dispatch({ type: ACTION_TYPES.LOGIN_REQUEST_ERROR, payload: AxiosErrorHelper(error) })
+      })
+  }
+}
+
+export const register = (data, historyPusher) => {
+  return (dispatch, getState) => {
+    dispatch({ type: ACTION_TYPES.REGISTER_REQUEST_INIT })
+    instanse.post(`/auth/Register`, data)
+      .then(result => {
+        dispatch({ type: ACTION_TYPES.REGISTER_REQUEST_SUCCESS })
+        historyPusher.push("/Login")
+      })
+      .catch(error => {
+        dispatch({ type: ACTION_TYPES.FILL_USER_NOTIFICATION, payload: AxiosErrorHelper(error) })
+        dispatch({ type: ACTION_TYPES.REGISTER_REQUEST_ERROR, payload: AxiosErrorHelper(error) })
       })
   }
 }
@@ -101,7 +154,6 @@ export const GetTableMeta = () => async (dispatch, getState) => {
 }
 
 export const SaveTableMeta = (data) => async (dispatch, getState) => {
-  console.log('data: ', data);
   dispatch({ type: ACTION_TYPES.SAVE_TABLEMETA_INIT })
   await instanse.post("Auth/SaveTableMeta", data)
     .then(response => {
@@ -113,15 +165,16 @@ export const SaveTableMeta = (data) => async (dispatch, getState) => {
     })
 }
 
-export const ChangePassword = (data) => async (dispatch, getState) => {
-  dispatch({ type: ACTION_TYPES.GET_USERSROLES_INIT })
+export const ChangePassword = (data, historyPusher) => async (dispatch, getState) => {
+  dispatch({ type: ACTION_TYPES.CHANGE_PASSWORD_INIT })
   await instanse.post("Auth/ChangePassword", data)
     .then(response => {
-      dispatch({ type: ACTION_TYPES.GET_USERSROLES_SUCCESS, payload: response.data })
+      dispatch({ type: ACTION_TYPES.CHANGE_PASSWORD_SUCCESS, payload: response.data })
+      historyPusher.push("/Home")
     })
     .catch(error => {
       dispatch({ type: ACTION_TYPES.FILL_USER_NOTIFICATION, payload: AxiosErrorHelper(error) })
-      dispatch({ type: ACTION_TYPES.GET_USERSROLES_ERROR, payload: AxiosErrorHelper(error) })
+      dispatch({ type: ACTION_TYPES.CHANGE_PASSWORD_ERROR, payload: AxiosErrorHelper(error) })
     })
 }
 

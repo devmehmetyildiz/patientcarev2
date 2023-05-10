@@ -43,27 +43,30 @@ function handle401Error(error) {
 
 
 function handle404Error(error) {
+    let reponse = null
     if (error.response && error.response.data) {
         let data = error.response.data
         if (Array.isArray(data)) {
             data.forEach(err => {
                 if (err.status && err.massage) {
-                    return { type: 'Error', code: err.status, description: err.massage }
+                    reponse = { type: 'Error', code: err.status, description: err.massage }
                 }
                 if (err.Msg && error.request.responseURL) {
-                    return { type: 'Error', code: err.Msg, description: error.request.responseURL }
+                    reponse = { type: 'Error', code: err.Msg, description: error.request.responseURL }
                 }
             });
         } else {
             if (data.status && data.massage) {
-                return { type: 'Error', code: data.status, description: data.massage }
+                reponse = { type: 'Error', code: data.status, description: data.massage }
             }
             if (data.Msg && error.request.responseURL) {
-                return { type: 'Error', code: data.Msg, description: error.request.responseURL }
+                reponse = { type: 'Error', code: data.Msg, description: error.request.responseURL }
             }
         }
-        return { type: 'Error', code: error.code, description: 'URL BULUNAMADI' }
+    } else {
+        reponse = { type: 'Error', code: error.code, description: 'URL BULUNAMADI' }
     }
+    return reponse
 
 }
 
@@ -72,8 +75,6 @@ function handle400Error(error) {
         let data = error.response.data
         if (Array.isArray(Object.keys(data?.errors))) {
             if (Array.isArray(Object.values(data?.errors))) {
-                console.log('data: ', data);
-                console.log('Object.values(data?.errors): ', Object.values(data?.errors));
                 return { type: 'Error', code: data.title, description: Object.values(data?.errors)[0] }
             } else {
                 data?.errors.forEach(err => {

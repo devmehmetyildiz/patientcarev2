@@ -7,6 +7,7 @@ export const ROUTES = {
 
     ACTIVEPATIENT: 'Activepatient',
     PATIENT: 'Patient',
+    TODO: 'Todo',
 
     PATIENTTYPE: 'Patienttype',
     PATIENTREPORT: 'Patientreport',
@@ -34,6 +35,8 @@ export const ROUTES = {
     PATIENTMOVEMENT: 'Patientmovement',
     CHECKPERIOD: 'Checkperiod',
     PERIOD: 'Period',
+    MAILSETTING: 'Mailsetting',
+    PRINTTEMPLATE: 'Printtemplate',
 
 }
 
@@ -45,11 +48,12 @@ export const MOVEMENTTYPES = [
 ]
 
 export const PATIENTMOVEMENTTYPE = [
-    { Name: "Kurumdan Cıkıs", value: 0 },
+    { Name: "İşlem Yok", value: 0 },
     { Name: "Kuruma Giriş", value: 1 },
     { Name: "İlk Kayıt", value: 2 },
     { Name: "Hastane Çıkış", value: 3 },
     { Name: "Hastane Giris", value: 4 },
     { Name: "Ölüm", value: 5 },
     { Name: "Kontrol", value: 6 },
+    { Name: "Kurumdan Cıkıs", value: 7 },
 ]
